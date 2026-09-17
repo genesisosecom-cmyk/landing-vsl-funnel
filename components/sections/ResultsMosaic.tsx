@@ -21,13 +21,13 @@ export function ResultsMosaic() {
           alt={results.featured.alt}
           width={results.featured.width}
           height={results.featured.height}
-          sizes="(min-width: 1320px) 1256px, 92vw"
+          sizes="(min-width: 1120px) 1040px, 92vw"
           priority={false}
-          className="h-auto w-full rounded-lg border border-linea"
+          className="h-auto mx-auto w-full max-w-[1040px] rounded-lg border border-linea"
         />
 
         {/* Masonry con columnas CSS: cada captura conserva su alto original. */}
-        <div className="w-full columns-1 gap-4 sm:columns-2 [&>*]:mb-4">
+        <div className="mx-auto w-full max-w-[1040px] columns-1 gap-4 sm:columns-2 [&>*]:mb-4">
           {results.items.map((image) => (
             <Image
               key={image.src}
@@ -35,7 +35,7 @@ export function ResultsMosaic() {
               alt={image.alt}
               width={image.width}
               height={image.height}
-              sizes="(min-width: 640px) 45vw, 90vw"
+              sizes="(min-width: 1120px) 512px, (min-width: 640px) 45vw, 90vw"
               className="h-auto w-full break-inside-avoid rounded-lg border border-linea"
             />
           ))}

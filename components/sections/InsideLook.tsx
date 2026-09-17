@@ -19,10 +19,10 @@ export function InsideLook() {
           alt={destacada.alt}
           width={destacada.width}
           height={destacada.height}
-          className="w-full rounded-pieza border border-linea"
+          className="mx-auto w-full max-w-[1040px] rounded-pieza border border-linea"
         />
 
-        <div className="grid w-full gap-5 sm:grid-cols-3">
+        <div className="grid mx-auto w-full max-w-[1040px] gap-5 sm:grid-cols-3">
           {resto.map((shot) => (
             <img
               key={shot.src}
@@ -31,7 +31,7 @@ export function InsideLook() {
               width={shot.width}
               height={shot.height}
               loading="lazy"
-              className="w-full rounded-pieza border border-linea"
+              className="mx-auto w-full max-w-[1040px] rounded-pieza border border-linea"
             />
           ))}
         </div>

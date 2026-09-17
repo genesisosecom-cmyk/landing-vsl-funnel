@@ -40,7 +40,7 @@ export function FounderCase() {
           </div>
         </div>
 
-        <div className="grid w-full gap-5 sm:grid-cols-2">
+        <div className="grid mx-auto w-full max-w-[1040px] gap-5 sm:grid-cols-2">
           {founderCase.media.map((shot) => (
             <img
               key={shot.src}
