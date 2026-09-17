@@ -11,11 +11,7 @@ export function ResultsMosaic() {
   return (
     <Section id="resultados" tono="hueso">
       <div className="flex flex-col items-center gap-10">
-        <SectionHeading
-          label={results.eyebrow}
-          title={results.title}
-          subtitle={results.subtitle}
-        />
+        <SectionHeading label={results.eyebrow} title={results.title} />
 
         {/* Masonry con columnas CSS: cada captura conserva su alto original. */}
         <div className="w-full columns-2 gap-4 lg:columns-3 xl:columns-4 [&>*]:mb-4">

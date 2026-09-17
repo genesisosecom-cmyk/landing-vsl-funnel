@@ -11,12 +11,15 @@
     @apply bg-blanco font-sans text-cuerpo text-negro antialiased;
   }
 
+  /* balance reparte las líneas y evita que la última quede con una palabra. */
   h1 {
     @apply font-sans text-h1 font-semibold max-md:text-[2.75rem];
+    text-wrap: balance;
   }
 
   h2 {
     @apply font-sans text-h2 font-medium;
+    text-wrap: balance;
   }
 
   h3 {

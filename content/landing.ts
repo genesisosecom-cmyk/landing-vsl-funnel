@@ -72,10 +72,10 @@ export const site = {
 /* -------------------------------------------------------------------------- */
 
 export const hero = {
-  /** H1 de dos líneas como máximo (manual 2.5). */
-  title: "El mes arranca *cobrado*.",
+  title:
+    "Cómo escalar tu marca de consumibles a *+$100M al mes* convirtiéndola a modelo de suscripción. Sin depender del CPA ni de más pauta.",
   body:
-    "Génesis parte del producto que ya vendés, lo rediseña para que se cobre solo cada ciclo de reposición, y construye una base de suscriptores que aguanta el blanco y no depende de Meta.",
+    "El mismo método que usé para superar +$3M USD con mis marcas, explicado para que lo puedas ejecutar si ya estás vendiendo un consumible.",
   video: {
     kind: "file",
     src: "",
@@ -133,7 +133,6 @@ export const founderCase = {
 export const insideLook = {
   eyebrow: "Por dentro",
   title: "Cómo funciona *Génesis OS* desde adentro",
-  body: "PLACEHOLDER — una línea sobre qué se ve acá: el campus, el tablero, la comunidad.",
   /** La primera va destacada a lo ancho; las otras en grilla. */
   media: [
     { src: "/placeholders/dentro-1.svg", alt: "PLACEHOLDER — el campus por dentro", width: 1280, height: 720 },
@@ -150,7 +149,8 @@ export const insideLook = {
 export const program = {
   eyebrow: "El programa",
   title: "Todo lo que *recibís*",
-  subtitle: "PLACEHOLDER — una oración que resuma el conjunto de entregables y el acompañamiento.",
+  subtitle:
+    "Todo lo que te doy y aplico por vos para que puedas convertir tu marca de consumibles en modelo de suscripción, 100 % uno a uno conmigo.",
   /** Numerados y en zig-zag automático. */
   features: [
     {
@@ -205,9 +205,8 @@ export const program = {
  * collage que la referencia tenía separados.
  */
 export const results = {
-  eyebrow: "Casos reales",
-  title: "Las marcas que *ya lo están corriendo*",
-  subtitle: "PLACEHOLDER — una oración que conecte el caso propio con el de ellos.",
+  eyebrow: "Marcas",
+  title: "Más casos de mis *clientes*",
   items: [
     {
       src: "/placeholders/resultado-1.svg",

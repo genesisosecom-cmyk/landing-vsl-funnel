@@ -12,11 +12,7 @@ export function InsideLook() {
   return (
     <Section id="por-dentro" tono="blanco">
       <div className="flex flex-col items-center gap-10">
-        <SectionHeading
-          label={insideLook.eyebrow}
-          title={insideLook.title}
-          subtitle={insideLook.body}
-        />
+        <SectionHeading label={insideLook.eyebrow} title={insideLook.title} />
 
         <img
           src={destacada.src}
