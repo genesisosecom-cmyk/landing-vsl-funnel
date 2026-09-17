@@ -1,12 +1,12 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="600" height="620" viewBox="0 0 600 620" role="img" aria-label="PRUEBA 4">
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="620" viewBox="0 0 600 620" role="img" aria-label="TABLERO 4">
   <defs>
-    <pattern id="h" width="16" height="16" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
-      <line x1="0" y1="0" x2="0" y2="16" stroke="#d8ded8" stroke-width="6"/>
+    <pattern id="t" width="18" height="18" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <line x1="0" y1="0" x2="0" y2="18" stroke="#EAE7E2" stroke-width="7"/>
     </pattern>
   </defs>
-  <rect width="600" height="620" fill="#eef1ee"/>
-  <rect width="600" height="620" fill="url(#h)" opacity="0.5"/>
-  <rect x="1" y="1" width="598" height="618" fill="none" stroke="#c3ccc3" stroke-width="2"/>
-  <text x="50%" y="48%" text-anchor="middle" font-family="system-ui, sans-serif" font-size="42" font-weight="700" fill="#6b746b">PRUEBA 4</text>
-  <text x="50%" y="48%" dy="44" text-anchor="middle" font-family="system-ui, sans-serif" font-size="36" fill="#8d968d">600 × 620</text>
+  <rect width="600" height="620" fill="#F4F2EF"/>
+  <rect width="600" height="620" fill="url(#t)"/>
+  <rect x="0.5" y="0.5" width="599" height="619" fill="none" stroke="#E6E2DD"/>
+  <text x="50%" y="48%" text-anchor="middle" font-family="system-ui, sans-serif" font-size="37" font-weight="600" letter-spacing="3.7" fill="#7A7370">TABLERO 4</text>
+  <text x="50%" y="48%" dy="42" text-anchor="middle" font-family="system-ui, sans-serif" font-size="32" letter-spacing="3.2" fill="#A39C96">600 × 620</text>
 </svg>

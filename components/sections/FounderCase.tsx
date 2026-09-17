@@ -1,51 +1,44 @@
 import { Section } from "@/components/ui/Section";
 import { SectionHeading } from "@/components/ui/SectionHeading";
+import { FranjaDeDatos } from "@/components/ui/FranjaDeDatos";
 import { VideoFrame } from "@/components/ui/VideoFrame";
 import { founderCase } from "@/content/landing";
 
 /**
- * Prueba social A — el caso propio del fundador.
+ * Prueba social A — el caso propio de Manu.
  *
- * Va acá arriba y no abajo con los alumnos porque responde la primera objeción
+ * Va arriba y no abajo con los alumnos porque responde la primera objeción
  * ("¿esto funciona?"). Formato propio, no la tarjeta repetida de testimonios:
- * es un solo caso y se sostiene con métricas + capturas propias.
+ * es un solo caso y se sostiene con datos y capturas propias.
+ *
+ * Se queda sobre negro: es pieza de marca, no contenido educativo (manual 4.3).
  */
 export function FounderCase() {
   return (
-    <Section id="caso-propio" tone="paper">
-      <div className="flex flex-col gap-10">
-        <SectionHeading label={founderCase.label} title={founderCase.title} />
-
-        <div className="grid items-center gap-8 lg:grid-cols-[1.1fr_1fr]">
+    <Section id="caso-propio" tono="negro">
+      <div className="flex flex-col gap-12">
+        <div className="grid items-center gap-14 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,1fr)]">
           <VideoFrame video={founderCase.video} />
 
-          <div className="flex flex-col gap-6">
-            <p className="text-base leading-relaxed">{founderCase.intro}</p>
+          <div className="flex flex-col gap-7">
+            <SectionHeading eyebrow={founderCase.eyebrow} title={founderCase.title} />
 
-            <dl className="grid grid-cols-3 gap-3">
-              {founderCase.stats.map((stat) => (
-                <div
-                  key={stat.label}
-                  className="rounded-card border border-hairline bg-mint/50 px-3 py-4 text-center"
-                >
-                  <dt className="sr-only">{stat.label}</dt>
-                  <dd className="flex flex-col gap-1">
-                    <span className="font-display text-xl text-accent-ink sm:text-2xl">
-                      {stat.value}
-                    </span>
-                    <span className="font-display text-[0.6rem] uppercase tracking-label text-body">
-                      {stat.label}
-                    </span>
-                  </dd>
-                </div>
-              ))}
-            </dl>
+            {founderCase.body.map((parrafo) => (
+              <p key={parrafo.slice(0, 32)} className="max-w-prose text-texto">
+                {parrafo}
+              </p>
+            ))}
+
+            <FranjaDeDatos
+              datos={founderCase.datos}
+              tamano="chico"
+              className="border-t border-linea pt-7"
+            />
           </div>
         </div>
 
-        <div className="grid gap-4 sm:grid-cols-2">
+        <div className="grid gap-6 md:grid-cols-2">
           {founderCase.media.map((shot) => (
-            // eslint-disable-next-line @next/next/no-img-element
             <img
               key={shot.src}
               src={shot.src}
@@ -53,7 +46,7 @@ export function FounderCase() {
               width={shot.width}
               height={shot.height}
               loading="lazy"
-              className="w-full rounded-card border border-hairline shadow-card"
+              className="w-full rounded-pieza border border-linea"
             />
           ))}
         </div>

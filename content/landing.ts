@@ -1,11 +1,17 @@
 /**
- * Contenido de la landing. Toda la página se arma desde acá:
- * ningún componente tiene copy ni rutas de assets hardcodeadas.
+ * Contenido de la landing. Toda la página se arma desde acá: ningún componente
+ * tiene copy ni rutas de assets adentro.
  *
- * Convención de resaltado: envolver en *asteriscos* las palabras que deben ir
- * en el color de acento dentro de un titular. Ej: "escalar a *$100k/mes*".
+ * Voz de marca (manual 1.3): rioplatense, de vos, directo. Frases cortas. El
+ * número al frente. Los "sin" antes que los "con". Nunca grita: sin mayúsculas
+ * de urgencia, sin emojis, sin signos de exclamación.
  *
- * TODO(contenido): todo lo marcado como PLACEHOLDER debe reemplazarse.
+ * Resaltado: envolver en *asteriscos* las palabras que van en naranja. El manual
+ * (2.4) lo limita a palabras sueltas y grandes; nunca a texto corrido.
+ *
+ * Marcas de estado del copy:
+ *   BORRADOR    — redactado a partir del manual de marca. Falta aprobación.
+ *   PLACEHOLDER — falta el dato o el material real.
  */
 
 export type Media = {
@@ -25,8 +31,10 @@ export type Video = {
   duration?: string;
 };
 
-export type Stat = {
+export type Dato = {
+  /** Cifra: un solo dato por pieza, en blanco sobre negro o negro sobre hueso. */
   value: string;
+  /** Etiqueta en Archivo, mayúsculas, gris cálido. */
   label: string;
 };
 
@@ -34,12 +42,12 @@ export type StudentCase = {
   id: string;
   name: string;
   country: string;
-  /** Línea de contexto: punto de partida → resultado · nicho. */
+  /** Contexto: punto de partida → resultado · nicho. */
   context: string;
   /** Titular del caso, con la cifra entre *asteriscos*. */
   headline: string;
   body: string;
-  metric: { label: string; value: string };
+  metric: Dato;
   video: Video;
 };
 
@@ -55,23 +63,19 @@ export type Feature = {
 
 export const site = {
   brand: {
-    name: "NOMBRE DE MARCA",
-    logo: {
-      src: "/placeholders/logo.svg",
-      alt: "Logo PLACEHOLDER",
-      width: 96,
-      height: 48,
-    } satisfies Media,
-    tagline: "BAJADA DE LA MARCA",
+    name: "Génesis OS",
+    /** Manual 1.3: se le vende al dueño de marca sin venderle. */
+    tagline: "El sistema desde donde una marca empieza a existir de otra forma",
   },
   seo: {
-    title: "PLACEHOLDER — Titular de la landing",
-    description: "PLACEHOLDER — descripción de 150 caracteres para buscadores y previews.",
+    title: "Génesis OS — El mes arranca cobrado",
+    description:
+      "Marcas de consumibles que acumulan clientes en vez de volver a comprarlos. El modelo de suscripción aplicado sobre el producto que ya vendés.",
   },
-  /** Un único CTA en toda la página: mismo texto, mismo destino, 5 apariciones. */
+  /** Un solo botón por pantalla (manual 4.4): naranja con texto negro. */
   cta: {
-    label: "Quiero acceder ahora",
     // TODO(contenido): URL real del checkout o del formulario de aplicación.
+    label: "Quiero entrar a Génesis",
     href: "https://ejemplo.com/checkout",
   },
 } as const;
@@ -81,10 +85,19 @@ export const site = {
 /* -------------------------------------------------------------------------- */
 
 export const hero = {
-  /** Fórmula: resultado + *métrica* + (sin la objeción principal). */
-  title: 'Cómo [lograr el resultado] y escalar a *[métrica]* (sin [objeción principal]).',
-  subtitle:
-    "PLACEHOLDER — una oración con la prueba de autoridad en número duro y a quién le sirve, tanto si empieza de cero como si ya está vendiendo.",
+  /** Eyebrow en Archivo naranja (manual 4.4). */
+  eyebrow: "Modelo de suscripción de consumibles",
+  /** H1 de dos líneas como máximo (manual 2.5). */
+  title: "El mes arranca *cobrado*.",
+  subtitle: "Marcas de consumibles que acumulan clientes en vez de volver a comprarlos.",
+  body:
+    "Génesis parte del producto que ya vendés, lo rediseña para que se cobre solo cada ciclo de reposición, y construye una base de suscriptores que aguanta el blanco y no depende de Meta.",
+  /** Franja de datos: cifra en blanco, etiqueta en gris cálido (manual 4.4). */
+  datos: [
+    { value: "2.200", label: "Suscriptores activos" },
+    { value: "1,28 %", label: "Churn mensual" },
+    { value: "USD 15.000", label: "Primer mes, sin pauta" },
+  ] satisfies Dato[],
   video: {
     kind: "file",
     src: "",
@@ -92,7 +105,7 @@ export const hero = {
     duration: "12:57",
     poster: {
       src: "/placeholders/video-16x9.svg",
-      alt: "PLACEHOLDER — portada del VSL",
+      alt: "PLACEHOLDER — portada del VSL: Manu explicando en el tablero",
       width: 1280,
       height: 720,
     },
@@ -100,35 +113,47 @@ export const hero = {
 };
 
 /* -------------------------------------------------------------------------- */
-/* 2. Prueba A — el caso del fundador (el testimonio más fuerte)               */
+/* 2. Prueba A — el caso propio (el testimonio más fuerte)                     */
 /* -------------------------------------------------------------------------- */
 
 export const founderCase = {
-  label: "Mi propio caso",
-  title: "De *[punto de partida]* a *[resultado]*",
-  intro:
-    "PLACEHOLDER — 2 o 3 oraciones en primera persona: de dónde arrancó, qué cambió y en cuánto tiempo. Es la respuesta a “¿esto de verdad funciona?”, así que va antes que cualquier testimonio de alumnos.",
-  /** Franja de métricas propias: 3 o 4, nunca más. */
-  stats: [
-    { value: "+$0.0M", label: "Facturado" },
-    { value: "0", label: "Marcas propias" },
-    { value: "0 meses", label: "Para el primer $100k" },
-  ] satisfies Stat[],
+  eyebrow: "El caso propio",
+  title: "El modelo lo corro en *mi propia marca*",
+  /** BORRADOR — redactado con los datos de la sección 1.1 del manual. */
+  body: [
+    "Arranqué en Mar del Plata publicando en orgánico sobre e-commerce de consumibles. Sin pauta, sin setters y sin closers: el primer mes de Génesis facturó USD 15.000.",
+    "Mientras el mercado vende “creá y escalá tu tienda”, yo opero una marca de consumibles por suscripción con 2.200 suscriptores activos y 1,28 % de churn. El modelo que enseño es el que uso.",
+  ],
+  datos: [
+    { value: "2.200", label: "Suscriptores activos" },
+    { value: "1,28 %", label: "Churn mensual" },
+    { value: "USD 15.000", label: "Primer mes, sin pauta" },
+  ] satisfies Dato[],
   video: {
     kind: "file",
     src: "",
-    title: "Caso del fundador",
+    title: "El caso de Manu",
     poster: {
       src: "/placeholders/video-16x9.svg",
-      alt: "PLACEHOLDER — video del caso propio",
+      alt: "PLACEHOLDER — Manu explicando el tablero de su marca",
       width: 1280,
       height: 720,
     },
   } satisfies Video,
-  /** Capturas propias: dashboards, facturación, marcas. */
+  /** Capturas propias: tablero de suscripciones, cohortes, facturación. */
   media: [
-    { src: "/placeholders/shot-wide-1.svg", alt: "PLACEHOLDER — dashboard de ventas", width: 800, height: 500 },
-    { src: "/placeholders/shot-wide-2.svg", alt: "PLACEHOLDER — facturación mensual", width: 800, height: 500 },
+    {
+      src: "/placeholders/shot-wide-1.svg",
+      alt: "PLACEHOLDER — tablero de suscripciones activas",
+      width: 800,
+      height: 500,
+    },
+    {
+      src: "/placeholders/shot-wide-2.svg",
+      alt: "PLACEHOLDER — cohortes y churn mensual",
+      width: 800,
+      height: 500,
+    },
   ] satisfies Media[],
 };
 
@@ -137,14 +162,16 @@ export const founderCase = {
 /* -------------------------------------------------------------------------- */
 
 export const insideLook = {
-  title: "Cómo funciona *[producto]* desde adentro",
+  eyebrow: "Por dentro",
+  title: "Cómo funciona *Génesis OS* desde adentro",
+  body: "PLACEHOLDER — una línea sobre qué se ve en el recorrido: el campus, el tablero, la comunidad.",
   video: {
     kind: "file",
     src: "",
-    title: "Recorrido por el producto",
+    title: "Recorrido por Génesis OS",
     poster: {
       src: "/placeholders/inside-16x9.svg",
-      alt: "PLACEHOLDER — captura del producto por dentro",
+      alt: "PLACEHOLDER — captura del programa por dentro",
       width: 1280,
       height: 720,
     },
@@ -156,39 +183,39 @@ export const insideLook = {
 /* -------------------------------------------------------------------------- */
 
 export const program = {
-  label: "El programa",
+  eyebrow: "El programa",
   title: "Todo lo que *recibís*",
   subtitle: "PLACEHOLDER — una oración que resuma el conjunto de entregables y el acompañamiento.",
-  /** Se muestran numerados y en zig-zag automático. 6 es el número de la referencia. */
+  /** Numerados y en zig-zag automático. */
   features: [
     {
-      title: "Seguimiento *1:1* con el equipo",
-      body: "PLACEHOLDER — describir el beneficio, no la feature: qué problema le saca de encima.",
+      title: "Seguimiento *1:1* con Manu y el equipo",
+      body: "PLACEHOLDER — el beneficio, no la feature: qué problema le saca de encima al dueño de marca.",
       media: { src: "/placeholders/feature-1.svg", alt: "PLACEHOLDER", width: 720, height: 520 },
     },
     {
-      title: "Llamadas *1:1*",
-      body: "PLACEHOLDER — describir el beneficio, no la feature.",
+      title: "Rediseño del *producto* a ciclo de reposición",
+      body: "PLACEHOLDER — el beneficio, no la feature.",
       media: { src: "/placeholders/feature-2.svg", alt: "PLACEHOLDER", width: 720, height: 520 },
     },
     {
       title: "Llamadas *grupales* semanales",
-      body: "PLACEHOLDER — describir el beneficio, no la feature.",
+      body: "PLACEHOLDER — el beneficio, no la feature.",
       media: { src: "/placeholders/feature-3.svg", alt: "PLACEHOLDER", width: 720, height: 520 },
     },
     {
-      title: "Más de *15 horas* de contenido grabado",
-      body: "PLACEHOLDER — describir el beneficio, no la feature.",
+      title: "El sistema de *retención* y cobro recurrente",
+      body: "PLACEHOLDER — el beneficio, no la feature.",
       media: { src: "/placeholders/feature-4.svg", alt: "PLACEHOLDER", width: 720, height: 520 },
     },
     {
-      title: "Sistemas, recursos y *conexiones*",
-      body: "PLACEHOLDER — describir el beneficio, no la feature.",
+      title: "Proveedores, *logística* y reposición",
+      body: "PLACEHOLDER — el beneficio, no la feature.",
       media: { src: "/placeholders/feature-5.svg", alt: "PLACEHOLDER", width: 720, height: 520 },
     },
     {
-      title: "Chat de *comunidad*",
-      body: "PLACEHOLDER — describir el beneficio, no la feature.",
+      title: "Comunidad de *dueños de marca*",
+      body: "PLACEHOLDER — el beneficio, no la feature.",
       media: { src: "/placeholders/feature-6.svg", alt: "PLACEHOLDER", width: 720, height: 520 },
     },
   ] satisfies Feature[],
@@ -199,19 +226,19 @@ export const program = {
 /* -------------------------------------------------------------------------- */
 
 export const studentCases = {
-  label: "Casos reales",
-  title: "Resultados de mis *alumnos*",
+  eyebrow: "Casos reales",
+  title: "Las marcas que *ya lo están corriendo*",
   subtitle: "PLACEHOLDER — una oración que conecte el caso propio con el de ellos.",
-  /** Mismo esquema de campos en todos: los hace comparables entre sí. */
+  /** Mismo esquema de campos en todos: el formato fijo los hace comparables. */
   items: [
     {
       id: "alumno-1",
       name: "Nombre Apellido",
-      country: "País",
-      context: "Punto de partida → resultado · Nicho",
+      country: "Ciudad, País",
+      context: "Compra única → suscripción · Nicho",
       headline: "De *[cifra inicial]* a *[cifra final]* en [tiempo]",
-      body: "PLACEHOLDER — 3 o 4 líneas: dónde estaba trabado, qué cambió al aplicar el método y dónde está hoy.",
-      metric: { label: "Facturación mensual", value: "$00,000 USD" },
+      body: "PLACEHOLDER — 3 o 4 líneas: dónde estaba trabado, qué cambió al aplicar el modelo y dónde está hoy. El número al frente.",
+      metric: { value: "$00.000", label: "Facturación mensual" },
       video: {
         kind: "file",
         src: "",
@@ -222,11 +249,11 @@ export const studentCases = {
     {
       id: "alumno-2",
       name: "Nombre Apellido",
-      country: "País",
-      context: "Punto de partida → resultado · Nicho",
+      country: "Ciudad, País",
+      context: "Compra única → suscripción · Nicho",
       headline: "De *[cifra inicial]* a *[cifra final]* en [tiempo]",
-      body: "PLACEHOLDER — 3 o 4 líneas: dónde estaba trabado, qué cambió al aplicar el método y dónde está hoy.",
-      metric: { label: "Ventas en 60 días", value: "$000,000 USD" },
+      body: "PLACEHOLDER — 3 o 4 líneas: dónde estaba trabado, qué cambió al aplicar el modelo y dónde está hoy. El número al frente.",
+      metric: { value: "000", label: "Suscriptores activos" },
       video: {
         kind: "file",
         src: "",
@@ -237,11 +264,11 @@ export const studentCases = {
     {
       id: "alumno-3",
       name: "Nombre Apellido",
-      country: "País",
-      context: "Punto de partida → resultado · Nicho",
+      country: "Ciudad, País",
+      context: "Compra única → suscripción · Nicho",
       headline: "De *[cifra inicial]* a *[cifra final]* en [tiempo]",
-      body: "PLACEHOLDER — 3 o 4 líneas: dónde estaba trabado, qué cambió al aplicar el método y dónde está hoy.",
-      metric: { label: "Profit mensual", value: "$00,000 USD" },
+      body: "PLACEHOLDER — 3 o 4 líneas: dónde estaba trabado, qué cambió al aplicar el modelo y dónde está hoy. El número al frente.",
+      metric: { value: "0,00 %", label: "Churn mensual" },
       video: {
         kind: "file",
         src: "",
@@ -252,16 +279,27 @@ export const studentCases = {
   ] satisfies StudentCase[],
 };
 
-/** Capturas crudas de alumnos: mensajes, paneles, gráficos. 8–12 funciona bien. */
+/** Capturas crudas: tableros, cohortes, mensajes. Carril analista, cero autos (manual 3.1). */
 export const proofCollage = {
-  label: "Casos reales",
-  title: "Más resultados de *alumnos*",
-  images: Array.from({ length: 9 }, (_, i) => ({
+  eyebrow: "Sin edición",
+  title: "Los tableros, como están",
+  images: Array.from({ length: 8 }, (_, i) => ({
     src: `/placeholders/proof-${i + 1}.svg`,
-    alt: `PLACEHOLDER — captura de resultado ${i + 1}`,
+    alt: `PLACEHOLDER — captura de tablero ${i + 1}`,
     width: 600,
-    height: [420, 560, 340, 620, 400, 500, 360, 540, 460][i],
+    height: [420, 560, 340, 620, 400, 500, 360, 540][i],
   })) satisfies Media[],
+};
+
+/* -------------------------------------------------------------------------- */
+/* Bandas de CTA                                                               */
+/* -------------------------------------------------------------------------- */
+
+/** Una línea de contexto por banda: evita el botón flotando solo en el vacío. */
+export const ctaBands = {
+  hero: "Lo mismo que corro en mi marca, aplicado a la tuya.",
+  programa: "Se parte del producto que ya vendés. No se empieza de cero.",
+  cierre: "PLACEHOLDER — la línea de cierre, antes del último botón.",
 };
 
 /* -------------------------------------------------------------------------- */
@@ -271,10 +309,11 @@ export const proofCollage = {
 export const footer = {
   /** Obligatorio si se corre tráfico pago mostrando cifras de facturación. */
   disclaimer:
-    "PLACEHOLDER — descargo de resultados: los casos mostrados son reales pero no garantizan resultados. Los resultados dependen del esfuerzo, la experiencia previa y el mercado. Esta página no está afiliada a Meta, Google ni a ninguna otra plataforma.",
+    "PLACEHOLDER — descargo de resultados: los casos mostrados son reales y no garantizan resultados. Dependen del producto, del mercado y del trabajo de cada marca. Esta página no está afiliada a Meta, Google ni a ninguna otra plataforma.",
   links: [
     { label: "Términos y condiciones", href: "#" },
     { label: "Política de privacidad", href: "#" },
     { label: "Contacto", href: "#" },
   ],
+  usuario: "@manudomzz",
 };

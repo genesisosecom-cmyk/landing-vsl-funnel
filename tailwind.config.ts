@@ -1,8 +1,11 @@
 import type { Config } from "tailwindcss";
 
 /**
- * Design tokens de la landing. Cambiar la marca = cambiar `accent` y las fuentes
- * en app/layout.tsx. Nada más debería tocarse para un rebrand.
+ * Tokens del Manual de Marca Génesis OS v2.0.
+ * Ningún valor de color ni de tipografía se define fuera de este archivo.
+ *
+ * Proporción de uso (manual 2.4): Negro 55 · Hueso y blanco 30 · Grises 10 · Naranja 5.
+ * El naranja se nota porque es poco: solo Semilla, acentos, subrayados y botones.
  */
 const config: Config = {
   content: [
@@ -14,44 +17,54 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        ink: "#0a0a0a",
-        frame: "#0a0a0a",
-        paper: "#ffffff",
-        mint: "#eef5ef",
-        /**
-         * Tres verdes por contraste, no por capricho:
-         * - DEFAULT: solo rellenos (botón, badges, estrellas) — texto oscuro encima.
-         * - head:    texto verde de 24px+ en negrita (AA large sobre blanco).
-         * - ink:     texto verde chico (AA normal sobre blanco).
-         */
-        accent: {
-          DEFAULT: "#3ecf4c",
-          hover: "#35bf43",
-          head: "#22a03a",
-          ink: "#1a8230",
-          50: "#eafaec",
+        negro: "#0B0B0B",
+        carbon: "#2E2E2E",
+        blanco: "#FFFFFF",
+        hueso: "#F4F2EF",
+        arena: "#E6E2DD",
+        /** Naranja Génesis: acentos sobre oscuro y fondo de botón. Nunca texto corrido. */
+        naranja: "#F0641E",
+        /** Brasa: el naranja legible sobre claro, y el hover del botón. */
+        brasa: "#C2410C",
+        /** Luz: extremo claro del degradado de la Semilla. Nunca sola. */
+        luz: "#FFB35C",
+        gris: {
+          calido: "#7A7370",
+          claro: "#BDB7B2",
         },
-        body: "#565c63",
-        hairline: "#e6e9e6",
+        anotacion: "#D42A2A",
       },
       fontFamily: {
-        display: ["var(--font-display)", "system-ui", "sans-serif"],
-        sans: ["var(--font-body)", "system-ui", "sans-serif"],
+        /** Todo lo que se lee. Es la fuente del logotipo. */
+        sans: ["var(--font-montserrat)", "system-ui", "sans-serif"],
+        /** Todo lo que se mide: etiquetas, datos, captions, numeración. */
+        data: ["var(--font-archivo)", "ui-monospace", "monospace"],
       },
-      maxWidth: {
-        page: "1180px",
-        prose: "620px",
-      },
-      borderRadius: {
-        card: "1.25rem",
-        cta: "0.625rem",
-      },
-      boxShadow: {
-        card: "0 18px 50px -24px rgba(10, 10, 10, 0.25)",
-        cta: "0 10px 24px -10px rgba(47, 184, 65, 0.7)",
+      fontSize: {
+        // Jerarquía del manual 2.5, en los valores de pantalla.
+        h1: ["4rem", { lineHeight: "1.05", letterSpacing: "-0.015em" }],
+        h2: ["1.875rem", { lineHeight: "1.2", letterSpacing: "-0.01em" }],
+        h3: ["1.375rem", { lineHeight: "1.25", letterSpacing: "-0.01em" }],
+        cuerpo: ["1.0625rem", { lineHeight: "1.6" }],
+        cifra: ["6rem", { lineHeight: "1", letterSpacing: "-0.02em" }],
+        dato: ["0.75rem", { lineHeight: "1.4", letterSpacing: "0.1em" }],
       },
       letterSpacing: {
-        label: "0.18em",
+        dato: "0.1em",
+        wordmark: "0.13em",
+      },
+      maxWidth: {
+        page: "1240px",
+        prose: "66ch",
+      },
+      borderRadius: {
+        pieza: "0.75rem",
+      },
+      backgroundImage: {
+        /** Halo: Brasa al 55 % que se apaga hacia negro. Uno solo por pieza (manual 3.3). */
+        halo: "radial-gradient(30% 48% at 18% 26%, rgba(194,65,12,0.55) 0%, rgba(194,65,12,0.12) 46%, rgba(11,11,11,0) 72%)",
+        /** Degradado Semilla: Luz → Brasa a 160°. Solo en la Semilla, solo sobre negro. */
+        semilla: "linear-gradient(160deg, #FFB35C 0%, #C2410C 100%)",
       },
     },
   },

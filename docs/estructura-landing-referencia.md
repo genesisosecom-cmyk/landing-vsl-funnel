@@ -150,3 +150,22 @@ solo caso y la tarjeta está diseñada para comparar varios entre sí.
 
 Implementado en `components/sections/FounderCase.tsx` y `components/sections/StudentCases.tsx`.
 Para invertir el orden alcanza con permutar ambos componentes en `app/page.tsx`.
+
+## 8. Implementación sobre el Manual de Marca Génesis OS
+
+La estructura de la referencia se mantiene; lo que cambia es todo lo visual y la
+voz. Equivalencias principales:
+
+| Referencia | Génesis OS |
+|---|---|
+| Landing clara con acento verde neón | Negro dominante con acento Naranja Génesis (proporción 55/30/10/5 del manual) |
+| Display condensada + Inter | Montserrat (lo que se lee) + Archivo (lo que se mide) |
+| Eyebrow en píldora | Eyebrow en Archivo mayúsculas, sin contenedor |
+| CTA verde, mayúsculas | Botón naranja con texto negro, sin mayúsculas de urgencia |
+| Cinco estrellas en el testimonio | La cifra al frente: "data antes que humo" |
+| Seis filas en zig-zag | Grilla de dos columnas (optimización de desktop) |
+| Sin identidad gráfica propia | Semilla, halo y campo de semillas construidos según el manual |
+
+El hero sigue además la especificación 4.4 del manual (hero web), que define
+fondo negro con halo, eyebrow naranja, título de dos líneas, un solo botón y la
+franja de datos con cifra en blanco y etiqueta en gris cálido.

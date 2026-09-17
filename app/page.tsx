@@ -1,3 +1,4 @@
+import { TopBar } from "@/components/sections/TopBar";
 import { Hero } from "@/components/sections/Hero";
 import { CtaBand } from "@/components/sections/CtaBand";
 import { FounderCase } from "@/components/sections/FounderCase";
@@ -5,38 +6,43 @@ import { InsideLook } from "@/components/sections/InsideLook";
 import { Program } from "@/components/sections/Program";
 import { StudentCases } from "@/components/sections/StudentCases";
 import { ProofCollage } from "@/components/sections/ProofCollage";
+import { CampoDeSemillas } from "@/components/brand/CampoDeSemillas";
 import { SiteFooter } from "@/components/sections/SiteFooter";
+import { ctaBands } from "@/content/landing";
 
 /**
- * Orden del funnel. El patrón es siempre: bloque de valor → prueba → CTA.
+ * Orden del funnel: bloque de valor → prueba → CTA.
  *
- * Los dos bloques de prueba social están separados a propósito:
- *   · FounderCase  (arriba) → "¿esto funciona?"        → el caso propio, el más fuerte.
+ * Los dos bloques de prueba social están separados por objeción:
+ *   · FounderCase  (arriba) → "¿esto funciona?"          → el caso propio de Manu.
  *   · StudentCases (abajo)  → "¿me va a funcionar a mí?" → casos de alumnos.
+ * Para invertirlos alcanza con intercambiarlos acá.
  *
- * Para invertirlos alcanza con intercambiar <FounderCase /> y <StudentCases />
- * acá: los componentes no dependen de su posición.
+ * Tonos según la proporción del manual (Negro 55 · Hueso 30): hero y caso propio
+ * sobre negro, todo el contenido sobre hueso, cierre y pie de vuelta en negro.
  */
 export default function Page() {
   return (
-    <main>
-      <Hero />
-      <CtaBand />
+    <>
+      <TopBar />
+      <main>
+        <Hero />
+        <FounderCase />
+        <CtaBand nota={ctaBands.hero} tono="negro" />
 
-      <FounderCase />
-      <CtaBand />
+        <InsideLook />
+        <Program />
+        <CtaBand nota={ctaBands.programa} tono="hueso" />
 
-      <InsideLook />
-      <CtaBand />
+        <StudentCases />
+        <ProofCollage />
 
-      <Program />
-      <CtaBand />
-
-      <StudentCases />
-      <ProofCollage />
-      <CtaBand tone="paper" />
-
+        <div className="tono-negro border-t border-linea bg-negro">
+          <CampoDeSemillas />
+        </div>
+        <CtaBand nota={ctaBands.cierre} tono="negro" />
+      </main>
       <SiteFooter />
-    </main>
+    </>
   );
 }

@@ -1,24 +1,22 @@
 import { highlight } from "@/lib/highlight";
-import { SectionLabel } from "./SectionLabel";
+import { Eyebrow } from "./Eyebrow";
 
 type Props = {
-  label?: string;
-  /** Usar *asteriscos* para las palabras en verde. */
+  eyebrow?: string;
+  /** Usar *asteriscos* para las palabras en el color de acento. */
   title: string;
   subtitle?: string;
-  align?: "center" | "left";
+  align?: "left" | "center";
 };
 
-export function SectionHeading({ label, title, subtitle, align = "center" }: Props) {
-  const alignment = align === "center" ? "items-center text-center" : "items-start text-left";
+export function SectionHeading({ eyebrow, title, subtitle, align = "left" }: Props) {
+  const alineacion = align === "center" ? "items-center text-center" : "items-start text-left";
 
   return (
-    <header className={`flex flex-col gap-4 ${alignment}`}>
-      {label ? <SectionLabel>{label}</SectionLabel> : null}
-      <h2 className="max-w-3xl text-3xl leading-[1.1] sm:text-4xl lg:text-[2.75rem]">
-        {highlight(title)}
-      </h2>
-      {subtitle ? <p className="max-w-prose text-base leading-relaxed">{subtitle}</p> : null}
+    <header className={`flex flex-col gap-4 ${alineacion}`}>
+      {eyebrow ? <Eyebrow>{eyebrow}</Eyebrow> : null}
+      <h2 className="max-w-3xl text-titulo">{highlight(title)}</h2>
+      {subtitle ? <p className="max-w-prose text-texto">{subtitle}</p> : null}
     </header>
   );
 }

@@ -8,25 +8,89 @@
   }
 
   body {
-    @apply bg-frame font-sans text-body antialiased;
+    @apply bg-negro font-sans text-cuerpo text-gris-claro antialiased;
   }
 
-  h1,
-  h2,
+  /* 64 px es el tope del rango del manual y es un valor de desktop: en mobile
+     el mismo título ocuparía media pantalla. */
+  h1 {
+    @apply font-sans text-h1 font-semibold max-md:text-[2.75rem];
+  }
+
+  h2 {
+    @apply font-sans text-h2 font-medium;
+  }
+
   h3 {
-    @apply font-display text-ink;
-    text-wrap: balance;
+    @apply font-sans text-h3 font-medium;
+  }
+
+  ::selection {
+    @apply bg-naranja text-negro;
   }
 }
 
 @layer components {
-  /* Contenedor interno de cada sección. */
-  .container-page {
-    @apply mx-auto w-full max-w-page px-5 sm:px-8;
+  /**
+   * Cada sección declara su tono y todo lo que hay adentro lo hereda por
+   * variables CSS. Es lo que mantiene la regla del manual de que el naranja
+   * sobre claro se reemplaza por Brasa, sin que ningún componente tenga que
+   * saber dónde está montado.
+   */
+  /* Fallback: si una sección no declara tono, hereda el oscuro. */
+  .tono-negro {
+    --fondo: #0b0b0b;
+    --pieza: #111111;
+    --titulo: #ffffff;
+    --texto: #bdb7b2;
+    --sutil: #7a7370;
+    --acento: #f0641e;
+    --linea: #2e2e2e;
   }
 
-  /* Ritmo vertical compartido por todas las secciones. */
+  .tono-hueso {
+    --fondo: #f4f2ef;
+    --pieza: #ffffff;
+    --titulo: #0b0b0b;
+    --texto: #0b0b0b;
+    --sutil: #7a7370;
+    --acento: #c2410c;
+    --linea: #e6e2dd;
+  }
+
+  .bg-tono {
+    background-color: var(--fondo);
+  }
+  .bg-pieza {
+    background-color: var(--pieza);
+  }
+  .text-titulo {
+    color: var(--titulo);
+  }
+  .text-texto {
+    color: var(--texto);
+  }
+  .text-sutil {
+    color: var(--sutil);
+  }
+  .text-acento {
+    color: var(--acento);
+  }
+  .border-linea {
+    border-color: var(--linea);
+  }
+
+  .container-page {
+    @apply mx-auto w-full max-w-page px-8;
+  }
+
+  /* Ritmo vertical de desktop: denso a propósito, sin bandas vacías. */
   .section-pad {
-    @apply py-16 sm:py-20 lg:py-24;
+    @apply py-20 max-lg:py-14;
+  }
+
+  /* Caption y datos (manual 2.5): Archivo, mayúsculas, tracking +10 %. */
+  .dato {
+    @apply font-data text-dato font-medium uppercase tracking-dato text-sutil;
   }
 }

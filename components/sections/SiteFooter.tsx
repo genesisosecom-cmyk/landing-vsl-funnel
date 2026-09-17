@@ -1,32 +1,29 @@
-import { footer, site } from "@/content/landing";
+import { Logotipo } from "@/components/brand/Logotipo";
+import { footer } from "@/content/landing";
 
 export function SiteFooter() {
   return (
-    <footer className="border-t border-hairline bg-ink">
-      <div className="container-page flex flex-col gap-6 py-12 text-center">
-        <span className="font-display text-sm uppercase tracking-label text-paper">
-          {site.brand.name}
-        </span>
+    <footer className="tono-negro border-t border-linea bg-negro">
+      <div className="container-page flex flex-col gap-10 py-14">
+        <div className="flex flex-wrap items-center justify-between gap-6">
+          <Logotipo tone="claro" className="text-[1.125rem]" />
+          {/* El usuario cierra la pieza en naranja (manual 4.3). */}
+          <span className="font-data text-dato font-medium uppercase tracking-dato text-naranja">
+            {footer.usuario}
+          </span>
+        </div>
 
-        <p className="mx-auto max-w-2xl text-xs leading-relaxed text-paper/60">
+        <p className="max-w-prose text-[0.8125rem] leading-relaxed text-sutil">
           {footer.disclaimer}
         </p>
 
-        <nav className="flex flex-wrap justify-center gap-x-6 gap-y-2">
+        <nav className="flex flex-wrap gap-x-8 gap-y-2 border-t border-linea pt-8">
           {footer.links.map((link) => (
-            <a
-              key={link.label}
-              href={link.href}
-              className="text-xs text-paper/70 underline-offset-4 hover:text-paper hover:underline"
-            >
+            <a key={link.label} className="dato hover:text-blanco" href={link.href}>
               {link.label}
             </a>
           ))}
         </nav>
-
-        <p className="text-xs text-paper/40">
-          &copy; {new Date().getFullYear()} {site.brand.name}
-        </p>
       </div>
     </footer>
   );

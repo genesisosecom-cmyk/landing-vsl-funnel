@@ -1,20 +1,26 @@
 import type { Metadata } from "next";
-import { Anton, Inter } from "next/font/google";
+import localFont from "next/font/local";
 import { site } from "@/content/landing";
 import "./globals.css";
 
-// Par tipográfico: display pesada para titulares + grotesca neutra para cuerpo.
-// Para cambiar la marca, reemplazar solo estas dos fuentes.
-const display = Anton({
-  subsets: ["latin", "latin-ext"],
-  weight: "400",
-  variable: "--font-display",
+/**
+ * Las dos familias del manual (2.5), self-hosted como variables subseteadas a
+ * latin + latin-ext: 145 KB entre las dos contra 1,37 MB de los .ttf originales.
+ *
+ * Montserrat = todo lo que se lee. Archivo = todo lo que se mide (el rol que el
+ * manual le da a JetBrains Mono; ver nota en README).
+ */
+const montserrat = localFont({
+  src: "../public/fonts/Montserrat-var.woff2",
+  weight: "100 900",
+  variable: "--font-montserrat",
   display: "swap",
 });
 
-const bodyFont = Inter({
-  subsets: ["latin", "latin-ext"],
-  variable: "--font-body",
+const archivo = localFont({
+  src: "../public/fonts/Archivo-var.woff2",
+  weight: "100 900",
+  variable: "--font-archivo",
   display: "swap",
 });
 
@@ -30,13 +36,8 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="es" className={`${display.variable} ${bodyFont.variable}`}>
-      <body>
-        {/* La página es una columna clara centrada sobre el marco oscuro. */}
-        <div className="mx-auto w-full max-w-[1280px] overflow-hidden bg-paper sm:my-6 sm:rounded-2xl">
-          {children}
-        </div>
-      </body>
+    <html lang="es" className={`${montserrat.variable} ${archivo.variable}`}>
+      <body>{children}</body>
     </html>
   );
 }

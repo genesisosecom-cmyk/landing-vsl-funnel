@@ -7,19 +7,21 @@ import { studentCases } from "@/content/landing";
  * Prueba social B — alumnos.
  *
  * Va después del caso propio y de la oferta: responde la segunda objeción
- * ("¿me va a funcionar a mí?"), que solo aparece cuando ya creyeron en el método.
+ * ("¿me va a funcionar a mí?"), que solo aparece cuando ya creyeron en el
+ * modelo. Sobre hueso, que es el carril del contenido con datos (manual 4.3).
  */
 export function StudentCases() {
   return (
-    <Section id="alumnos" tone="paper">
-      <div className="flex flex-col gap-10">
+    <Section id="alumnos" tono="hueso">
+      <div className="flex flex-col gap-12">
         <SectionHeading
-          label={studentCases.label}
+          eyebrow={studentCases.eyebrow}
           title={studentCases.title}
           subtitle={studentCases.subtitle}
         />
 
-        <div className="flex flex-col gap-6">
+        {/* Ancho acotado: a 1240 px la línea de texto se iba a 100 caracteres. */}
+        <div className="flex w-full max-w-[1040px] flex-col gap-6">
           {studentCases.items.map((item) => (
             <TestimonialCard key={item.id} item={item} />
           ))}

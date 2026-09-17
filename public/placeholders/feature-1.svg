@@ -1,12 +1,12 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="720" height="520" viewBox="0 0 720 520" role="img" aria-label="ENTREGABLE 1">
   <defs>
-    <pattern id="h" width="16" height="16" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
-      <line x1="0" y1="0" x2="0" y2="16" stroke="#d8ded8" stroke-width="6"/>
+    <pattern id="t" width="18" height="18" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <line x1="0" y1="0" x2="0" y2="18" stroke="#EAE7E2" stroke-width="7"/>
     </pattern>
   </defs>
-  <rect width="720" height="520" fill="#eef1ee"/>
-  <rect width="720" height="520" fill="url(#h)" opacity="0.5"/>
-  <rect x="1" y="1" width="718" height="518" fill="none" stroke="#c3ccc3" stroke-width="2"/>
-  <text x="50%" y="48%" text-anchor="middle" font-family="system-ui, sans-serif" font-size="37" font-weight="700" fill="#6b746b">ENTREGABLE 1</text>
-  <text x="50%" y="48%" dy="39" text-anchor="middle" font-family="system-ui, sans-serif" font-size="31" fill="#8d968d">720 × 520</text>
+  <rect width="720" height="520" fill="#F4F2EF"/>
+  <rect width="720" height="520" fill="url(#t)"/>
+  <rect x="0.5" y="0.5" width="719" height="519" fill="none" stroke="#E6E2DD"/>
+  <text x="50%" y="48%" text-anchor="middle" font-family="system-ui, sans-serif" font-size="32" font-weight="600" letter-spacing="3.2" fill="#7A7370">ENTREGABLE 1</text>
+  <text x="50%" y="48%" dy="37" text-anchor="middle" font-family="system-ui, sans-serif" font-size="27" letter-spacing="2.7" fill="#A39C96">720 × 520</text>
 </svg>
