@@ -19,8 +19,6 @@ export function Hero() {
 
         <h1 className="max-w-[16ch] text-titulo">{highlight(hero.title)}</h1>
 
-        <p className="max-w-prose text-h3 font-medium text-titulo">{hero.subtitle}</p>
-
         <p className="max-w-prose text-texto">{hero.body}</p>
 
         <VideoFrame video={hero.video} className="w-full max-w-[46rem]" />

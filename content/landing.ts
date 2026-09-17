@@ -38,17 +38,11 @@ export type Dato = {
   label: string;
 };
 
-export type StudentCase = {
+export type MosaicItem = {
   id: string;
-  name: string;
-  country: string;
-  /** Contexto: punto de partida → resultado · nicho. */
-  context: string;
-  /** Titular del caso, con la cifra entre *asteriscos*. */
-  headline: string;
-  body: string;
-  metric: Dato;
-  video: Video;
+  /** La etiqueta del resultado, tal como va sobre la captura: "+$21k en 90 días". */
+  label: string;
+  image: Media;
 };
 
 export type Feature = {
@@ -87,7 +81,6 @@ export const site = {
 export const hero = {
   /** H1 de dos líneas como máximo (manual 2.5). */
   title: "El mes arranca *cobrado*.",
-  subtitle: "Marcas de consumibles que acumulan clientes en vez de volver a comprarlos.",
   body:
     "Génesis parte del producto que ya vendés, lo rediseña para que se cobre solo cada ciclo de reposición, y construye una base de suscriptores que aguanta el blanco y no depende de Meta.",
   video: {
@@ -109,7 +102,7 @@ export const hero = {
 /* -------------------------------------------------------------------------- */
 
 export const founderCase = {
-  eyebrow: "El caso propio",
+  eyebrow: "Mi caso",
   title: "El modelo lo corro en *mi propia marca*",
   /** BORRADOR — redactado con los datos de la sección 1.1 del manual. */
   body: [
@@ -121,31 +114,22 @@ export const founderCase = {
     { value: "1,28 %", label: "Churn mensual" },
     { value: "USD 15.000", label: "Primer mes, sin pauta" },
   ] satisfies Dato[],
-  video: {
-    kind: "file",
-    src: "",
-    title: "El caso de Manu",
-    poster: {
-      src: "/placeholders/video-16x9.svg",
-      alt: "PLACEHOLDER — Manu explicando el tablero de su marca",
-      width: 1280,
-      height: 720,
-    },
-  } satisfies Video,
-  /** Capturas propias: tablero de suscripciones, cohortes, facturación. */
+  /**
+   * Foto principal: carril analista (manual 3.1) — Manu explicando, con el
+   * tablero al lado y el producto real sobre la mesa. Nunca autos ni fajos.
+   */
+  photo: {
+    src: "/placeholders/foto-manu.svg",
+    alt: "PLACEHOLDER — foto de Manu explicando el tablero",
+    width: 900,
+    height: 1100,
+  } satisfies Media,
+  /** Capturas propias: tableros, cohortes, facturación, suscriptores. */
   media: [
-    {
-      src: "/placeholders/shot-wide-1.svg",
-      alt: "PLACEHOLDER — tablero de suscripciones activas",
-      width: 800,
-      height: 500,
-    },
-    {
-      src: "/placeholders/shot-wide-2.svg",
-      alt: "PLACEHOLDER — cohortes y churn mensual",
-      width: 800,
-      height: 500,
-    },
+    { src: "/placeholders/caso-1.svg", alt: "PLACEHOLDER — tablero de suscripciones", width: 800, height: 500 },
+    { src: "/placeholders/caso-2.svg", alt: "PLACEHOLDER — cohortes y churn", width: 800, height: 500 },
+    { src: "/placeholders/caso-3.svg", alt: "PLACEHOLDER — facturación mensual", width: 800, height: 500 },
+    { src: "/placeholders/caso-4.svg", alt: "PLACEHOLDER — suscriptores activos", width: 800, height: 500 },
   ] satisfies Media[],
 };
 
@@ -156,18 +140,14 @@ export const founderCase = {
 export const insideLook = {
   eyebrow: "Por dentro",
   title: "Cómo funciona *Génesis OS* desde adentro",
-  body: "PLACEHOLDER — una línea sobre qué se ve en el recorrido: el campus, el tablero, la comunidad.",
-  video: {
-    kind: "file",
-    src: "",
-    title: "Recorrido por Génesis OS",
-    poster: {
-      src: "/placeholders/inside-16x9.svg",
-      alt: "PLACEHOLDER — captura del programa por dentro",
-      width: 1280,
-      height: 720,
-    },
-  } satisfies Video,
+  body: "PLACEHOLDER — una línea sobre qué se ve acá: el campus, el tablero, la comunidad.",
+  /** La primera va destacada a lo ancho; las otras en grilla. */
+  media: [
+    { src: "/placeholders/dentro-1.svg", alt: "PLACEHOLDER — el campus por dentro", width: 1280, height: 720 },
+    { src: "/placeholders/dentro-2.svg", alt: "PLACEHOLDER — la comunidad", width: 800, height: 600 },
+    { src: "/placeholders/dentro-3.svg", alt: "PLACEHOLDER — el tablero del alumno", width: 800, height: 600 },
+    { src: "/placeholders/dentro-4.svg", alt: "PLACEHOLDER — las llamadas grabadas", width: 800, height: 600 },
+  ] satisfies Media[],
 };
 
 /* -------------------------------------------------------------------------- */
@@ -217,70 +197,161 @@ export const program = {
 /* 5. Prueba B — alumnos                                                       */
 /* -------------------------------------------------------------------------- */
 
-export const studentCases = {
+/**
+ * Prueba social B — los resultados de los alumnos, todos juntos.
+ *
+ * Son capturas sin editar con su etiqueta de resultado: el argumento es el
+ * volumen, no el detalle de cada una. Reemplaza a la vez las tarjetas de
+ * testimonio y el collage que la referencia tenía separados.
+ */
+export const results = {
   eyebrow: "Casos reales",
+  // TODO(contenido): las etiquetas son ejemplos. Reemplazar por el resultado
+  // real de cada captura, en el mismo formato: cifra + plazo.
   title: "Las marcas que *ya lo están corriendo*",
   subtitle: "PLACEHOLDER — una oración que conecte el caso propio con el de ellos.",
-  /** Mismo esquema de campos en todos: el formato fijo los hace comparables. */
   items: [
     {
-      id: "alumno-1",
-      name: "Nombre Apellido",
-      country: "Ciudad, País",
-      context: "Compra única → suscripción · Nicho",
-      headline: "De *[cifra inicial]* a *[cifra final]* en [tiempo]",
-      body: "PLACEHOLDER — 3 o 4 líneas: dónde estaba trabado, qué cambió al aplicar el modelo y dónde está hoy. El número al frente.",
-      metric: { value: "$00.000", label: "Facturación mensual" },
-      video: {
-        kind: "file",
-        src: "",
-        title: "Testimonio en video",
-        poster: { src: "/placeholders/video-9x16.svg", alt: "PLACEHOLDER", width: 405, height: 720 },
+      id: "resultado-1",
+      label: "+$21k en 90 días",
+      image: {
+        src: "/placeholders/resultado-1.svg",
+        alt: "PLACEHOLDER — captura del resultado 1",
+        width: 520,
+        height: 520,
       },
     },
     {
-      id: "alumno-2",
-      name: "Nombre Apellido",
-      country: "Ciudad, País",
-      context: "Compra única → suscripción · Nicho",
-      headline: "De *[cifra inicial]* a *[cifra final]* en [tiempo]",
-      body: "PLACEHOLDER — 3 o 4 líneas: dónde estaba trabado, qué cambió al aplicar el modelo y dónde está hoy. El número al frente.",
-      metric: { value: "000", label: "Suscriptores activos" },
-      video: {
-        kind: "file",
-        src: "",
-        title: "Testimonio en video",
-        poster: { src: "/placeholders/video-9x16.svg", alt: "PLACEHOLDER", width: 405, height: 720 },
+      id: "resultado-2",
+      label: "$64k en 90 días",
+      image: {
+        src: "/placeholders/resultado-2.svg",
+        alt: "PLACEHOLDER — captura del resultado 2",
+        width: 520,
+        height: 380,
       },
     },
     {
-      id: "alumno-3",
-      name: "Nombre Apellido",
-      country: "Ciudad, País",
-      context: "Compra única → suscripción · Nicho",
-      headline: "De *[cifra inicial]* a *[cifra final]* en [tiempo]",
-      body: "PLACEHOLDER — 3 o 4 líneas: dónde estaba trabado, qué cambió al aplicar el modelo y dónde está hoy. El número al frente.",
-      metric: { value: "0,00 %", label: "Churn mensual" },
-      video: {
-        kind: "file",
-        src: "",
-        title: "Testimonio en video",
-        poster: { src: "/placeholders/video-9x16.svg", alt: "PLACEHOLDER", width: 405, height: 720 },
+      id: "resultado-3",
+      label: "+$11k en 30 días",
+      image: {
+        src: "/placeholders/resultado-3.svg",
+        alt: "PLACEHOLDER — captura del resultado 3",
+        width: 520,
+        height: 640,
       },
     },
-  ] satisfies StudentCase[],
-};
-
-/** Capturas crudas: tableros, cohortes, mensajes. Carril analista, cero autos (manual 3.1). */
-export const proofCollage = {
-  eyebrow: "Sin edición",
-  title: "Los tableros, como están",
-  images: Array.from({ length: 8 }, (_, i) => ({
-    src: `/placeholders/proof-${i + 1}.svg`,
-    alt: `PLACEHOLDER — captura de tablero ${i + 1}`,
-    width: 600,
-    height: [420, 560, 340, 620, 400, 500, 360, 540][i],
-  })) satisfies Media[],
+    {
+      id: "resultado-4",
+      label: "$52k en 180 días",
+      image: {
+        src: "/placeholders/resultado-4.svg",
+        alt: "PLACEHOLDER — captura del resultado 4",
+        width: 520,
+        height: 300,
+      },
+    },
+    {
+      id: "resultado-5",
+      label: "+$26k en 30 días",
+      image: {
+        src: "/placeholders/resultado-5.svg",
+        alt: "PLACEHOLDER — captura del resultado 5",
+        width: 520,
+        height: 460,
+      },
+    },
+    {
+      id: "resultado-6",
+      label: "$14k en 30 días",
+      image: {
+        src: "/placeholders/resultado-6.svg",
+        alt: "PLACEHOLDER — captura del resultado 6",
+        width: 520,
+        height: 560,
+      },
+    },
+    {
+      id: "resultado-7",
+      label: "$100.000 en 7 días",
+      image: {
+        src: "/placeholders/resultado-7.svg",
+        alt: "PLACEHOLDER — captura del resultado 7",
+        width: 520,
+        height: 340,
+      },
+    },
+    {
+      id: "resultado-8",
+      label: "+$40k en 30 días",
+      image: {
+        src: "/placeholders/resultado-8.svg",
+        alt: "PLACEHOLDER — captura del resultado 8",
+        width: 520,
+        height: 600,
+      },
+    },
+    {
+      id: "resultado-9",
+      label: "+$25k en 30 días",
+      image: {
+        src: "/placeholders/resultado-9.svg",
+        alt: "PLACEHOLDER — captura del resultado 9",
+        width: 520,
+        height: 420,
+      },
+    },
+    {
+      id: "resultado-10",
+      label: "$12k en 30 días",
+      image: {
+        src: "/placeholders/resultado-10.svg",
+        alt: "PLACEHOLDER — captura del resultado 10",
+        width: 520,
+        height: 480,
+      },
+    },
+    {
+      id: "resultado-11",
+      label: "+$30k/mes",
+      image: {
+        src: "/placeholders/resultado-11.svg",
+        alt: "PLACEHOLDER — captura del resultado 11",
+        width: 520,
+        height: 360,
+      },
+    },
+    {
+      id: "resultado-12",
+      label: "$180k en 120 días",
+      image: {
+        src: "/placeholders/resultado-12.svg",
+        alt: "PLACEHOLDER — captura del resultado 12",
+        width: 520,
+        height: 540,
+      },
+    },
+    {
+      id: "resultado-13",
+      label: "$300k en 90 días",
+      image: {
+        src: "/placeholders/resultado-13.svg",
+        alt: "PLACEHOLDER — captura del resultado 13",
+        width: 520,
+        height: 400,
+      },
+    },
+    {
+      id: "resultado-14",
+      label: "$96k en 30 días",
+      image: {
+        src: "/placeholders/resultado-14.svg",
+        alt: "PLACEHOLDER — captura del resultado 14",
+        width: 520,
+        height: 620,
+      },
+    },
+  ] satisfies MosaicItem[],
 };
 
 /* -------------------------------------------------------------------------- */

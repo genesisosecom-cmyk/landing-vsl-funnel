@@ -102,17 +102,15 @@ paneles). Sin texto, sin lightbox: volumen como prueba. Precedido por el mismo e
 <SectionLabel>       // píldora de sección
 <SectionHeading>     // eyebrow + H2 con resaltado + subcopy
 <VideoFrame>         // 16:9 o 9:16, fachada con click para cargar
-<MetricChip>         // etiqueta + cifra, al pie de cada caso
-<Stars>              // valoración del testimonio
-<TestimonialCard>    // video + estrellas + meta + titular + body + <MetricChip>
+<MetricChip>         // etiqueta + cifra
 <FeatureRow>         // entregable numerado, en zig-zag
-<ProofCollage>       // masonry de capturas
+<ResultsMosaic>      // mosaico de capturas con su etiqueta de resultado
 <Section>            // envoltorio con tono (blanco / hueso / negro)
 ```
 
 Con estos componentes se arma la página entera: es una landing de **datos**, no de maquetación
-única — el contenido vive en arrays (`studentCases.items[]`, `program.features[]`,
-`proofCollage.images[]`).
+única — el contenido vive en arrays (`results.items[]`, `program.features[]`,
+`founderCase.media[]`).
 
 ## 5. Lo que la referencia NO tiene (decidir antes de construir)
 
@@ -143,14 +141,14 @@ de testimonio de peso distinto, así que los dos bloques se repartieron por obje
 
 | Bloque | Contenido | Objeción que responde | Formato |
 |--------|-----------|-----------------------|---------|
-| Prueba A (slot 3) | Caso propio del fundador | "¿esto funciona?" | Bloque ancho propio: video + franja de métricas + capturas propias |
-| Prueba B (slot 9) | Casos de alumnos | "¿me va a funcionar a mí?" | Tarjetas repetidas (formato fijo) + collage de capturas |
+| Prueba A (slot 3) | Caso propio del fundador | "¿esto funciona?" | Bloque propio: foto de Manu + chips de métricas + capturas de tableros |
+| Prueba B (slot 9) | Casos de alumnos | "¿me va a funcionar a mí?" | Mosaico de capturas, cada una con su etiqueta de resultado |
 
 El caso propio va arriba porque es el testimonio más fuerte y porque la autoridad tiene que
 existir antes de que los casos de alumnos signifiquen algo. No usa la tarjeta repetida: es un
 solo caso y la tarjeta está diseñada para comparar varios entre sí.
 
-Implementado en `components/sections/FounderCase.tsx` y `components/sections/StudentCases.tsx`.
+Implementado en `components/sections/FounderCase.tsx` y `components/sections/ResultsMosaic.tsx`.
 Para invertir el orden alcanza con permutar ambos componentes en `app/page.tsx`.
 
 ## 8. Implementación

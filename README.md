@@ -23,8 +23,10 @@ ni rutas de assets adentro: para cambiar la página se edita ese archivo.
 
 - Palabras en el color de acento: envolverlas en `*asteriscos*`. El acento se
   resuelve solo según la sección (Naranja sobre negro, Brasa sobre hueso).
-- Videos: `kind: "file"` para un mp4 propio, `kind: "embed"` para YouTube/Vimeo/Loom.
-  Con `src` vacío el reproductor muestra el cartel "Falta el video".
+- El VSL del hero: `kind: "file"` para un mp4 propio, `kind: "embed"` para
+  YouTube/Vimeo/Loom. Con `src` vacío el reproductor muestra "Falta el video".
+- Etiquetas del mosaico de resultados: una por captura, en el mismo formato
+  (cifra + plazo). Las que están son ejemplos.
 - Imágenes: reemplazar las rutas `/placeholders/*.svg` por assets reales.
 - Marcas en el copy: `BORRADOR` = redactado desde el manual, falta aprobación ·
   `PLACEHOLDER` = falta el dato o el material real.
@@ -80,21 +82,26 @@ y hueso.
 
 1. Hero centrado: logo, título, bajada y VSL
 2. CTA
-3. **Caso propio de Manu** — responde "¿esto funciona?"
+3. **Mi caso** — responde "¿esto funciona?". Foto de Manu, métricas y capturas
+   de sus tableros. Sin video.
 4. CTA
-5. Demo del producto por dentro
+5. **Génesis OS por dentro** — capturas del campus, la comunidad y el tablero.
+   Sin video.
 6. CTA
 7. Oferta: seis entregables en zig-zag
 8. CTA
-9. **Casos de alumnos** + collage de tableros — responde "¿me va a funcionar a mí?"
+9. **Resultados de alumnos** — mosaico de capturas, cada una con su etiqueta de
+   resultado. Responde "¿me va a funcionar a mí?"
 10. CTA de cierre y pie con descargo de resultados
 
-El único ajuste sobre la referencia es el reparto de la prueba social: la
-referencia usa el mismo formato de tarjeta en los dos bloques; acá el de arriba
-es el caso propio, con formato propio.
+El ajuste sobre la referencia es el reparto de la prueba social: la referencia
+usa el mismo formato de tarjeta en los dos bloques y un collage aparte; acá el
+de arriba es el caso propio y el de abajo es un único mosaico con todo junto.
+
+El VSL del hero es el único video de la página.
 
 Los dos bloques de prueba social son intercambiables: alcanza con permutar
-`<FounderCase />` y `<StudentCases />` en `app/page.tsx`.
+`<FounderCase />` y `<ResultsMosaic />` en `app/page.tsx`.
 
 ## Layout
 

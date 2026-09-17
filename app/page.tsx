@@ -3,17 +3,16 @@ import { CtaBand } from "@/components/sections/CtaBand";
 import { FounderCase } from "@/components/sections/FounderCase";
 import { InsideLook } from "@/components/sections/InsideLook";
 import { Program } from "@/components/sections/Program";
-import { StudentCases } from "@/components/sections/StudentCases";
-import { ProofCollage } from "@/components/sections/ProofCollage";
+import { ResultsMosaic } from "@/components/sections/ResultsMosaic";
 import { SiteFooter } from "@/components/sections/SiteFooter";
 
 /**
  * Estructura de la landing de referencia: bloque de valor → prueba → CTA, con
- * el mismo botón repetido cinco veces y secciones alternando blanco y hueso.
+ * el mismo botón repetido cinco veces y las secciones alternando blanco y hueso.
  *
- * El único ajuste sobre la referencia es el reparto de la prueba social:
- *   · FounderCase  (arriba) → "¿esto funciona?"          → el caso propio de Manu.
- *   · StudentCases (abajo)  → "¿me va a funcionar a mí?" → casos de alumnos.
+ * El ajuste sobre la referencia es el reparto de la prueba social:
+ *   · FounderCase   (arriba) → "¿esto funciona?"          → el caso propio de Manu.
+ *   · ResultsMosaic (abajo)  → "¿me va a funcionar a mí?" → resultados de alumnos.
  * Para invertirlos alcanza con intercambiarlos acá.
  */
 export default function Page() {
@@ -32,8 +31,7 @@ export default function Page() {
         <Program />
         <CtaBand tono="blanco" />
 
-        <StudentCases />
-        <ProofCollage />
+        <ResultsMosaic />
         <CtaBand tono="blanco" />
       </main>
       <SiteFooter />
