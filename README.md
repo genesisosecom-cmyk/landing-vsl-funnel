@@ -25,8 +25,10 @@ ni rutas de assets adentro: para cambiar la página se edita ese archivo.
   resuelve solo según la sección (Naranja sobre negro, Brasa sobre hueso).
 - El VSL del hero: `kind: "file"` para un mp4 propio, `kind: "embed"` para
   YouTube/Vimeo/Loom. Con `src` vacío el reproductor muestra "Falta el video".
-- Mosaico de resultados: es solo un array de imágenes. Agregar entradas alcanza,
-  el masonry las acomoda solo.
+- Mosaico de resultados: las capturas viven en `public/resultados/`. Para sumar
+  una, dejarla ahí y agregarla al array `results.items` con su ancho y alto
+  reales; el masonry la acomoda solo. `results.featured` es la que va destacada
+  a lo ancho, para una captura con mucho detalle.
 - Imágenes: reemplazar las rutas `/placeholders/*.svg` por assets reales.
 - Marcas en el copy: `BORRADOR` = redactado desde el manual, falta aprobación ·
   `PLACEHOLDER` = falta el dato o el material real.
@@ -113,7 +115,8 @@ Verificada sin overflow horizontal a 1920, 1440, 1366 y 390.
 
 - [ ] URL real del checkout en `site.cta.href`.
 - [ ] Aprobar el copy marcado `BORRADOR` y completar los `PLACEHOLDER`.
-- [ ] Assets reales (y pasar los `<img>` a `next/image` cuando dejen de ser SVG).
+- [ ] Assets reales (y pasar los `<img>` a `next/image` cuando dejen de ser SVG;
+      el mosaico de resultados ya lo usa).
 - [ ] Reemplazar el wordmark por el SVG en curvas de la carpeta de marca.
 - [ ] Descargo de resultados redactado por alguien que lo valide legalmente.
 - [ ] Pixel y evento de click sobre `[data-cta="primary"]`.

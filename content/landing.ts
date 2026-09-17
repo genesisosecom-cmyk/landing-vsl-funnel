@@ -193,104 +193,47 @@ export const program = {
 /**
  * Prueba social B — los resultados de los alumnos, todos juntos.
  *
- * Son capturas sin editar con su etiqueta de resultado: el argumento es el
- * volumen, no el detalle de cada una. Reemplaza a la vez las tarjetas de
- * testimonio y el collage que la referencia tenía separados.
- */
-/**
- * Prueba social B — los resultados de los alumnos, todos juntos.
- *
  * Capturas sin editar y sin texto encima: el argumento es el volumen, no el
- * detalle de cada una. Reemplaza a la vez las tarjetas de testimonio y el
- * collage que la referencia tenía separados.
+ * detalle de cada una. Los archivos viven en public/resultados/; para sumar
+ * una captura alcanza con dejarla ahí y agregarla a este array.
  */
 export const results = {
   eyebrow: "Marcas",
   title: "Más casos de mis *clientes*",
+  /**
+   * El tablero mensual va destacado a lo ancho: tiene doce métricas y dentro de
+   * una columna del mosaico no se lee ninguna.
+   */
+  featured: {
+    src: "/resultados/prueba-social-4.jpg",
+    alt: "Tablero mensual: $271,5 M de facturación, $92,7 M de ganancia y 34,14 % de margen",
+    width: 1468,
+    height: 680,
+  } satisfies Media,
   items: [
     {
-      src: "/placeholders/resultado-1.svg",
-      alt: "PLACEHOLDER — captura del resultado 1",
-      width: 520,
-      height: 520,
+      src: "/resultados/prueba-social-1.jpg",
+      alt: "Tablero de tienda: 15 órdenes, $1,2 M de facturación y $229,6 K de ganancia",
+      width: 1238,
+      height: 807,
     },
     {
-      src: "/placeholders/resultado-2.svg",
-      alt: "PLACEHOLDER — captura del resultado 2",
-      width: 520,
-      height: 380,
+      src: "/resultados/prueba-social-2.jpg",
+      alt: "Ventas en vivo: $1,5 M totales y 23 pedidos en el día",
+      width: 1188,
+      height: 841,
     },
     {
-      src: "/placeholders/resultado-3.svg",
-      alt: "PLACEHOLDER — captura del resultado 3",
-      width: 520,
-      height: 640,
+      src: "/resultados/prueba-social-3.jpg",
+      alt: "Ventas de siete días: $50,4 M totales y 900 pedidos",
+      width: 1183,
+      height: 844,
     },
     {
-      src: "/placeholders/resultado-4.svg",
-      alt: "PLACEHOLDER — captura del resultado 4",
-      width: 520,
-      height: 300,
-    },
-    {
-      src: "/placeholders/resultado-5.svg",
-      alt: "PLACEHOLDER — captura del resultado 5",
-      width: 520,
-      height: 460,
-    },
-    {
-      src: "/placeholders/resultado-6.svg",
-      alt: "PLACEHOLDER — captura del resultado 6",
-      width: 520,
-      height: 560,
-    },
-    {
-      src: "/placeholders/resultado-7.svg",
-      alt: "PLACEHOLDER — captura del resultado 7",
-      width: 520,
-      height: 340,
-    },
-    {
-      src: "/placeholders/resultado-8.svg",
-      alt: "PLACEHOLDER — captura del resultado 8",
-      width: 520,
-      height: 600,
-    },
-    {
-      src: "/placeholders/resultado-9.svg",
-      alt: "PLACEHOLDER — captura del resultado 9",
-      width: 520,
-      height: 420,
-    },
-    {
-      src: "/placeholders/resultado-10.svg",
-      alt: "PLACEHOLDER — captura del resultado 10",
-      width: 520,
-      height: 480,
-    },
-    {
-      src: "/placeholders/resultado-11.svg",
-      alt: "PLACEHOLDER — captura del resultado 11",
-      width: 520,
-      height: 360,
-    },
-    {
-      src: "/placeholders/resultado-12.svg",
-      alt: "PLACEHOLDER — captura del resultado 12",
-      width: 520,
-      height: 540,
-    },
-    {
-      src: "/placeholders/resultado-13.svg",
-      alt: "PLACEHOLDER — captura del resultado 13",
-      width: 520,
-      height: 400,
-    },
-    {
-      src: "/placeholders/resultado-14.svg",
-      alt: "PLACEHOLDER — captura del resultado 14",
-      width: 520,
-      height: 620,
+      src: "/resultados/prueba-social-5.jpg",
+      alt: "Ventas en vivo: $1,9 M totales, 23 pedidos y 31 visitantes",
+      width: 1180,
+      height: 846,
     },
   ] satisfies Media[],
 };

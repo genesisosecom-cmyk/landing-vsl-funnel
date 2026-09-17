@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { Section } from "@/components/ui/Section";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { results } from "@/content/landing";
@@ -6,6 +7,8 @@ import { results } from "@/content/landing";
  * Prueba social B — todos los resultados juntos.
  *
  * Solo capturas, sin etiquetas ni texto encima: lo que convence es el volumen.
+ * Van con next/image porque son JPG de 1200 px que se muestran a 400: sin
+ * optimizar son casi medio mega de descarga al pedo.
  */
 export function ResultsMosaic() {
   return (
@@ -13,17 +16,27 @@ export function ResultsMosaic() {
       <div className="flex flex-col items-center gap-10">
         <SectionHeading label={results.eyebrow} title={results.title} />
 
+        <Image
+          src={results.featured.src}
+          alt={results.featured.alt}
+          width={results.featured.width}
+          height={results.featured.height}
+          sizes="(min-width: 1320px) 1256px, 92vw"
+          priority={false}
+          className="h-auto w-full rounded-lg border border-linea"
+        />
+
         {/* Masonry con columnas CSS: cada captura conserva su alto original. */}
-        <div className="w-full columns-2 gap-4 lg:columns-3 xl:columns-4 [&>*]:mb-4">
+        <div className="w-full columns-1 gap-4 sm:columns-2 [&>*]:mb-4">
           {results.items.map((image) => (
-            <img
+            <Image
               key={image.src}
               src={image.src}
               alt={image.alt}
               width={image.width}
               height={image.height}
-              loading="lazy"
-              className="w-full break-inside-avoid rounded-lg border border-linea"
+              sizes="(min-width: 640px) 45vw, 90vw"
+              className="h-auto w-full break-inside-avoid rounded-lg border border-linea"
             />
           ))}
         </div>
