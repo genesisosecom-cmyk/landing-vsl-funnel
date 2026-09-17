@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
 import { site } from "@/content/landing";
 import "./globals.css";
@@ -25,13 +25,21 @@ const archivo = localFont({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(site.url),
   title: site.seo.title,
   description: site.seo.description,
   openGraph: {
     title: site.seo.title,
     description: site.seo.description,
     type: "website",
+    locale: "es_AR",
+    siteName: site.brand.name,
   },
+};
+
+// themeColor va en el export viewport, no en metadata (Next 15+).
+export const viewport: Viewport = {
+  themeColor: "#0B0B0B",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

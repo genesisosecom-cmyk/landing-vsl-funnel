@@ -41,22 +41,27 @@ ni rutas de assets adentro: para cambiar la página se edita ese archivo.
 | Por debajo del hero, el contenido pasa a hueso | `app/page.tsx` |
 | El usuario cierra la pieza en naranja | `components/sections/SiteFooter.tsx` |
 
-### Dos desvíos del manual, a confirmar
+### Dos desvíos del manual
 
 1. **Archivo en lugar de JetBrains Mono.** El manual asigna JetBrains Mono a "lo
    que se mide" (captions, datos, etiquetas). Las tipografías entregadas fueron
-   Montserrat y Archivo, así que Archivo ocupa ese rol. Si la decisión es
-   mantener JetBrains Mono, se cambia solo en `app/layout.tsx`.
+   Montserrat y Archivo, así que Archivo ocupa ese rol. Para volver a JetBrains
+   Mono alcanza con cambiar la fuente en `app/layout.tsx`: el resto del sistema
+   la toma de la variable `--font-archivo`.
 2. **Wordmark tipografiado.** El manual dice que GENESIS OS es un dibujo en
    curvas y que no se tipea. `components/brand/Logotipo.tsx` lo reconstruye con
-   la familia, los pesos y el tracking correctos como provisorio: reemplazar por
-   `wordmark_blanco.svg` / `_negro.svg` de `Logo-Genesis-OS/marca/`.
+   la familia, los pesos y el tracking correctos, como provisorio hasta tener el
+   archivo: reemplazar por `wordmark_blanco.svg` / `_negro.svg` de
+   `Logo-Genesis-OS/marca/`.
 
 ### Contraste
 
-Todo el texto pasa WCAG AA salvo los captions en Gris cálido (4,2:1), que es el
-color que el manual asigna a captions y etiquetas. Si se quiere AA estricto en
-esos 12 px, el reemplazo es `#6B6461`.
+Todo el texto pasa WCAG AA. Los captions sobre negro usan Gris claro, que es el
+color que el manual asigna a texto secundario sobre negro (10:1); el Gris cálido
+ahí se quedaba en 4,2:1. Sobre hueso los captions sí van en Gris cálido, tal como
+lo indica el manual: 4,2:1 en 12 px, apenas por debajo de AA. Es la única excepción
+y es una decisión de la paleta, no del código; si se quiere AA estricto ahí, el
+reemplazo más cercano es `#6B6461` en `--sutil` del tono hueso.
 
 ## Tipografías
 

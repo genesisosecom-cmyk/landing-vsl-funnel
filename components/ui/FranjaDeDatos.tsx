@@ -13,9 +13,12 @@ type Props = {
  */
 export function FranjaDeDatos({ datos, tamano = "grande", className = "" }: Props) {
   const cifra = tamano === "grande" ? "text-[2rem]" : "text-[1.5rem]";
+  // Literales: Tailwind no ve las clases armadas por interpolación.
+  const columnas =
+    { 1: "grid-cols-1", 2: "grid-cols-2", 3: "grid-cols-3" }[datos.length] ?? "grid-cols-4";
 
   return (
-    <dl className={`grid grid-cols-3 gap-x-8 gap-y-6 max-sm:grid-cols-1 ${className}`}>
+    <dl className={`grid ${columnas} gap-x-8 gap-y-6 max-sm:grid-cols-1 ${className}`}>
       {datos.map((d) => (
         <div key={d.label} className="flex flex-col gap-1.5">
           <dd

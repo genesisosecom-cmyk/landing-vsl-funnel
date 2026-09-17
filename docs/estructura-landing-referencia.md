@@ -98,19 +98,20 @@ paneles). Sin texto, sin lightbox: volumen como prueba. Precedido por el mismo e
 ## 4. Componentes a construir (reutilizables)
 
 ```
-<CtaButton>          // usado 5 veces, mismo label
-<SectionLabel>       // píldora eyebrow
-<SectionHeading>     // H2 + <Highlight> + subcopy opcional
-<VslPlayer>          // 16:9, poster, controles
-<TestimonialCard>    // video + estrellas + meta + titular + body + <MetricChip>
-<MetricChip>         // etiqueta + valor
-<FeatureRow>         // numerada, alternada (prop `reverse`)
-<ProofCollage>       // masonry de imágenes
-<VideoShowcase>      // imagen ancha + overlay de play
+<CtaButton>          // el único botón, repetido
+<Eyebrow>            // etiqueta de sección
+<SectionHeading>     // eyebrow + H2 con resaltado + subcopy
+<VideoFrame>         // 16:9 o 9:16, fachada con click para cargar
+<FranjaDeDatos>      // cifra + etiqueta, en franja o dentro de tarjeta
+<TestimonialCard>    // video + dato + titular + body + atribución
+<FeatureCard>        // entregable numerado
+<ProofCollage>       // masonry de capturas
+<Section>            // envoltorio con tono (negro / hueso)
 ```
 
-Con estos 9 componentes se arma la página entera: es una landing de **datos**, no de maquetación
-única — el contenido vive en arrays (`testimonials[]`, `features[]`, `proofImages[]`).
+Con estos componentes se arma la página entera: es una landing de **datos**, no de maquetación
+única — el contenido vive en arrays (`studentCases.items[]`, `program.features[]`,
+`proofCollage.images[]`).
 
 ## 5. Lo que la referencia NO tiene (decidir antes de construir)
 

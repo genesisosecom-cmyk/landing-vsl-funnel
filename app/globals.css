@@ -43,7 +43,9 @@
     --pieza: #111111;
     --titulo: #ffffff;
     --texto: #bdb7b2;
-    --sutil: #7a7370;
+    /* Gris claro, que es el que el manual asigna a texto secundario sobre negro:
+       el Gris cálido acá se queda en 4,2:1. */
+    --sutil: #bdb7b2;
     --acento: #f0641e;
     --linea: #2e2e2e;
   }

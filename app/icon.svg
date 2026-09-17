@@ -1,0 +1,4 @@
+<!-- Favicon: Semilla plana, sin halo (manual 2.1: el halo solo a partir de 48 px). -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="30 16 40 68" width="64" height="64">
+  <path d="M50 22.5 A34 34 0 0 1 50 77.5 A34 34 0 0 1 50 22.5 Z" fill="#F0641E"/>
+</svg>

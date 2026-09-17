@@ -67,6 +67,8 @@ export const site = {
     /** Manual 1.3: se le vende al dueño de marca sin venderle. */
     tagline: "El sistema desde donde una marca empieza a existir de otra forma",
   },
+  // TODO(contenido): reemplazar por el dominio definitivo cuando exista.
+  url: "https://landing-vsl-funnel-v1.vercel.app",
   seo: {
     title: "Génesis OS — El mes arranca cobrado",
     description:
