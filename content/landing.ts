@@ -73,7 +73,7 @@ export const site = {
 
 export const hero = {
   title:
-    "Cómo escalar tu marca de consumibles a *+$100M al mes* convirtiéndola a modelo de suscripción. Sin depender del CPA ni de más pauta.",
+    "Cómo escalar tu marca de consumibles a *+$100M al mes* convirtiéndola a modelo de suscripción.",
   body:
     "El mismo método que usé para superar +$3M USD con mis marcas, explicado para que lo puedas ejecutar si ya estás vendiendo un consumible.",
   video: {
@@ -99,13 +99,13 @@ export const founderCase = {
   title: "El modelo lo corro en *mi propia marca*",
   /** BORRADOR — redactado con los datos de la sección 1.1 del manual. */
   body: [
-    "Arranqué en Mar del Plata publicando en orgánico sobre e-commerce de consumibles. Sin pauta, sin setters y sin closers: el primer mes de Génesis facturó USD 15.000.",
-    "Mientras el mercado vende “creá y escalá tu tienda”, yo opero una marca de consumibles por suscripción con 2.200 suscriptores activos y 1,28 % de churn. El modelo que enseño es el que uso.",
+    "Arranqué en Mar del Plata publicando en orgánico sobre e-commerce de consumibles. Sin pauta, sin setters y sin closers: el primer mes de Génesis facturó $150.000.000.",
+    "Mientras el mercado vende “creá y escalá tu tienda”, yo opero una marca de consumibles por suscripción con 2.256 suscriptores activos y 1,28 % de churn. El modelo que enseño es el que uso.",
   ],
   datos: [
-    { value: "2.200", label: "Suscriptores activos" },
+    { value: "2.256", label: "Suscriptores activos" },
     { value: "1,28 %", label: "Churn mensual" },
-    { value: "USD 15.000", label: "Primer mes, sin pauta" },
+    { value: "$150.000.000", label: "Primer mes, sin pauta" },
   ] satisfies Dato[],
   /**
    * Foto principal: carril analista (manual 3.1) — Manu explicando, con el

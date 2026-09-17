@@ -17,7 +17,7 @@ export function Hero() {
           <span className="h-px w-10 bg-naranja" />
         </div>
 
-        <h1 className="max-w-[36ch] text-[2.25rem] leading-[1.08] text-titulo sm:text-[2.5rem] lg:text-[2.75rem]">{highlight(hero.title)}</h1>
+        <h1 className="max-w-[30ch] text-[2.5rem] leading-[1.06] text-titulo sm:text-[2.75rem] lg:text-[3.25rem]">{highlight(hero.title)}</h1>
 
         <p className="max-w-prose text-texto">{hero.body}</p>
 
