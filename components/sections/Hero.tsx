@@ -21,7 +21,8 @@ export function Hero() {
 
         <p className="max-w-prose text-texto">{hero.body}</p>
 
-        <VideoFrame video={hero.video} className="w-full max-w-[46rem]" />
+        {/* En pantallas grandes el VSL crece, pero sin empujar el botón fuera del primer scroll. */}
+        <VideoFrame video={hero.video} className="w-full max-w-[46rem] xl:max-w-4xl" />
 
         <CtaButton size="lg" />
       </div>

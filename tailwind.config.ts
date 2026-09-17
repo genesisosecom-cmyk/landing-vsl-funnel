@@ -54,7 +54,7 @@ const config: Config = {
         wordmark: "0.13em",
       },
       maxWidth: {
-        page: "1180px",
+        page: "1320px",
         prose: "66ch",
       },
       borderRadius: {

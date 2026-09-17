@@ -25,8 +25,8 @@ ni rutas de assets adentro: para cambiar la página se edita ese archivo.
   resuelve solo según la sección (Naranja sobre negro, Brasa sobre hueso).
 - El VSL del hero: `kind: "file"` para un mp4 propio, `kind: "embed"` para
   YouTube/Vimeo/Loom. Con `src` vacío el reproductor muestra "Falta el video".
-- Etiquetas del mosaico de resultados: una por captura, en el mismo formato
-  (cifra + plazo). Las que están son ejemplos.
+- Mosaico de resultados: es solo un array de imágenes. Agregar entradas alcanza,
+  el masonry las acomoda solo.
 - Imágenes: reemplazar las rutas `/placeholders/*.svg` por assets reales.
 - Marcas en el copy: `BORRADOR` = redactado desde el manual, falta aprobación ·
   `PLACEHOLDER` = falta el dato o el material real.
@@ -90,8 +90,8 @@ y hueso.
 6. CTA
 7. Oferta: seis entregables en zig-zag
 8. CTA
-9. **Resultados de alumnos** — mosaico de capturas, cada una con su etiqueta de
-   resultado. Responde "¿me va a funcionar a mí?"
+9. **Resultados de alumnos** — mosaico de capturas, sin etiquetas ni texto
+   encima. Responde "¿me va a funcionar a mí?"
 10. CTA de cierre y pie con descargo de resultados
 
 El ajuste sobre la referencia es el reparto de la prueba social: la referencia
@@ -105,7 +105,8 @@ Los dos bloques de prueba social son intercambiables: alcanza con permutar
 
 ## Layout
 
-Columna clara de 1180 px centrada sobre marco negro, como la referencia.
+Secciones a sangre completa con un contenedor de 1320 px: la página ocupa todo
+el ancho de la ventana. El hero entra completo, con el botón, en 1920 × 1080.
 Verificada sin overflow horizontal a 1920, 1440, 1366 y 390.
 
 ## Pendiente antes de publicar

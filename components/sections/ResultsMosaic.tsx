@@ -5,13 +5,11 @@ import { results } from "@/content/landing";
 /**
  * Prueba social B — todos los resultados juntos.
  *
- * Mosaico de capturas sin editar, cada una con su etiqueta de resultado
- * arriba. Va sobre negro porque las capturas son oscuras: sobre claro el
- * mosaico se lee como un parche de manchas negras.
+ * Solo capturas, sin etiquetas ni texto encima: lo que convence es el volumen.
  */
 export function ResultsMosaic() {
   return (
-    <Section id="resultados" tono="negro">
+    <Section id="resultados" tono="hueso">
       <div className="flex flex-col items-center gap-10">
         <SectionHeading
           label={results.eyebrow}
@@ -20,21 +18,17 @@ export function ResultsMosaic() {
         />
 
         {/* Masonry con columnas CSS: cada captura conserva su alto original. */}
-        <div className="w-full columns-1 gap-3 sm:columns-2 lg:columns-3 xl:columns-4 [&>*]:mb-3">
-          {results.items.map((item) => (
-            <figure key={item.id} className="break-inside-avoid">
-              <figcaption className="mb-1.5 font-sans text-[0.875rem] font-semibold text-titulo">
-                {item.label}
-              </figcaption>
-              <img
-                src={item.image.src}
-                alt={item.image.alt}
-                width={item.image.width}
-                height={item.image.height}
-                loading="lazy"
-                className="w-full rounded-lg border border-linea"
-              />
-            </figure>
+        <div className="w-full columns-2 gap-4 lg:columns-3 xl:columns-4 [&>*]:mb-4">
+          {results.items.map((image) => (
+            <img
+              key={image.src}
+              src={image.src}
+              alt={image.alt}
+              width={image.width}
+              height={image.height}
+              loading="lazy"
+              className="w-full break-inside-avoid rounded-lg border border-linea"
+            />
           ))}
         </div>
       </div>

@@ -104,7 +104,7 @@ paneles). Sin texto, sin lightbox: volumen como prueba. Precedido por el mismo e
 <VideoFrame>         // 16:9 o 9:16, fachada con click para cargar
 <MetricChip>         // etiqueta + cifra
 <FeatureRow>         // entregable numerado, en zig-zag
-<ResultsMosaic>      // mosaico de capturas con su etiqueta de resultado
+<ResultsMosaic>      // mosaico de capturas
 <Section>            // envoltorio con tono (blanco / hueso / negro)
 ```
 
@@ -142,7 +142,7 @@ de testimonio de peso distinto, así que los dos bloques se repartieron por obje
 | Bloque | Contenido | Objeción que responde | Formato |
 |--------|-----------|-----------------------|---------|
 | Prueba A (slot 3) | Caso propio del fundador | "¿esto funciona?" | Bloque propio: foto de Manu + chips de métricas + capturas de tableros |
-| Prueba B (slot 9) | Casos de alumnos | "¿me va a funcionar a mí?" | Mosaico de capturas, cada una con su etiqueta de resultado |
+| Prueba B (slot 9) | Casos de alumnos | "¿me va a funcionar a mí?" | Mosaico de capturas, sin texto encima |
 
 El caso propio va arriba porque es el testimonio más fuerte y porque la autoridad tiene que
 existir antes de que los casos de alumnos signifiquen algo. No usa la tarjeta repetida: es un
@@ -161,7 +161,7 @@ Génesis OS se toman únicamente la tipografía y los colores:
 | Acento verde neón | Naranja Génesis en rellenos, Brasa en texto sobre claro |
 | Display condensada + Inter | Montserrat (lo que se lee) + Archivo (lo que se mide) |
 | Fondos blanco y verde menta | Blanco y Hueso |
-| Marco oscuro alrededor de la columna | Negro de marca |
+| Marco oscuro alrededor de la columna | Sin marco: secciones a sangre completa |
 
 Lo único que cambia respecto de la estructura descrita arriba es el reparto de
 la prueba social de la sección 7.

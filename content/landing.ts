@@ -38,13 +38,6 @@ export type Dato = {
   label: string;
 };
 
-export type MosaicItem = {
-  id: string;
-  /** La etiqueta del resultado, tal como va sobre la captura: "+$21k en 90 días". */
-  label: string;
-  image: Media;
-};
-
 export type Feature = {
   title: string;
   body: string;
@@ -204,154 +197,103 @@ export const program = {
  * volumen, no el detalle de cada una. Reemplaza a la vez las tarjetas de
  * testimonio y el collage que la referencia tenía separados.
  */
+/**
+ * Prueba social B — los resultados de los alumnos, todos juntos.
+ *
+ * Capturas sin editar y sin texto encima: el argumento es el volumen, no el
+ * detalle de cada una. Reemplaza a la vez las tarjetas de testimonio y el
+ * collage que la referencia tenía separados.
+ */
 export const results = {
   eyebrow: "Casos reales",
-  // TODO(contenido): las etiquetas son ejemplos. Reemplazar por el resultado
-  // real de cada captura, en el mismo formato: cifra + plazo.
   title: "Las marcas que *ya lo están corriendo*",
   subtitle: "PLACEHOLDER — una oración que conecte el caso propio con el de ellos.",
   items: [
     {
-      id: "resultado-1",
-      label: "+$21k en 90 días",
-      image: {
-        src: "/placeholders/resultado-1.svg",
-        alt: "PLACEHOLDER — captura del resultado 1",
-        width: 520,
-        height: 520,
-      },
+      src: "/placeholders/resultado-1.svg",
+      alt: "PLACEHOLDER — captura del resultado 1",
+      width: 520,
+      height: 520,
     },
     {
-      id: "resultado-2",
-      label: "$64k en 90 días",
-      image: {
-        src: "/placeholders/resultado-2.svg",
-        alt: "PLACEHOLDER — captura del resultado 2",
-        width: 520,
-        height: 380,
-      },
+      src: "/placeholders/resultado-2.svg",
+      alt: "PLACEHOLDER — captura del resultado 2",
+      width: 520,
+      height: 380,
     },
     {
-      id: "resultado-3",
-      label: "+$11k en 30 días",
-      image: {
-        src: "/placeholders/resultado-3.svg",
-        alt: "PLACEHOLDER — captura del resultado 3",
-        width: 520,
-        height: 640,
-      },
+      src: "/placeholders/resultado-3.svg",
+      alt: "PLACEHOLDER — captura del resultado 3",
+      width: 520,
+      height: 640,
     },
     {
-      id: "resultado-4",
-      label: "$52k en 180 días",
-      image: {
-        src: "/placeholders/resultado-4.svg",
-        alt: "PLACEHOLDER — captura del resultado 4",
-        width: 520,
-        height: 300,
-      },
+      src: "/placeholders/resultado-4.svg",
+      alt: "PLACEHOLDER — captura del resultado 4",
+      width: 520,
+      height: 300,
     },
     {
-      id: "resultado-5",
-      label: "+$26k en 30 días",
-      image: {
-        src: "/placeholders/resultado-5.svg",
-        alt: "PLACEHOLDER — captura del resultado 5",
-        width: 520,
-        height: 460,
-      },
+      src: "/placeholders/resultado-5.svg",
+      alt: "PLACEHOLDER — captura del resultado 5",
+      width: 520,
+      height: 460,
     },
     {
-      id: "resultado-6",
-      label: "$14k en 30 días",
-      image: {
-        src: "/placeholders/resultado-6.svg",
-        alt: "PLACEHOLDER — captura del resultado 6",
-        width: 520,
-        height: 560,
-      },
+      src: "/placeholders/resultado-6.svg",
+      alt: "PLACEHOLDER — captura del resultado 6",
+      width: 520,
+      height: 560,
     },
     {
-      id: "resultado-7",
-      label: "$100.000 en 7 días",
-      image: {
-        src: "/placeholders/resultado-7.svg",
-        alt: "PLACEHOLDER — captura del resultado 7",
-        width: 520,
-        height: 340,
-      },
+      src: "/placeholders/resultado-7.svg",
+      alt: "PLACEHOLDER — captura del resultado 7",
+      width: 520,
+      height: 340,
     },
     {
-      id: "resultado-8",
-      label: "+$40k en 30 días",
-      image: {
-        src: "/placeholders/resultado-8.svg",
-        alt: "PLACEHOLDER — captura del resultado 8",
-        width: 520,
-        height: 600,
-      },
+      src: "/placeholders/resultado-8.svg",
+      alt: "PLACEHOLDER — captura del resultado 8",
+      width: 520,
+      height: 600,
     },
     {
-      id: "resultado-9",
-      label: "+$25k en 30 días",
-      image: {
-        src: "/placeholders/resultado-9.svg",
-        alt: "PLACEHOLDER — captura del resultado 9",
-        width: 520,
-        height: 420,
-      },
+      src: "/placeholders/resultado-9.svg",
+      alt: "PLACEHOLDER — captura del resultado 9",
+      width: 520,
+      height: 420,
     },
     {
-      id: "resultado-10",
-      label: "$12k en 30 días",
-      image: {
-        src: "/placeholders/resultado-10.svg",
-        alt: "PLACEHOLDER — captura del resultado 10",
-        width: 520,
-        height: 480,
-      },
+      src: "/placeholders/resultado-10.svg",
+      alt: "PLACEHOLDER — captura del resultado 10",
+      width: 520,
+      height: 480,
     },
     {
-      id: "resultado-11",
-      label: "+$30k/mes",
-      image: {
-        src: "/placeholders/resultado-11.svg",
-        alt: "PLACEHOLDER — captura del resultado 11",
-        width: 520,
-        height: 360,
-      },
+      src: "/placeholders/resultado-11.svg",
+      alt: "PLACEHOLDER — captura del resultado 11",
+      width: 520,
+      height: 360,
     },
     {
-      id: "resultado-12",
-      label: "$180k en 120 días",
-      image: {
-        src: "/placeholders/resultado-12.svg",
-        alt: "PLACEHOLDER — captura del resultado 12",
-        width: 520,
-        height: 540,
-      },
+      src: "/placeholders/resultado-12.svg",
+      alt: "PLACEHOLDER — captura del resultado 12",
+      width: 520,
+      height: 540,
     },
     {
-      id: "resultado-13",
-      label: "$300k en 90 días",
-      image: {
-        src: "/placeholders/resultado-13.svg",
-        alt: "PLACEHOLDER — captura del resultado 13",
-        width: 520,
-        height: 400,
-      },
+      src: "/placeholders/resultado-13.svg",
+      alt: "PLACEHOLDER — captura del resultado 13",
+      width: 520,
+      height: 400,
     },
     {
-      id: "resultado-14",
-      label: "$96k en 30 días",
-      image: {
-        src: "/placeholders/resultado-14.svg",
-        alt: "PLACEHOLDER — captura del resultado 14",
-        width: 520,
-        height: 620,
-      },
+      src: "/placeholders/resultado-14.svg",
+      alt: "PLACEHOLDER — captura del resultado 14",
+      width: 520,
+      height: 620,
     },
-  ] satisfies MosaicItem[],
+  ] satisfies Media[],
 };
 
 /* -------------------------------------------------------------------------- */

@@ -10,7 +10,11 @@ type Props = {
  * Naranja Génesis con texto negro: el blanco sobre este naranja no llega a 4,5:1.
  */
 export function CtaButton({ size = "md", className = "" }: Props) {
-  const sizing = size === "lg" ? "px-10 py-5 text-[0.9375rem]" : "px-8 py-4 text-[0.875rem]";
+  // En mobile el label entra justo: sin bajar padding y cuerpo se parte en dos líneas.
+  const sizing =
+    size === "lg"
+      ? "px-10 py-5 text-[0.9375rem] max-sm:px-6 max-sm:py-4 max-sm:text-[0.8125rem]"
+      : "px-8 py-4 text-[0.875rem] max-sm:px-6 max-sm:text-[0.8125rem]";
 
   return (
     <a

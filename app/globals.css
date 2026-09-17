@@ -7,9 +7,8 @@
     scroll-behavior: smooth;
   }
 
-  /* El marco de la página es oscuro; el contenido vive en una columna clara. */
   body {
-    @apply bg-negro font-sans text-cuerpo text-negro antialiased;
+    @apply bg-blanco font-sans text-cuerpo text-negro antialiased;
   }
 
   h1 {
