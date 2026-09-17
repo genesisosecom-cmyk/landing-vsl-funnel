@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="560" viewBox="0 0 600 560" role="img" aria-label="PRUEBA 2">
+  <defs>
+    <pattern id="h" width="16" height="16" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <line x1="0" y1="0" x2="0" y2="16" stroke="#d8ded8" stroke-width="6"/>
+    </pattern>
+  </defs>
+  <rect width="600" height="560" fill="#eef1ee"/>
+  <rect width="600" height="560" fill="url(#h)" opacity="0.5"/>
+  <rect x="1" y="1" width="598" height="558" fill="none" stroke="#c3ccc3" stroke-width="2"/>
+  <text x="50%" y="48%" text-anchor="middle" font-family="system-ui, sans-serif" font-size="40" font-weight="700" fill="#6b746b">PRUEBA 2</text>
+  <text x="50%" y="48%" dy="42" text-anchor="middle" font-family="system-ui, sans-serif" font-size="34" fill="#8d968d">600 × 560</text>
+</svg>

@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" role="img" aria-label="PORTADA DEL VSL">
+  <defs>
+    <pattern id="h" width="16" height="16" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <line x1="0" y1="0" x2="0" y2="16" stroke="#d8ded8" stroke-width="6"/>
+    </pattern>
+  </defs>
+  <rect width="1280" height="720" fill="#eef1ee"/>
+  <rect width="1280" height="720" fill="url(#h)" opacity="0.5"/>
+  <rect x="1" y="1" width="1278" height="718" fill="none" stroke="#c3ccc3" stroke-width="2"/>
+  <text x="50%" y="48%" text-anchor="middle" font-family="system-ui, sans-serif" font-size="51" font-weight="700" fill="#6b746b">PORTADA DEL VSL</text>
+  <text x="50%" y="48%" dy="53" text-anchor="middle" font-family="system-ui, sans-serif" font-size="45" fill="#8d968d">1280 × 720</text>
+</svg>

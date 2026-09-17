@@ -133,3 +133,20 @@ Con estos 9 componentes se arma la página entera: es una landing de **datos**, 
 - [ ] 8–12 capturas para el collage.
 - [ ] Un único CTA repetido 5 veces, con el mismo destino y el mismo texto.
 - [ ] Footer con disclaimer de resultados.
+
+## 7. Adaptación aplicada en esta implementación
+
+La referencia usa el mismo formato de tarjeta para toda su prueba social. Acá hay dos tipos
+de testimonio de peso distinto, así que los dos bloques se repartieron por objeción:
+
+| Bloque | Contenido | Objeción que responde | Formato |
+|--------|-----------|-----------------------|---------|
+| Prueba A (slot 3) | Caso propio del fundador | "¿esto funciona?" | Bloque ancho propio: video + franja de métricas + capturas propias |
+| Prueba B (slot 9) | Casos de alumnos | "¿me va a funcionar a mí?" | Tarjetas repetidas (formato fijo) + collage de capturas |
+
+El caso propio va arriba porque es el testimonio más fuerte y porque la autoridad tiene que
+existir antes de que los casos de alumnos signifiquen algo. No usa la tarjeta repetida: es un
+solo caso y la tarjeta está diseñada para comparar varios entre sí.
+
+Implementado en `components/sections/FounderCase.tsx` y `components/sections/StudentCases.tsx`.
+Para invertir el orden alcanza con permutar ambos componentes en `app/page.tsx`.
