@@ -1,7 +1,9 @@
 # Landing Génesis OS
 
-Landing de funnel VSL en Next.js (App Router) + Tailwind, construida sobre el
-**Manual de Marca Génesis OS v2.0** y optimizada para desktop.
+Landing de funnel VSL en Next.js (App Router) + Tailwind.
+
+**Estructura de la landing de referencia** (con un solo ajuste, ver abajo) y del
+**Manual de Marca Génesis OS v2.0** únicamente la tipografía y los colores.
 
 - Estructura: `docs/estructura-landing-referencia.md`
 - Contenido: `content/landing.ts` (única fuente de verdad)
@@ -27,27 +29,30 @@ ni rutas de assets adentro: para cambiar la página se edita ese archivo.
 - Marcas en el copy: `BORRADOR` = redactado desde el manual, falta aprobación ·
   `PLACEHOLDER` = falta el dato o el material real.
 
-## El manual, aplicado
+## Qué se toma del manual, y qué no
 
-| Regla del manual | Dónde vive |
+Del manual se aplican **solo dos cosas**: las tipografías y la paleta. El layout
+es el de la landing de referencia.
+
+| Del manual | Dónde vive |
 |---|---|
-| Paleta y proporción Negro 55 · Hueso 30 · Grises 10 · Naranja 5 | `tailwind.config.ts` + tonos en `app/globals.css` |
-| Naranja solo en palabras sueltas y grandes; Brasa cuando va sobre claro | `lib/highlight.tsx` y la variable `--acento` por sección |
-| Jerarquía tipográfica (H1 64/1.05/−1,5 %, H2, cuerpo, caption, cifra) | `fontSize` en `tailwind.config.ts` |
-| Semilla: intersección de dos círculos, R = 34, centros en x = 30 y 70 | `components/brand/Semilla.tsx` |
-| Halo: Brasa 55 % que se apaga hacia negro, uno solo por pieza, con la Semilla en el centro | `components/brand/Halo.tsx`, usado solo en el hero |
-| Campo de semillas: retícula al tresbolillo, 12 % con algunas al 28 %, nunca detrás de texto | `components/brand/CampoDeSemillas.tsx`, como separador |
-| Hero 4.4: negro con halo, eyebrow naranja, H1 de dos líneas, un botón naranja con texto negro, franja de datos con cifra en blanco | `components/sections/Hero.tsx` |
-| Por debajo del hero, el contenido pasa a hueso | `app/page.tsx` |
-| El usuario cierra la pieza en naranja | `components/sections/SiteFooter.tsx` |
+| Paleta completa (Naranja, Brasa, Luz, Negro, Hueso, Arena, grises) | `tailwind.config.ts` |
+| Naranja para rellenos; Brasa para el naranja legible sobre claro | tonos en `app/globals.css` + `lib/highlight.tsx` |
+| Montserrat para lo que se lee, Archivo para lo que se mide | `app/layout.tsx` |
+| Jerarquía tipográfica (H1 64/1.05/−1,5 %, H2, cuerpo, caption) | `fontSize` en `tailwind.config.ts` |
+| Semilla y logotipo, como logo de la página | `components/brand/` |
 
-### Dos desvíos del manual
+**No se aplican** (son decisiones de layout, no de marca): la proporción de uso
+Negro 55 / Hueso 30, el hero de la sección 4.4, el halo, el campo de semillas,
+la barra con el logotipo y la franja de datos. La página es clara y centrada,
+como la referencia.
+
+### Dos desvíos sobre las fuentes
 
 1. **Archivo en lugar de JetBrains Mono.** El manual asigna JetBrains Mono a "lo
-   que se mide" (captions, datos, etiquetas). Las tipografías entregadas fueron
-   Montserrat y Archivo, así que Archivo ocupa ese rol. Para volver a JetBrains
-   Mono alcanza con cambiar la fuente en `app/layout.tsx`: el resto del sistema
-   la toma de la variable `--font-archivo`.
+   que se mide" (captions, datos, etiquetas, botones). Las tipografías
+   entregadas fueron Montserrat y Archivo, así que Archivo ocupa ese rol. Para
+   volver a JetBrains Mono alcanza con cambiar la fuente en `app/layout.tsx`.
 2. **Wordmark tipografiado.** El manual dice que GENESIS OS es un dibujo en
    curvas y que no se tipea. `components/brand/Logotipo.tsx` lo reconstruye con
    la familia, los pesos y el tracking correctos, como provisorio hasta tener el
@@ -56,12 +61,10 @@ ni rutas de assets adentro: para cambiar la página se edita ese archivo.
 
 ### Contraste
 
-Todo el texto pasa WCAG AA. Los captions sobre negro usan Gris claro, que es el
-color que el manual asigna a texto secundario sobre negro (10:1); el Gris cálido
-ahí se quedaba en 4,2:1. Sobre hueso los captions sí van en Gris cálido, tal como
-lo indica el manual: 4,2:1 en 12 px, apenas por debajo de AA. Es la única excepción
-y es una decisión de la paleta, no del código; si se quiere AA estricto ahí, el
-reemplazo más cercano es `#6B6461` en `--sutil` del tono hueso.
+Todo el texto pasa WCAG AA. Los captions sobre claro van en Gris cálido, el
+color que el manual les asigna: 4,2:1 en 12 px, apenas por debajo de AA. Es la
+única excepción y es una decisión de la paleta, no del código; si se quiere AA
+estricto ahí, el reemplazo más cercano es `#6B6461` en `--sutil`.
 
 ## Tipografías
 
@@ -71,30 +74,32 @@ latin-ext (`public/fonts/*.woff2`): 145 KB entre las dos contra 1,37 MB de los
 
 ## Orden del funnel
 
-Definido en `app/page.tsx`. El patrón es `bloque de valor → prueba → CTA`, con un
-solo botón por pantalla.
+Definido en `app/page.tsx`. Es el de la referencia: `bloque de valor → prueba →
+CTA`, con el mismo botón repetido cinco veces y las secciones alternando blanco
+y hueso.
 
-1. Barra con el logotipo
-2. Hero + VSL sobre negro, con halo y franja de datos
+1. Hero centrado: logo, título, bajada y VSL
+2. CTA
 3. **Caso propio de Manu** — responde "¿esto funciona?"
-4. Demo del producto por dentro
-5. Oferta: seis entregables
-6. **Casos de alumnos** + collage de tableros — responde "¿me va a funcionar a mí?"
-7. Cierre y pie con descargo de resultados
+4. CTA
+5. Demo del producto por dentro
+6. CTA
+7. Oferta: seis entregables en zig-zag
+8. CTA
+9. **Casos de alumnos** + collage de tableros — responde "¿me va a funcionar a mí?"
+10. CTA de cierre y pie con descargo de resultados
+
+El único ajuste sobre la referencia es el reparto de la prueba social: la
+referencia usa el mismo formato de tarjeta en los dos bloques; acá el de arriba
+es el caso propio, con formato propio.
 
 Los dos bloques de prueba social son intercambiables: alcanza con permutar
 `<FounderCase />` y `<StudentCases />` en `app/page.tsx`.
 
-## Desktop
+## Layout
 
-Optimizada a 1440 × 900: el hero entra completo en el primer scroll, incluida la
-franja de datos. Verificada sin overflow horizontal a 1920, 1440, 1366 y 390.
-
-- Contenedor de 1240 px con fondos a sangre completa.
-- Los entregables van en grilla de dos columnas en vez de seis filas en zig-zag:
-  la misma información en la mitad de alto (la sección pasó de 3.056 a 1.984 px).
-- Las bandas de CTA llevan una línea de contexto al lado del botón, para no ser
-  franjas vacías.
+Columna clara de 1180 px centrada sobre marco negro, como la referencia.
+Verificada sin overflow horizontal a 1920, 1440, 1366 y 390.
 
 ## Pendiente antes de publicar
 

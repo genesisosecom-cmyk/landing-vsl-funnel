@@ -54,17 +54,16 @@ const config: Config = {
         wordmark: "0.13em",
       },
       maxWidth: {
-        page: "1240px",
+        page: "1180px",
         prose: "66ch",
       },
       borderRadius: {
-        pieza: "0.75rem",
+        pieza: "1.25rem",
+        cta: "0.625rem",
       },
-      backgroundImage: {
-        /** Halo: Brasa al 55 % que se apaga hacia negro. Uno solo por pieza (manual 3.3). */
-        halo: "radial-gradient(30% 48% at 18% 26%, rgba(194,65,12,0.55) 0%, rgba(194,65,12,0.12) 46%, rgba(11,11,11,0) 72%)",
-        /** Degradado Semilla: Luz → Brasa a 160°. Solo en la Semilla, solo sobre negro. */
-        semilla: "linear-gradient(160deg, #FFB35C 0%, #C2410C 100%)",
+      boxShadow: {
+        pieza: "0 18px 50px -24px rgba(11, 11, 11, 0.25)",
+        cta: "0 10px 24px -12px rgba(194, 65, 12, 0.6)",
       },
     },
   },

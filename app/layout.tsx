@@ -45,7 +45,12 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="es" className={`${montserrat.variable} ${archivo.variable}`}>
-      <body>{children}</body>
+      <body>
+        {/* La página es una columna clara centrada sobre el marco negro. */}
+        <div className="mx-auto w-full max-w-[1280px] overflow-hidden bg-blanco sm:my-6 sm:rounded-2xl">
+          {children}
+        </div>
+      </body>
     </html>
   );
 }

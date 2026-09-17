@@ -1,4 +1,3 @@
-import { TopBar } from "@/components/sections/TopBar";
 import { Hero } from "@/components/sections/Hero";
 import { CtaBand } from "@/components/sections/CtaBand";
 import { FounderCase } from "@/components/sections/FounderCase";
@@ -6,41 +5,36 @@ import { InsideLook } from "@/components/sections/InsideLook";
 import { Program } from "@/components/sections/Program";
 import { StudentCases } from "@/components/sections/StudentCases";
 import { ProofCollage } from "@/components/sections/ProofCollage";
-import { CampoDeSemillas } from "@/components/brand/CampoDeSemillas";
 import { SiteFooter } from "@/components/sections/SiteFooter";
-import { ctaBands } from "@/content/landing";
 
 /**
- * Orden del funnel: bloque de valor → prueba → CTA.
+ * Estructura de la landing de referencia: bloque de valor → prueba → CTA, con
+ * el mismo botón repetido cinco veces y secciones alternando blanco y hueso.
  *
- * Los dos bloques de prueba social están separados por objeción:
+ * El único ajuste sobre la referencia es el reparto de la prueba social:
  *   · FounderCase  (arriba) → "¿esto funciona?"          → el caso propio de Manu.
  *   · StudentCases (abajo)  → "¿me va a funcionar a mí?" → casos de alumnos.
  * Para invertirlos alcanza con intercambiarlos acá.
- *
- * Tonos según la proporción del manual (Negro 55 · Hueso 30): hero y caso propio
- * sobre negro, todo el contenido sobre hueso, cierre y pie de vuelta en negro.
  */
 export default function Page() {
   return (
     <>
-      <TopBar />
       <main>
+        {/* El botón del hero es el primero de los cinco: el de abajo del video. */}
         <Hero />
+
         <FounderCase />
-        <CtaBand nota={ctaBands.hero} tono="negro" />
+        <CtaBand />
 
         <InsideLook />
+        <CtaBand />
+
         <Program />
-        <CtaBand nota={ctaBands.programa} tono="hueso" />
+        <CtaBand tono="blanco" />
 
         <StudentCases />
         <ProofCollage />
-
-        <div className="tono-negro border-t border-linea bg-negro">
-          <CampoDeSemillas />
-        </div>
-        <CtaBand nota={ctaBands.cierre} tono="negro" />
+        <CtaBand tono="blanco" />
       </main>
       <SiteFooter />
     </>

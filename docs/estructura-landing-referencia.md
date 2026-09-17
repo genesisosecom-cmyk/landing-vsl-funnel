@@ -99,14 +99,15 @@ paneles). Sin texto, sin lightbox: volumen como prueba. Precedido por el mismo e
 
 ```
 <CtaButton>          // el único botón, repetido
-<Eyebrow>            // etiqueta de sección
+<SectionLabel>       // píldora de sección
 <SectionHeading>     // eyebrow + H2 con resaltado + subcopy
 <VideoFrame>         // 16:9 o 9:16, fachada con click para cargar
-<FranjaDeDatos>      // cifra + etiqueta, en franja o dentro de tarjeta
-<TestimonialCard>    // video + dato + titular + body + atribución
-<FeatureCard>        // entregable numerado
+<MetricChip>         // etiqueta + cifra, al pie de cada caso
+<Stars>              // valoración del testimonio
+<TestimonialCard>    // video + estrellas + meta + titular + body + <MetricChip>
+<FeatureRow>         // entregable numerado, en zig-zag
 <ProofCollage>       // masonry de capturas
-<Section>            // envoltorio con tono (negro / hueso)
+<Section>            // envoltorio con tono (blanco / hueso / negro)
 ```
 
 Con estos componentes se arma la página entera: es una landing de **datos**, no de maquetación
@@ -152,21 +153,17 @@ solo caso y la tarjeta está diseñada para comparar varios entre sí.
 Implementado en `components/sections/FounderCase.tsx` y `components/sections/StudentCases.tsx`.
 Para invertir el orden alcanza con permutar ambos componentes en `app/page.tsx`.
 
-## 8. Implementación sobre el Manual de Marca Génesis OS
+## 8. Implementación
 
-La estructura de la referencia se mantiene; lo que cambia es todo lo visual y la
-voz. Equivalencias principales:
+La estructura de este documento es la que está implementada. Del Manual de Marca
+Génesis OS se toman únicamente la tipografía y los colores:
 
-| Referencia | Génesis OS |
+| Referencia | Implementación |
 |---|---|
-| Landing clara con acento verde neón | Negro dominante con acento Naranja Génesis (proporción 55/30/10/5 del manual) |
+| Acento verde neón | Naranja Génesis en rellenos, Brasa en texto sobre claro |
 | Display condensada + Inter | Montserrat (lo que se lee) + Archivo (lo que se mide) |
-| Eyebrow en píldora | Eyebrow en Archivo mayúsculas, sin contenedor |
-| CTA verde, mayúsculas | Botón naranja con texto negro, sin mayúsculas de urgencia |
-| Cinco estrellas en el testimonio | La cifra al frente: "data antes que humo" |
-| Seis filas en zig-zag | Grilla de dos columnas (optimización de desktop) |
-| Sin identidad gráfica propia | Semilla, halo y campo de semillas construidos según el manual |
+| Fondos blanco y verde menta | Blanco y Hueso |
+| Marco oscuro alrededor de la columna | Negro de marca |
 
-El hero sigue además la especificación 4.4 del manual (hero web), que define
-fondo negro con halo, eyebrow naranja, título de dos líneas, un solo botón y la
-franja de datos con cifra en blanco y etiqueta en gris cálido.
+Lo único que cambia respecto de la estructura descrita arriba es el reparto de
+la prueba social de la sección 7.

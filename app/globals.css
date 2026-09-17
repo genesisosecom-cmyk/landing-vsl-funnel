@@ -7,12 +7,11 @@
     scroll-behavior: smooth;
   }
 
+  /* El marco de la página es oscuro; el contenido vive en una columna clara. */
   body {
-    @apply bg-negro font-sans text-cuerpo text-gris-claro antialiased;
+    @apply bg-negro font-sans text-cuerpo text-negro antialiased;
   }
 
-  /* 64 px es el tope del rango del manual y es un valor de desktop: en mobile
-     el mismo título ocuparía media pantalla. */
   h1 {
     @apply font-sans text-h1 font-semibold max-md:text-[2.75rem];
   }
@@ -32,32 +31,39 @@
 
 @layer components {
   /**
-   * Cada sección declara su tono y todo lo que hay adentro lo hereda por
-   * variables CSS. Es lo que mantiene la regla del manual de que el naranja
-   * sobre claro se reemplaza por Brasa, sin que ningún componente tenga que
-   * saber dónde está montado.
+   * Tonos de sección. La landing alterna blanco y hueso; el negro queda para el
+   * pie. Cada sección declara el suyo y lo que hay adentro lo hereda por
+   * variables: es lo que resuelve solo que el acento sea Brasa sobre claro y
+   * Naranja sobre oscuro, sin que ningún componente sepa dónde está montado.
    */
-  /* Fallback: si una sección no declara tono, hereda el oscuro. */
-  .tono-negro {
-    --fondo: #0b0b0b;
-    --pieza: #111111;
-    --titulo: #ffffff;
-    --texto: #bdb7b2;
-    /* Gris claro, que es el que el manual asigna a texto secundario sobre negro:
-       el Gris cálido acá se queda en 4,2:1. */
-    --sutil: #bdb7b2;
-    --acento: #f0641e;
-    --linea: #2e2e2e;
+  .tono-blanco {
+    --fondo: #ffffff;
+    --pieza: #ffffff;
+    --titulo: #0b0b0b;
+    --texto: #565c63;
+    --sutil: #7a7370;
+    --acento: #c2410c;
+    --linea: #e6e2dd;
   }
 
   .tono-hueso {
     --fondo: #f4f2ef;
     --pieza: #ffffff;
     --titulo: #0b0b0b;
-    --texto: #0b0b0b;
+    --texto: #565c63;
     --sutil: #7a7370;
     --acento: #c2410c;
     --linea: #e6e2dd;
+  }
+
+  .tono-negro {
+    --fondo: #0b0b0b;
+    --pieza: #111111;
+    --titulo: #ffffff;
+    --texto: #bdb7b2;
+    --sutil: #bdb7b2;
+    --acento: #f0641e;
+    --linea: #2e2e2e;
   }
 
   .bg-tono {
@@ -83,15 +89,14 @@
   }
 
   .container-page {
-    @apply mx-auto w-full max-w-page px-8;
+    @apply mx-auto w-full max-w-page px-8 max-sm:px-5;
   }
 
-  /* Ritmo vertical de desktop: denso a propósito, sin bandas vacías. */
   .section-pad {
     @apply py-20 max-lg:py-14;
   }
 
-  /* Caption y datos (manual 2.5): Archivo, mayúsculas, tracking +10 %. */
+  /* Etiquetas y datos: Archivo, mayúsculas, tracking +10 % (manual 2.5). */
   .dato {
     @apply font-data text-dato font-medium uppercase tracking-dato text-sutil;
   }

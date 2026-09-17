@@ -64,8 +64,6 @@ export type Feature = {
 export const site = {
   brand: {
     name: "Génesis OS",
-    /** Manual 1.3: se le vende al dueño de marca sin venderle. */
-    tagline: "El sistema desde donde una marca empieza a existir de otra forma",
   },
   // TODO(contenido): reemplazar por el dominio definitivo cuando exista.
   url: "https://landing-vsl-funnel-v1.vercel.app",
@@ -74,7 +72,7 @@ export const site = {
     description:
       "Marcas de consumibles que acumulan clientes en vez de volver a comprarlos. El modelo de suscripción aplicado sobre el producto que ya vendés.",
   },
-  /** Un solo botón por pantalla (manual 4.4): naranja con texto negro. */
+  /** Un único CTA en toda la página: mismo texto y destino, cinco apariciones. */
   cta: {
     // TODO(contenido): URL real del checkout o del formulario de aplicación.
     label: "Quiero entrar a Génesis",
@@ -87,19 +85,11 @@ export const site = {
 /* -------------------------------------------------------------------------- */
 
 export const hero = {
-  /** Eyebrow en Archivo naranja (manual 4.4). */
-  eyebrow: "Modelo de suscripción de consumibles",
   /** H1 de dos líneas como máximo (manual 2.5). */
   title: "El mes arranca *cobrado*.",
   subtitle: "Marcas de consumibles que acumulan clientes en vez de volver a comprarlos.",
   body:
     "Génesis parte del producto que ya vendés, lo rediseña para que se cobre solo cada ciclo de reposición, y construye una base de suscriptores que aguanta el blanco y no depende de Meta.",
-  /** Franja de datos: cifra en blanco, etiqueta en gris cálido (manual 4.4). */
-  datos: [
-    { value: "2.200", label: "Suscriptores activos" },
-    { value: "1,28 %", label: "Churn mensual" },
-    { value: "USD 15.000", label: "Primer mes, sin pauta" },
-  ] satisfies Dato[],
   video: {
     kind: "file",
     src: "",
@@ -291,17 +281,6 @@ export const proofCollage = {
     width: 600,
     height: [420, 560, 340, 620, 400, 500, 360, 540][i],
   })) satisfies Media[],
-};
-
-/* -------------------------------------------------------------------------- */
-/* Bandas de CTA                                                               */
-/* -------------------------------------------------------------------------- */
-
-/** Una línea de contexto por banda: evita el botón flotando solo en el vacío. */
-export const ctaBands = {
-  hero: "Lo mismo que corro en mi marca, aplicado a la tuya.",
-  programa: "Se parte del producto que ya vendés. No se empieza de cero.",
-  cierre: "PLACEHOLDER — la línea de cierre, antes del último botón.",
 };
 
 /* -------------------------------------------------------------------------- */

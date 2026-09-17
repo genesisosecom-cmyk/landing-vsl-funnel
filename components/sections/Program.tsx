@@ -1,22 +1,22 @@
 import { Section } from "@/components/ui/Section";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-import { FeatureCard } from "./FeatureCard";
+import { FeatureRow } from "./FeatureRow";
 import { program } from "@/content/landing";
 
-/** La oferta: qué recibe exactamente, con una captura real por entregable. */
+/** La oferta: seis entregables numerados, cada uno con su captura. */
 export function Program() {
   return (
     <Section id="programa" tono="hueso">
-      <div className="flex flex-col gap-12">
+      <div className="flex flex-col items-center gap-10">
         <SectionHeading
-          eyebrow={program.eyebrow}
+          label={program.eyebrow}
           title={program.title}
           subtitle={program.subtitle}
         />
 
-        <div className="grid gap-6 lg:grid-cols-2">
+        <div className="flex w-full flex-col gap-6">
           {program.features.map((feature, i) => (
-            <FeatureCard key={feature.title} feature={feature} index={i} />
+            <FeatureRow key={feature.title} feature={feature} index={i} />
           ))}
         </div>
       </div>
