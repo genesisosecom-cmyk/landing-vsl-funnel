@@ -23,8 +23,8 @@ ni rutas de assets adentro: para cambiar la página se edita ese archivo.
 
 - Palabras en el color de acento: envolverlas en `*asteriscos*`. El acento se
   resuelve solo según la sección (Naranja sobre negro, Brasa sobre hueso).
-- El VSL del hero: `kind: "file"` para un mp4 propio, `kind: "embed"` para
-  YouTube/Vimeo/Loom. Con `src` vacío el reproductor muestra "Falta el video".
+- El VSL del hero está en VTurb: en `hero.player` van el ID del reproductor y
+  la URL de su script, los dos datos que VTurb entrega con el embed.
 - Mosaico de resultados: las capturas viven en `public/resultados/`. Para sumar
   una, dejarla ahí y agregarla al array `results.items` con su ancho y alto
   reales; el masonry la acomoda solo. `results.featured` es la que va destacada
@@ -100,7 +100,7 @@ El ajuste sobre la referencia es el reparto de la prueba social: la referencia
 usa el mismo formato de tarjeta en los dos bloques y un collage aparte; acá el
 de arriba es el caso propio y el de abajo es un único mosaico con todo junto.
 
-El VSL del hero es el único video de la página.
+El VSL del hero, servido por VTurb, es el único video de la página.
 
 Los dos bloques de prueba social son intercambiables: alcanza con permutar
 `<FounderCase />` y `<ResultsMosaic />` en `app/page.tsx`.

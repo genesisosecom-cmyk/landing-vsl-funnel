@@ -21,14 +21,11 @@ export type Media = {
   height: number;
 };
 
-export type Video = {
-  /** "file" = mp4 propio · "embed" = YouTube/Vimeo/Loom (se carga recién al hacer click). */
-  kind: "file" | "embed";
-  /** Vacío = placeholder; el reproductor avisa que falta el video. */
-  src: string;
-  poster: Media;
-  title: string;
-  duration?: string;
+export type Player = {
+  /** ID del reproductor en VTurb, sin el prefijo "vid-". */
+  id: string;
+  /** Script del player: lo entrega VTurb junto con el embed. */
+  scriptSrc: string;
 };
 
 export type Dato = {
@@ -80,18 +77,12 @@ export const hero = {
     "Cómo escalar tu marca de consumibles a *+$100M al mes* convirtiéndola a modelo de suscripción.",
   body:
     "El mismo método que usé para superar +$3M USD con mis marcas, explicado para que lo puedas ejecutar si ya estás vendiendo un consumible.",
-  video: {
-    kind: "file",
-    src: "",
-    title: "Video de venta principal",
-    duration: "12:57",
-    poster: {
-      src: "/placeholders/video-16x9.svg",
-      alt: "PLACEHOLDER — portada del VSL: Manu explicando en el tablero",
-      width: 1280,
-      height: 720,
-    },
-  } satisfies Video,
+  /** El VSL, alojado en VTurb. */
+  player: {
+    id: "6aaca34423e48c7b7d880451",
+    scriptSrc:
+      "https://scripts.converteai.net/f742aa68-fd02-43e3-862f-368d962ade9f/players/6aaca34423e48c7b7d880451/v4/player.js",
+  } satisfies Player,
 };
 
 /* -------------------------------------------------------------------------- */

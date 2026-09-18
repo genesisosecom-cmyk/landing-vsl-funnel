@@ -1,6 +1,6 @@
 import { Logotipo } from "@/components/brand/Logotipo";
 import { CtaButton } from "@/components/ui/CtaButton";
-import { VideoFrame } from "@/components/ui/VideoFrame";
+import { VturbPlayer } from "@/components/ui/VturbPlayer";
 import { highlight } from "@/lib/highlight";
 import { hero } from "@/content/landing";
 
@@ -22,7 +22,7 @@ export function Hero() {
         <p className="max-w-prose text-texto">{hero.body}</p>
 
         {/* En pantallas grandes el VSL crece, pero sin empujar el botón fuera del primer scroll. */}
-        <VideoFrame video={hero.video} className="w-full max-w-[42rem] xl:max-w-4xl" />
+        <VturbPlayer player={hero.player} className="w-full max-w-[42rem] xl:max-w-4xl" />
 
         <CtaButton size="lg" />
       </div>
