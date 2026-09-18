@@ -117,13 +117,13 @@ export const founderCase = {
     width: 1100,
     height: 1955,
   } satisfies Media,
-  /** Capturas propias: tableros, cohortes, facturación, suscriptores. */
-  media: [
-    { src: "/placeholders/caso-1.svg", alt: "PLACEHOLDER — tablero de suscripciones", width: 800, height: 500 },
-    { src: "/placeholders/caso-2.svg", alt: "PLACEHOLDER — cohortes y churn", width: 800, height: 500 },
-    { src: "/placeholders/caso-3.svg", alt: "PLACEHOLDER — facturación mensual", width: 800, height: 500 },
-    { src: "/placeholders/caso-4.svg", alt: "PLACEHOLDER — suscriptores activos", width: 800, height: 500 },
-  ] satisfies Media[],
+  /** Captura del panel de suscripciones de la marca. */
+  media: {
+    src: "/tablero-suscripciones.jpg",
+    alt: "Panel de suscripciones: 2.256 suscripciones activas y $157.468.800 de facturación en el mes",
+    width: 2080,
+    height: 1128,
+  } satisfies Media,
 };
 
 /* -------------------------------------------------------------------------- */

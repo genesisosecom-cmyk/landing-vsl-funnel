@@ -44,19 +44,15 @@ export function FounderCase() {
           </div>
         </div>
 
-        <div className="grid mx-auto w-full max-w-[1040px] gap-5 sm:grid-cols-2">
-          {founderCase.media.map((shot) => (
-            <img
-              key={shot.src}
-              src={shot.src}
-              alt={shot.alt}
-              width={shot.width}
-              height={shot.height}
-              loading="lazy"
-              className="w-full rounded-pieza border border-linea"
-            />
-          ))}
-        </div>
+        {/* La captura ya viene con su propio marco negro, así que no lleva borde. */}
+        <Image
+          src={founderCase.media.src}
+          alt={founderCase.media.alt}
+          width={founderCase.media.width}
+          height={founderCase.media.height}
+          sizes="(min-width: 1120px) 1040px, 92vw"
+          className="mx-auto h-auto w-full max-w-[1040px] rounded-pieza"
+        />
       </div>
     </Section>
   );
