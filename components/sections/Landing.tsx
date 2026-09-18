@@ -11,11 +11,12 @@ import type { Flujo } from "@/lib/atribucion";
 /**
  * La landing, idéntica en los dos flujos del A/B.
  *
- * Lo único que cambia entre /formulario y /agenda es a dónde llevan los
- * botones y qué pasa después del formulario. El contenido es el mismo para
- * que la diferencia medida sea el mecanismo de conversión y nada más.
+ * Lo único que cambia entre /formulario y /agenda es qué hay embebido en la
+ * sección de conversión: nuestro formulario o el calendario de GHL. El
+ * contenido es el mismo para que la diferencia medida sea el mecanismo de
+ * conversión y nada más.
  */
-export function Landing({ flujo, destinoFormulario }: { flujo: Flujo; destinoFormulario: string }) {
+export function Landing({ flujo }: { flujo: Flujo }) {
   // Los botones no navegan: bajan al formulario embebido, que es donde arranca
   // el flujo. Una sola pantalla de conversión para toda la página.
   const aplicarUrl = "#aplicar";
@@ -31,7 +32,7 @@ export function Landing({ flujo, destinoFormulario }: { flujo: Flujo; destinoFor
 
         <InsideLook />
         {/* Acá iba una banda de CTA; ahora el formulario va embebido de una. */}
-        <FormularioEnLanding flujo={flujo} destino={destinoFormulario} />
+        <FormularioEnLanding flujo={flujo} destino="/gracias" />
 
         <Program />
         <CtaBand href={aplicarUrl} tono="blanco" />

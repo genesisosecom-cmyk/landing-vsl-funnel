@@ -60,10 +60,6 @@ export const site = {
   tracking: {
     metaPixelId: "29155340914068656",
   },
-  /** El Typeform de aplicación, el mismo para los dos flujos del A/B. */
-  typeform: {
-    id: "uKtOSZl1",
-  },
   /** El texto del CTA es único; el destino depende del flujo del test. */
   cta: {
     label: "Quiero entrar a Génesis",
@@ -276,6 +272,38 @@ export const aplicar = {
     "Son tres preguntas para entender tu marca. Si el modelo aplica a tu producto, seguimos; si no, te lo decimos.",
   /** Título del formulario embebido dentro de la landing, bajo "por dentro". */
   tituloEnLanding: "Aplicá para entrar a *Génesis OS*",
+  /**
+   * El formulario propio. Las preguntas son las mismas que hacía el Typeform,
+   * con el mismo texto, más el mail: sin mail Meta matchea sólo por teléfono y
+   * GoHighLevel no tiene con qué deduplicar el contacto cuando después agenda.
+   */
+  formulario: {
+    enviar: "Enviar mi aplicación",
+    enviando: "Enviando…",
+    error: "No pudimos enviar tu aplicación. Probá de nuevo en un momento.",
+    campos: {
+      nombre: { etiqueta: "Tu nombre", placeholder: "Nombre y apellido" },
+      email: { etiqueta: "Tu email", placeholder: "vos@tumarca.com" },
+      telefono: { etiqueta: "Tu teléfono", placeholder: "+54 9 11 …", ayuda: "Con código de país. Te escribimos por WhatsApp." },
+      instagram: { etiqueta: "Tu instagram", placeholder: "@tumarca" },
+    },
+    facturacion: {
+      etiqueta: "¿Cuánto está facturando tu marca mensualmente?",
+      opciones: ["Menos de 10M", "Entre 10M y 30M", "Entre 30M y 50M", "Entre 50M y 100M", "Más de 100M"],
+    },
+    frecuencia: {
+      etiqueta: "¿Cada cuánto se le termina el producto a tu cliente?",
+      opciones: [
+        "En menos de 30 días",
+        "Entre 30 y 60 días",
+        "Entre 60 y 90 días",
+        "Más de 90 días",
+        "No se termina, se compra una vez y listo",
+      ],
+    },
+  },
+  /** Título del calendario embebido dentro de la landing, en el flujo de agenda. */
+  tituloAgendaEnLanding: "Agendá tu llamada con *Manu*",
   calendario: {
     titulo: "Elegí el horario de tu llamada",
     intro: "Son 30 minutos con Manu para revisar tu marca y tus números.",

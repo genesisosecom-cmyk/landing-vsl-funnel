@@ -22,9 +22,5 @@ export default async function LandingPorFlujo({
   const { flujo } = await params;
   if (!esFlujo(flujo)) notFound();
 
-  // Terminado el formulario: en el flujo de agenda sigue el calendario; en el
-  // de formulario, directo al agradecimiento.
-  const destino = flujo === "agenda" ? "/agenda/calendario" : "/gracias";
-
-  return <Landing flujo={flujo} destinoFormulario={destino} />;
+  return <Landing flujo={flujo} />;
 }

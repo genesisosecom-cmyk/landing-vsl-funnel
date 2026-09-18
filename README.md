@@ -84,20 +84,23 @@ sortea nada.
 | Ruta | Qué es |
 |---|---|
 | `/` | Redirige a `/formulario` |
-| `/formulario` · `/agenda` | La misma landing, con distinto destino de conversión |
-| `/formulario/aplicar` · `/agenda/aplicar` | Typeform embebido |
-| `/agenda/calendario` | Calendario de GHL (solo el flujo de agenda) |
+| `/formulario` · `/agenda` | La misma landing, con distinto mecanismo de conversión |
 | `/gracias` | Cierre de los dos flujos |
+| `/tracking` | Panel interno, con contraseña |
 
-Los cuatro botones de la landing bajan con scroll al formulario embebido
-(`#aplicar`), que está debajo de "por dentro" en lugar de una banda de CTA. No
-navegan: el flujo arranca ahí.
+Los cuatro botones de la landing bajan con scroll a la sección `#aplicar`, que
+está debajo de "por dentro" en lugar de una banda de CTA. No navegan: el flujo
+arranca ahí.
 
-Flujo formulario: formulario → `/gracias`.
-Flujo agenda: formulario → calendario → `/gracias`.
+Lo único que cambia entre los dos flujos es qué hay embebido en esa sección:
 
-Las rutas `/[flujo]/aplicar` siguen existiendo con el mismo formulario, por si
-hace falta un link directo (bio, WhatsApp, email). Ningún botón apunta ahí.
+- **`/formulario`** → formulario propio → `/gracias`. Lo contactamos nosotros.
+- **`/agenda`** → calendario de GHL directo → `/gracias` (redirect configurado
+  en el propio calendario). Los datos los pide el formulario del calendario.
+
+En agenda no hay formulario previo a propósito: dos formularios seguidos pedían
+los mismos datos dos veces y abrían la puerta a que GHL creara dos contactos por
+un teléfono escrito distinto.
 
 ## Orden del funnel
 
@@ -146,13 +149,16 @@ Verificada sin overflow horizontal a 1920, 1440, 1366 y 390.
 - [x] Evento de click: `InitiateCheckout` con la posición del botón
       (`components/analytics/CtaTracker.tsx`).
 - [x] Destino del CTA: `/aplicar`.
-- [x] Dos landings (`/formulario` y `/agenda`) con Typeform embebido, lead a
-      GoHighLevel y atribución por anuncio.
-- [ ] Campos ocultos declarados en el Typeform (sin eso la atribución se pierde).
-- [ ] Webhook de Typeform apuntando a `/api/typeform` con su secreto.
+- [x] Dos landings (`/formulario` y `/agenda`), lead a GoHighLevel y atribución
+      por anuncio.
+- [x] Formulario propio en `/formulario` y calendario de GHL embebido en
+      `/agenda`.
+- [x] Panel de tracking en `/tracking`, lead por lead (ver `docs/tracking.md`).
+- [ ] `SUPABASE_URL`, `SUPABASE_SERVICE_KEY` y `TRACKING_PASSWORD` en Vercel.
 - [ ] `META_CAPI_TOKEN` en Vercel: sin él los eventos de servidor no salen.
 - [ ] Webhook de citas: crear el workflow en GHL apuntando a
-      `/api/ghl/cita?token=$GHL_WEBHOOK_SECRET`.
+      `/api/ghl/cita?token=$GHL_WEBHOOK_SECRET`. Sin eso el flujo de agenda no
+      manda ninguna conversión a Meta.
 - [ ] Decidir si se suman precio, FAQ, garantía y urgencia.
 
 ## Medición
@@ -161,13 +167,17 @@ Verificada sin overflow horizontal a 1920, 1440, 1366 y 390.
 |---|---|---|
 | Carga de la landing | `PageView` | navegador |
 | Click en cualquier CTA | `InitiateCheckout` con la posición del botón | navegador |
-| Typeform completado | `Lead` con flujo y origen | navegador **y** servidor (webhook de Typeform), mismo `event_id` |
-| Cita agendada | `Schedule` | servidor, desde el webhook de GHL |
+| Formulario enviado (`/formulario`) | `Lead` con flujo y origen | navegador **y** servidor (`/api/lead`), mismo `event_id` |
+| Cita agendada (`/agenda`) | `Lead` + `Schedule` | servidor, desde el webhook de GHL |
 
 La atribución se captura en la primera visita (`utm_*`, `fbclid`, `_fbp`) en una
-cookie propia de 90 días y viaja como campos ocultos del Typeform. En GoHighLevel
-queda en el `attributionSource` del contacto y en los campos `utm_source`,
-`utm_medium` y `utm_content`.
+cookie propia de 90 días. En el flujo de formulario viaja en el mismo POST que
+los datos del lead; en el de agenda viaja en la URL del iframe del calendario y
+se recupera leyendo el contacto de GHL. En GoHighLevel queda en el
+`attributionSource` del contacto y en los campos `utm_source`, `utm_medium`,
+`utm_content`, `utm_campaign` y `fbclid`.
+
+El detalle completo del tracking está en `docs/tracking.md`.
 
 **Ojo con una particularidad de GHL:** el `attributionSource` se escribe solo al
 crear el contacto; en un contacto que ya existía, GHL lo ignora. Los campos

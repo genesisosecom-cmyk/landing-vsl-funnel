@@ -1,9 +1,11 @@
 "use client";
 
 import { useEffect } from "react";
+import { anotarEvento } from "@/lib/visita";
 
 /**
- * Dispara InitiateCheckout cuando alguien hace click en el CTA.
+ * Dispara InitiateCheckout cuando alguien hace click en el CTA, y lo anota en
+ * el panel de tracking.
  *
  * Va por delegación en document en vez de un onClick en el botón: así CtaButton
  * sigue siendo un componente de servidor y cualquier CTA que se agregue después
@@ -23,6 +25,11 @@ export function CtaTracker() {
 
       const posicion = Array.from(document.querySelectorAll('[data-cta="primary"]')).indexOf(cta) + 1;
       window.fbq?.("track", "InitiateCheckout", { content_name: `cta_${posicion}` });
+
+      anotarEvento("cta_click", {
+        flujo: window.location.pathname.replace(/^\//, "").split("/")[0],
+        detalle: { posicion },
+      });
     }
 
     // capture: el evento se registra aunque algo más cancele el click después.
