@@ -119,5 +119,6 @@ Verificada sin overflow horizontal a 1920, 1440, 1366 y 390.
       el mosaico de resultados ya lo usa).
 - [ ] Reemplazar el wordmark por el SVG en curvas de la carpeta de marca.
 - [ ] Descargo de resultados redactado por alguien que lo valide legalmente.
-- [ ] Pixel y evento de click sobre `[data-cta="primary"]`.
+- [x] Píxel de Meta (`components/analytics/MetaPixel.tsx`, ID en `site.tracking`).
+- [ ] Evento de click sobre `[data-cta="primary"]` (Lead o el que se elija en Meta).
 - [ ] Decidir si se suman precio, FAQ, garantía y urgencia.

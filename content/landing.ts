@@ -59,6 +59,10 @@ export const site = {
     description:
       "Marcas de consumibles que acumulan clientes en vez de volver a comprarlos. El modelo de suscripción aplicado sobre el producto que ya vendés.",
   },
+  /** El ID es público: viaja al navegador en cualquier sitio que corra el píxel. */
+  tracking: {
+    metaPixelId: "29155340914068656",
+  },
   /** Un único CTA en toda la página: mismo texto y destino, cinco apariciones. */
   cta: {
     // TODO(contenido): URL real del checkout o del formulario de aplicación.

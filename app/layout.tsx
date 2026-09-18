@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
+import { MetaPixel } from "@/components/analytics/MetaPixel";
 import { site } from "@/content/landing";
 import "./globals.css";
 
@@ -45,7 +46,10 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="es" className={`${montserrat.variable} ${archivo.variable}`}>
-      <body>{children}</body>
+      <body>
+        {children}
+        <MetaPixel />
+      </body>
     </html>
   );
 }
