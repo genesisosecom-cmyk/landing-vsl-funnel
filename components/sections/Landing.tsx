@@ -16,7 +16,9 @@ import type { Flujo } from "@/lib/atribucion";
  * que la diferencia medida sea el mecanismo de conversión y nada más.
  */
 export function Landing({ flujo, destinoFormulario }: { flujo: Flujo; destinoFormulario: string }) {
-  const aplicarUrl = `/${flujo}/aplicar`;
+  // Los botones no navegan: bajan al formulario embebido, que es donde arranca
+  // el flujo. Una sola pantalla de conversión para toda la página.
+  const aplicarUrl = "#aplicar";
 
   return (
     <>

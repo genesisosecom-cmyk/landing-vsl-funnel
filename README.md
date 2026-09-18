@@ -89,12 +89,15 @@ sortea nada.
 | `/agenda/calendario` | Calendario de GHL (solo el flujo de agenda) |
 | `/gracias` | Cierre de los dos flujos |
 
-Flujo formulario: botón → Typeform → `/gracias`.
-Flujo agenda: botón → Typeform → calendario → `/gracias`.
+Los cuatro botones de la landing bajan con scroll al formulario embebido
+(`#aplicar`), que está debajo de "por dentro" en lugar de una banda de CTA. No
+navegan: el flujo arranca ahí.
 
-En las dos, la sección que sigue a "por dentro" lleva el Typeform embebido en
-lugar de una banda de CTA, con el campo oculto `origen` en `seccion` para
-distinguirlo del `boton`.
+Flujo formulario: formulario → `/gracias`.
+Flujo agenda: formulario → calendario → `/gracias`.
+
+Las rutas `/[flujo]/aplicar` siguen existiendo con el mismo formulario, por si
+hace falta un link directo (bio, WhatsApp, email). Ningún botón apunta ahí.
 
 ## Orden del funnel
 

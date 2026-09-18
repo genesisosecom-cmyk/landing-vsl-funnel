@@ -12,7 +12,9 @@ import type { Flujo } from "@/lib/atribucion";
  */
 export function FormularioEnLanding({ flujo, destino }: { flujo: Flujo; destino: string }) {
   return (
-    <Section id="aplicar" tono="hueso">
+    // scroll-mt deja aire arriba cuando se llega por el ancla, en vez de pegar
+    // el título contra el borde de la pantalla.
+    <Section id="aplicar" tono="hueso" className="scroll-mt-6">
       <div className="flex flex-col items-center gap-8">
         <h2 className="max-w-2xl text-center text-titulo">{highlight(aplicar.tituloEnLanding)}</h2>
 
