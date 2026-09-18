@@ -120,5 +120,7 @@ Verificada sin overflow horizontal a 1920, 1440, 1366 y 390.
 - [ ] Reemplazar el wordmark por el SVG en curvas de la carpeta de marca.
 - [ ] Descargo de resultados redactado por alguien que lo valide legalmente.
 - [x] Píxel de Meta (`components/analytics/MetaPixel.tsx`, ID en `site.tracking`).
-- [ ] Evento de click sobre `[data-cta="primary"]` (Lead o el que se elija en Meta).
+- [x] Evento de click: `InitiateCheckout` con la posición del botón
+      (`components/analytics/CtaTracker.tsx`).
+- [ ] Destino del CTA: hoy `site.cta.href` apunta a un placeholder.
 - [ ] Decidir si se suman precio, FAQ, garantía y urgencia.

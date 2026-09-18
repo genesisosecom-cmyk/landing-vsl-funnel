@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
+import { CtaTracker } from "@/components/analytics/CtaTracker";
 import { MetaPixel } from "@/components/analytics/MetaPixel";
 import { site } from "@/content/landing";
 import "./globals.css";
@@ -49,6 +50,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         {children}
         <MetaPixel />
+        <CtaTracker />
       </body>
     </html>
   );
