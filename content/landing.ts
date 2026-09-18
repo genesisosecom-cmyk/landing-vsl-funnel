@@ -112,10 +112,10 @@ export const founderCase = {
    * tablero al lado y el producto real sobre la mesa. Nunca autos ni fajos.
    */
   photo: {
-    src: "/placeholders/foto-manu.svg",
-    alt: "PLACEHOLDER — foto de Manu explicando el tablero",
-    width: 900,
-    height: 1100,
+    src: "/manu.jpg",
+    alt: "Manu Dominguez en su estudio",
+    width: 1100,
+    height: 1955,
   } satisfies Media,
   /** Capturas propias: tableros, cohortes, facturación, suscriptores. */
   media: [
