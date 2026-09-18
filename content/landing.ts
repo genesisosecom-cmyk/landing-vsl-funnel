@@ -154,34 +154,64 @@ export const program = {
   /** Numerados y en zig-zag automático. */
   features: [
     {
-      title: "Seguimiento *1:1* con Manu y el equipo",
-      body: "PLACEHOLDER — el beneficio, no la feature: qué problema le saca de encima al dueño de marca.",
-      media: { src: "/placeholders/feature-1.svg", alt: "PLACEHOLDER", width: 720, height: 520 },
+      title: "Seguimiento *1:1* con Manu",
+      body: "Sabés operar, lo que no sabés es cuál es el próximo paso, y hasta hoy lo venías adivinando solo con la plata de tu negocio como costo del error. Acá tenés al lado a alguien que ya hizo esta migración con su propia marca: dejás de probar a ciegas y de tener miedo a romper lo que hoy te factura.",
+      media: {
+        src: "/placeholders/feature-1.svg",
+        alt: "PLACEHOLDER — captura del seguimiento 1:1",
+        width: 720,
+        height: 520,
+      },
     },
     {
       title: "Rediseño del *producto* a ciclo de reposición",
-      body: "PLACEHOLDER — el beneficio, no la feature.",
-      media: { src: "/placeholders/feature-2.svg", alt: "PLACEHOLDER", width: 720, height: 520 },
+      body: "No cambiás de producto ni tirás lo que construiste: el mismo producto que ya vendés pasa a volver solo cuando al cliente se le termina. Dejás de empezar de cero en cada venta y de pagar adquisición por un cliente que ya era tuyo.",
+      media: {
+        src: "/placeholders/feature-2.svg",
+        alt: "PLACEHOLDER — captura del rediseño de producto",
+        width: 720,
+        height: 520,
+      },
     },
     {
-      title: "Llamadas *grupales* semanales",
-      body: "PLACEHOLDER — el beneficio, no la feature.",
-      media: { src: "/placeholders/feature-3.svg", alt: "PLACEHOLDER", width: 720, height: 520 },
+      title: "Llamadas *1:1* semanales",
+      body: "El error que hoy descubrís a fin de mes, acá lo corregís a los siete días, con tus números arriba de la mesa y no con una sensación. Dejás de perder meses enteros yendo para el lado equivocado y de quedarte trabado esperando a que alguien te conteste.",
+      media: {
+        src: "/placeholders/feature-3.svg",
+        alt: "PLACEHOLDER — captura de una llamada semanal",
+        width: 720,
+        height: 520,
+      },
     },
     {
       title: "El sistema de *retención* y cobro recurrente",
-      body: "PLACEHOLDER — el beneficio, no la feature.",
-      media: { src: "/placeholders/feature-4.svg", alt: "PLACEHOLDER", width: 720, height: 520 },
+      body: "El 1 del mes ya tenés facturación adentro antes de gastar un peso en pauta: la pauta pasa a sumar, no a sostenerte. Y si te bajan la cuenta un martes, no se termina el negocio — los suscriptores se siguen cobrando igual.",
+      media: {
+        src: "/placeholders/feature-4.svg",
+        alt: "PLACEHOLDER — captura del sistema de cobro recurrente",
+        width: 720,
+        height: 520,
+      },
     },
     {
-      title: "Proveedores, *logística* y reposición",
-      body: "PLACEHOLDER — el beneficio, no la feature.",
-      media: { src: "/placeholders/feature-5.svg", alt: "PLACEHOLDER", width: 720, height: 520 },
+      title: "Proyecciones de *stock* y reposición",
+      body: "Una base que se cobra sola no sirve de nada si el mes que viene no tenés stock para entregarla: acá la reposición se calcula sobre tus suscriptores activos, no sobre corazonadas. Te sacás de encima el quiebre de stock y la entrega tarde, que es la forma más cara de perder un cliente que ya te pagaba todos los meses.",
+      media: {
+        src: "/placeholders/feature-5.svg",
+        alt: "PLACEHOLDER — captura de la proyección de stock",
+        width: 720,
+        height: 520,
+      },
     },
     {
-      title: "Comunidad de *dueños de marca*",
-      body: "PLACEHOLDER — el beneficio, no la feature.",
-      media: { src: "/placeholders/feature-6.svg", alt: "PLACEHOLDER", width: 720, height: 520 },
+      title: "Conversión de tu *base actual*",
+      body: "Los clientes que ya te compraron una vez son la primera tanda de suscriptores, y no te cuestan un peso de pauta porque ya los pagaste. Empezás a cobrar recurrencia con la gente que ya tenés, en vez de esperar a que la pauta te traiga gente nueva.",
+      media: {
+        src: "/placeholders/feature-6.svg",
+        alt: "PLACEHOLDER — captura de la conversión de la base",
+        width: 720,
+        height: 520,
+      },
     },
   ] satisfies Feature[],
 };
