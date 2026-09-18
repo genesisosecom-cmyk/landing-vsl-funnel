@@ -8,7 +8,7 @@ import { hero } from "@/content/landing";
  * Hero de la referencia: todo centrado en una columna — logo, título, bajada,
  * VSL y el botón. Sin navegación ni links salientes: una sola acción posible.
  */
-export function Hero() {
+export function Hero({ href }: { href: string }) {
   return (
     <header className="tono-blanco bg-tono text-texto">
       <div className="container-page flex flex-col items-center gap-5 pb-12 pt-8 text-center">
@@ -24,7 +24,7 @@ export function Hero() {
         {/* En pantallas grandes el VSL crece, pero sin empujar el botón fuera del primer scroll. */}
         <VturbPlayer player={hero.player} className="w-full max-w-[42rem] xl:max-w-4xl" />
 
-        <CtaButton size="lg" />
+        <CtaButton href={href} size="lg" />
       </div>
     </header>
   );

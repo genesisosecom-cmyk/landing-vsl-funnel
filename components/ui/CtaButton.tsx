@@ -1,6 +1,8 @@
 import { site } from "@/content/landing";
 
 type Props = {
+  /** El destino depende del flujo: /formulario/aplicar o /agenda/aplicar. */
+  href: string;
   size?: "md" | "lg";
   className?: string;
 };
@@ -9,7 +11,7 @@ type Props = {
  * El único CTA de la página, repetido cinco veces con el mismo texto y destino.
  * Naranja Génesis con texto negro: el blanco sobre este naranja no llega a 4,5:1.
  */
-export function CtaButton({ size = "md", className = "" }: Props) {
+export function CtaButton({ href, size = "md", className = "" }: Props) {
   // En mobile el label entra justo: sin bajar padding y cuerpo se parte en dos líneas.
   const sizing =
     size === "lg"
@@ -18,7 +20,7 @@ export function CtaButton({ size = "md", className = "" }: Props) {
 
   return (
     <a
-      href={site.cta.href}
+      href={href}
       data-cta="primary"
       className={`inline-flex items-center justify-center gap-3 rounded-cta bg-naranja font-data font-semibold uppercase tracking-dato text-negro shadow-cta transition-colors hover:bg-brasa hover:text-blanco focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brasa ${sizing} ${className}`}
     >

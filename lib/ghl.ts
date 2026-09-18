@@ -1,4 +1,4 @@
-import type { Atribucion, Variante } from "./atribucion";
+import type { Atribucion, Flujo } from "./atribucion";
 
 /**
  * Cliente de GoHighLevel (API v2).
@@ -15,13 +15,18 @@ const CAMPOS = {
   utmSource: "YxZa5BCAAF7ZGtGh6NGi",
   utmMedium: "IDPD042sOkASJteoto0q",
   utmContent: "DiZhk2Muz63v09gwbus6",
+  instagram: "MGWoZYcdmDS3gEnaemMC",
 } as const;
 
 export type Lead = {
   nombre: string;
-  email: string;
+  email?: string;
   telefono: string;
-  variante: Variante;
+  /** Instagram: lo pide el formulario y sirve para identificar al lead. */
+  instagram?: string;
+  flujo: Flujo;
+  /** Desde qué parte de la página se abrió el formulario. */
+  origen?: string;
   atribucion: Atribucion;
 };
 
@@ -45,11 +50,12 @@ export async function upsertContacto(lead: Lead): Promise<ResultadoGhl> {
     email: lead.email,
     phone: lead.telefono,
     source: "Landing VSL",
-    tags: ["landing-vsl", `variante-${lead.variante}`],
+    tags: ["landing-vsl", `flujo-${lead.flujo}`, lead.origen ? `origen-${lead.origen}` : ""].filter(Boolean),
     customFields: [
       { id: CAMPOS.utmSource, value: a.utmSource ?? "" },
       { id: CAMPOS.utmMedium, value: a.utmMedium ?? "" },
       { id: CAMPOS.utmContent, value: a.utmContent ?? "" },
+      { id: CAMPOS.instagram, value: lead.instagram ?? "" },
     ].filter((c) => c.value),
     attributionSource: {
       url: a.landing ? `https://www.genesisecom.com${a.landing}` : undefined,

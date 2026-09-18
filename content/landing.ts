@@ -60,10 +60,13 @@ export const site = {
   tracking: {
     metaPixelId: "29155340914068656",
   },
-  /** Un único CTA en toda la página: mismo texto y destino, cinco apariciones. */
+  /** El Typeform de aplicación, el mismo para los dos flujos del A/B. */
+  typeform: {
+    id: "uKtOSZl1",
+  },
+  /** El texto del CTA es único; el destino depende del flujo del test. */
   cta: {
     label: "Quiero entrar a Génesis",
-    href: "/aplicar",
   },
 } as const;
 
@@ -266,38 +269,24 @@ export const results = {
 /* Página de aplicación (/aplicar) — las dos variantes del A/B               */
 /* -------------------------------------------------------------------------- */
 
-/** BORRADOR — copy de la página de conversión, a aprobar. */
+/** BORRADOR — copy de las páginas del flujo, a aprobar. */
 export const aplicar = {
-  formulario: {
-    nombre: "Tu nombre y apellido",
-    email: "Tu email",
-    telefono: "Tu WhatsApp (con código de país)",
-    enviar: "Continuar",
-    enviando: "Enviando…",
-    error: "No pudimos enviar tus datos. Probá de nuevo en un momento.",
-  },
-  /** Variante A: deja los datos y agenda en el momento. */
-  agenda: {
-    title: "Dejá tus datos y *agendá* la llamada",
-    intro:
-      "Son 30 minutos con Manu para ver tu marca, tus números y si el modelo de suscripción aplica a tu producto. Si no aplica, te lo decimos en la llamada.",
-    tituloAgenda: "Elegí el horario que te quede mejor",
-  },
-  /** Variante B: deja los datos y lo contactamos. */
-  contacto: {
-    title: "Dejá tus datos y *te escribimos*",
-    intro:
-      "Te escribimos por WhatsApp para ver tu marca, tus números y si el modelo de suscripción aplica a tu producto. Si no aplica, te lo decimos ahí.",
-    graciasTitulo: "Listo, ya tenemos tus datos",
-    graciasTexto:
-      "Te escribimos por WhatsApp en las próximas horas al número que dejaste. Revisá que sea el correcto.",
-  },
-  /** El calendario vive en GoHighLevel; el slug es el de la subcuenta. */
+  titulo: "Completá la aplicación",
+  intro:
+    "Son tres preguntas para entender tu marca. Si el modelo aplica a tu producto, seguimos; si no, te lo decimos.",
+  /** Título del formulario embebido dentro de la landing, bajo "por dentro". */
+  tituloEnLanding: "Aplicá para entrar a *Génesis OS*",
   calendario: {
+    titulo: "Elegí el horario de tu llamada",
+    intro: "Son 30 minutos con Manu para revisar tu marca y tus números.",
+    /** El calendario de GoHighLevel. El redirect posterior se configura en GHL. */
     url: "https://api.leadconnectorhq.com/widget/bookings/genesis-os-consultoria",
   },
-  legal:
-    "Al enviar tus datos aceptás que nos pongamos en contacto con vos por WhatsApp, teléfono o email.",
+  gracias: {
+    titulo: "Listo, ya tenemos tu aplicación",
+    texto:
+      "Si tu marca encaja con el modelo, te escribimos por WhatsApp al número que dejaste. Revisá que sea el correcto.",
+  },
 };
 
 /* -------------------------------------------------------------------------- */

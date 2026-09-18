@@ -76,6 +76,26 @@ Montserrat y Archivo van self-hosted como variables subseteadas a latin +
 latin-ext (`public/fonts/*.woff2`): 145 KB entre las dos contra 1,37 MB de los
 `.ttf` originales. Se cargan con `next/font/local`, sin pedidos a Google Fonts.
 
+## Las dos landings del A/B
+
+El reparto lo hace Meta mandando cada anuncio a una URL distinta; la app no
+sortea nada.
+
+| Ruta | Qué es |
+|---|---|
+| `/` | Redirige a `/formulario` |
+| `/formulario` · `/agenda` | La misma landing, con distinto destino de conversión |
+| `/formulario/aplicar` · `/agenda/aplicar` | Typeform embebido |
+| `/agenda/calendario` | Calendario de GHL (solo el flujo de agenda) |
+| `/gracias` | Cierre de los dos flujos |
+
+Flujo formulario: botón → Typeform → `/gracias`.
+Flujo agenda: botón → Typeform → calendario → `/gracias`.
+
+En las dos, la sección que sigue a "por dentro" lleva el Typeform embebido en
+lugar de una banda de CTA, con el campo oculto `origen` en `seccion` para
+distinguirlo del `boton`.
+
 ## Orden del funnel
 
 Definido en `app/page.tsx`. Es el de la referencia: `bloque de valor → prueba →
@@ -123,8 +143,10 @@ Verificada sin overflow horizontal a 1920, 1440, 1366 y 390.
 - [x] Evento de click: `InitiateCheckout` con la posición del botón
       (`components/analytics/CtaTracker.tsx`).
 - [x] Destino del CTA: `/aplicar`.
-- [x] Página de aplicación con A/B (agenda vs contacto), lead a GoHighLevel y
-      atribución por anuncio.
+- [x] Dos landings (`/formulario` y `/agenda`) con Typeform embebido, lead a
+      GoHighLevel y atribución por anuncio.
+- [ ] Campos ocultos declarados en el Typeform (sin eso la atribución se pierde).
+- [ ] Webhook de Typeform apuntando a `/api/typeform` con su secreto.
 - [ ] `META_CAPI_TOKEN` en Vercel: sin él los eventos de servidor no salen.
 - [ ] Webhook de citas: crear el workflow en GHL apuntando a
       `/api/ghl/cita?token=$GHL_WEBHOOK_SECRET`.
@@ -136,11 +158,11 @@ Verificada sin overflow horizontal a 1920, 1440, 1366 y 390.
 |---|---|---|
 | Carga de la landing | `PageView` | navegador |
 | Click en cualquier CTA | `InitiateCheckout` con la posición del botón | navegador |
-| Formulario enviado | `Lead` con la variante | navegador **y** servidor, mismo `event_id` |
+| Typeform completado | `Lead` con flujo y origen | navegador **y** servidor (webhook de Typeform), mismo `event_id` |
 | Cita agendada | `Schedule` | servidor, desde el webhook de GHL |
 
 La atribución se captura en la primera visita (`utm_*`, `fbclid`, `_fbp`) en una
-cookie propia de 90 días y viaja sola en el POST del formulario. En GoHighLevel
+cookie propia de 90 días y viaja como campos ocultos del Typeform. En GoHighLevel
 queda en el `attributionSource` del contacto y en los campos `utm_source`,
 `utm_medium` y `utm_content`.
 
