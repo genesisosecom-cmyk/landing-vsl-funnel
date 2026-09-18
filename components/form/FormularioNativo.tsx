@@ -2,8 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
-import { COOKIE_ATRIBUCION, leerAtribucion } from "@/lib/atribucion";
-import { anotarEvento, idDeVisita, leerCookie } from "@/lib/visita";
+import { anotarEvento, atribucionDeLaVisita, idDeVisita } from "@/lib/visita";
 import { aplicar } from "@/content/landing";
 
 const copia = aplicar.formulario;
@@ -89,7 +88,7 @@ export function FormularioNativo({ flujo, origen, destino, className = "" }: Pro
           origen,
           eventId,
           visitaId: idDeVisita(),
-          atribucion: leerAtribucion(leerCookie(COOKIE_ATRIBUCION)),
+          atribucion: atribucionDeLaVisita(),
         }),
       });
 

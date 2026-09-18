@@ -7,6 +7,8 @@
  * panel sólo podría mostrar los que completaron, que es justo la mitad
  * aburrida del embudo.
  */
+import { COOKIE_ATRIBUCION, leerAtribucion, type Atribucion } from "./atribucion";
+
 export const COOKIE_VISITA = "gen_vid";
 export const DIAS_DE_VIDA_VISITA = 90;
 
@@ -64,4 +66,45 @@ export function anotarEvento(
   } catch {
     /* el tracking nunca rompe la página */
   }
+}
+
+/**
+ * La atribución de esta visita, sin depender de quién corrió primero.
+ *
+ * `CapturaDeAtribucion` escribe la cookie en un efecto, y los componentes que
+ * están más arriba en el árbol —el calendario, por ejemplo— corren su efecto
+ * antes. En una visita nueva desde un anuncio eso significaba leer la cookie
+ * todavía vacía y perder el origen justo en el click que lo trae.
+ *
+ * Así que si la cookie ya tiene algo se respeta (es first-touch y gana), y si
+ * está vacía se arma con lo que hay en la URL de ahora mismo.
+ */
+export function atribucionDeLaVisita(): Atribucion {
+  const guardada = leerAtribucion(leerCookie(COOKIE_ATRIBUCION));
+  if (Object.keys(guardada).length > 0) return guardada;
+  return atribucionDeLaUrl();
+}
+
+/** Lo que se puede leer de la URL y de las cookies del píxel en esta carga. */
+export function atribucionDeLaUrl(): Atribucion {
+  if (typeof window === "undefined") return {};
+
+  const parametros = new URLSearchParams(window.location.search);
+  const fbclid = parametros.get("fbclid") ?? undefined;
+
+  return {
+    utmSource: parametros.get("utm_source") ?? undefined,
+    utmMedium: parametros.get("utm_medium") ?? undefined,
+    utmCampaign: parametros.get("utm_campaign") ?? undefined,
+    utmContent: parametros.get("utm_content") ?? undefined,
+    utmTerm: parametros.get("utm_term") ?? undefined,
+    fbclid,
+    fbp: leerCookie("_fbp"),
+    // _fbc la arma el píxel a partir del fbclid, pero puede tardar: si no está
+    // todavía, la construimos con el formato que espera Meta.
+    fbc: leerCookie("_fbc") ?? (fbclid ? `fb.1.${Date.now()}.${fbclid}` : undefined),
+    referrer: document.referrer || undefined,
+    landing: window.location.pathname,
+    desde: new Date().toISOString(),
+  };
 }

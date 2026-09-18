@@ -305,10 +305,16 @@ export const aplicar = {
   /** Título del calendario embebido dentro de la landing, en el flujo de agenda. */
   tituloAgendaEnLanding: "Agendá tu llamada con *Manu*",
   calendario: {
-    titulo: "Elegí el horario de tu llamada",
-    intro: "Son 30 minutos con Manu para revisar tu marca y tus números.",
-    /** El calendario de GoHighLevel. El redirect posterior se configura en GHL. */
-    url: "https://api.leadconnectorhq.com/widget/bookings/genesis-os-consultoria",
+    /**
+     * "Genesis OS | Validacion" en GoHighLevel, 40 minutos.
+     *
+     * Va la URL por id y no por slug: el slug se puede renombrar desde el
+     * panel de GHL y el día que pase, la landing queda con un calendario roto
+     * sin que nadie toque el código. El id no cambia.
+     *
+     * El redirect posterior a la reserva se configura en GHL, no acá.
+     */
+    url: "https://api.leadconnectorhq.com/widget/booking/6wIBPZIlrpaCsJpMpv2j",
   },
   gracias: {
     titulo: "Listo, ya tenemos tu aplicación",

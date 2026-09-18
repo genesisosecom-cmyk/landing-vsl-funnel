@@ -2,8 +2,7 @@
 
 import Script from "next/script";
 import { useEffect, useState } from "react";
-import { COOKIE_ATRIBUCION, leerAtribucion } from "@/lib/atribucion";
-import { leerCookie } from "@/lib/visita";
+import { atribucionDeLaVisita } from "@/lib/visita";
 import { aplicar } from "@/content/landing";
 
 /**
@@ -17,7 +16,7 @@ import { aplicar } from "@/content/landing";
  * cruza hacia el lado de GHL. Sin estos parámetros el contacto se crea sin
  * origen y la agenda queda sin anuncio.
  *
- * El src se arma en el cliente porque la cookie sólo existe ahí. Hasta que
+ * El src se arma en el cliente porque la atribución sólo existe ahí. Hasta que
  * monta se muestra el marco vacío: cargar el iframe dos veces (una sin UTM y
  * otra con) haría que GHL registre la primera visita sin atribución.
  */
@@ -25,7 +24,7 @@ export function CalendarioGhl({ className = "" }: { className?: string }) {
   const [src, setSrc] = useState<string | null>(null);
 
   useEffect(() => {
-    const a = leerAtribucion(leerCookie(COOKIE_ATRIBUCION));
+    const a = atribucionDeLaVisita();
     const url = new URL(aplicar.calendario.url);
 
     const parametros: Record<string, string | undefined> = {
@@ -51,6 +50,8 @@ export function CalendarioGhl({ className = "" }: { className?: string }) {
           src={src}
           title="Calendario de Génesis OS"
           scrolling="no"
+          // Lo trae el snippet que genera GHL: el calendario puede cobrar seña.
+          allow="payment"
           className="h-full min-h-[760px] w-full"
         />
       )}

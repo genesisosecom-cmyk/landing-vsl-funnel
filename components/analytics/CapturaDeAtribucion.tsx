@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { anotarEvento } from "@/lib/visita";
+import { anotarEvento, atribucionDeLaUrl, leerCookie as cookie } from "@/lib/visita";
 import {
   COOKIE_ATRIBUCION,
   DIAS_DE_VIDA,
@@ -9,15 +9,6 @@ import {
   serializarAtribucion,
   type Atribucion,
 } from "@/lib/atribucion";
-
-function cookie(nombre: string): string | undefined {
-  return document.cookie
-    .split("; ")
-    .find((c) => c.startsWith(`${nombre}=`))
-    ?.split("=")
-    .slice(1)
-    .join("=");
-}
 
 /**
  * Guarda el origen de la visita en una cookie propia y la anota en el panel.
@@ -29,24 +20,7 @@ function cookie(nombre: string): string | undefined {
 export function CapturaDeAtribucion() {
   useEffect(() => {
     const guardada = leerAtribucion(cookie(COOKIE_ATRIBUCION));
-    const parametros = new URLSearchParams(window.location.search);
-    const fbclid = parametros.get("fbclid") ?? undefined;
-
-    const nueva: Atribucion = {
-      utmSource: parametros.get("utm_source") ?? undefined,
-      utmMedium: parametros.get("utm_medium") ?? undefined,
-      utmCampaign: parametros.get("utm_campaign") ?? undefined,
-      utmContent: parametros.get("utm_content") ?? undefined,
-      utmTerm: parametros.get("utm_term") ?? undefined,
-      fbclid,
-      fbp: cookie("_fbp"),
-      // _fbc la arma el píxel a partir del fbclid, pero puede tardar: si no
-      // está todavía, la construimos con el formato que espera Meta.
-      fbc: cookie("_fbc") ?? (fbclid ? `fb.1.${Date.now()}.${fbclid}` : undefined),
-      referrer: document.referrer || undefined,
-      landing: window.location.pathname,
-      desde: new Date().toISOString(),
-    };
+    const nueva: Atribucion = atribucionDeLaUrl();
 
     // Ya hay origen guardado y esta visita no trae uno nuevo: no se toca.
     const hayOrigenNuevo = Boolean(nueva.utmSource || nueva.fbclid);
