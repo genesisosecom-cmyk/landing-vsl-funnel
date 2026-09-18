@@ -91,10 +91,10 @@ export const hero = {
 export const founderCase = {
   eyebrow: "Mi caso",
   title: "El modelo lo corro en *mi propia marca*",
-  /** BORRADOR — redactado con los datos de la sección 1.1 del manual. */
   body: [
-    "Arranqué en Mar del Plata publicando en orgánico sobre e-commerce de consumibles. Sin pauta, sin setters y sin closers: el primer mes de Génesis facturó $150.000.000.",
-    "Mientras el mercado vende “creá y escalá tu tienda”, yo opero una marca de consumibles por suscripción con 2.256 suscriptores activos y 1,28 % de churn. El modelo que enseño es el que uso.",
+    "Hago e-commerce hace aproximadamente 3 años y hoy en día llevo generados +$3.000.000 de dólares con mis marcas. Pasé por lo que todos pasaron: testear infinitos productos, pegar winners, quemar plata, quilombos de stock, de todo. Con el tiempo encontré la forma de poder crear una marca sin depender de pegar un winner, lo empecé a comunicar y hasta hoy tengo más de 50 casos de éxito que pudieron crear y escalar sus marcas de esta forma.",
+    "Hace un tiempo entendí para dónde se estaban moviendo las marcas de e-commerce más grandes del mundo, y lo apliqué en mis marcas propias.",
+    "Mientras el mercado te vende “creá y escalá tu tienda”, yo opero 3 marcas en simultáneo, marcas de consumibles con modelo de suscripción con 2.256 suscriptores activos y 1,28 % de churn. El modelo que muestro, es el que uso.",
   ],
   datos: [
     { value: "2.256", label: "Suscriptores activos" },
