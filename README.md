@@ -122,5 +122,39 @@ Verificada sin overflow horizontal a 1920, 1440, 1366 y 390.
 - [x] Píxel de Meta (`components/analytics/MetaPixel.tsx`, ID en `site.tracking`).
 - [x] Evento de click: `InitiateCheckout` con la posición del botón
       (`components/analytics/CtaTracker.tsx`).
-- [ ] Destino del CTA: hoy `site.cta.href` apunta a un placeholder.
+- [x] Destino del CTA: `/aplicar`.
+- [x] Página de aplicación con A/B (agenda vs contacto), lead a GoHighLevel y
+      atribución por anuncio.
+- [ ] `META_CAPI_TOKEN` en Vercel: sin él los eventos de servidor no salen.
+- [ ] Webhook de citas: crear el workflow en GHL apuntando a
+      `/api/ghl/cita?token=$GHL_WEBHOOK_SECRET`.
 - [ ] Decidir si se suman precio, FAQ, garantía y urgencia.
+
+## Medición
+
+| Momento | Evento | Cómo |
+|---|---|---|
+| Carga de la landing | `PageView` | navegador |
+| Click en cualquier CTA | `InitiateCheckout` con la posición del botón | navegador |
+| Formulario enviado | `Lead` con la variante | navegador **y** servidor, mismo `event_id` |
+| Cita agendada | `Schedule` | servidor, desde el webhook de GHL |
+
+La atribución se captura en la primera visita (`utm_*`, `fbclid`, `_fbp`) en una
+cookie propia de 90 días y viaja sola en el POST del formulario. En GoHighLevel
+queda en el `attributionSource` del contacto y en los campos `utm_source`,
+`utm_medium` y `utm_content`.
+
+**Ojo con una particularidad de GHL:** el `attributionSource` se escribe solo al
+crear el contacto; en un contacto que ya existía, GHL lo ignora. Los campos
+personalizados sí se actualizan siempre, así que el nombre del anuncio
+(`utm_content`) queda al día en todos los casos.
+
+### UTMs en Meta
+
+En cada anuncio, en "Parámetros de URL":
+
+```
+utm_source=meta&utm_medium=paid&utm_campaign={{campaign.name}}&utm_content={{ad.name}}&utm_term={{adset.name}}
+```
+
+Meta agrega el `fbclid` por su cuenta.

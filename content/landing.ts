@@ -62,9 +62,8 @@ export const site = {
   },
   /** Un único CTA en toda la página: mismo texto y destino, cinco apariciones. */
   cta: {
-    // TODO(contenido): URL real del checkout o del formulario de aplicación.
     label: "Quiero entrar a Génesis",
-    href: "https://ejemplo.com/checkout",
+    href: "/aplicar",
   },
 } as const;
 
@@ -261,6 +260,44 @@ export const results = {
       height: 846,
     },
   ] satisfies Media[],
+};
+
+/* -------------------------------------------------------------------------- */
+/* Página de aplicación (/aplicar) — las dos variantes del A/B               */
+/* -------------------------------------------------------------------------- */
+
+/** BORRADOR — copy de la página de conversión, a aprobar. */
+export const aplicar = {
+  formulario: {
+    nombre: "Tu nombre y apellido",
+    email: "Tu email",
+    telefono: "Tu WhatsApp (con código de país)",
+    enviar: "Continuar",
+    enviando: "Enviando…",
+    error: "No pudimos enviar tus datos. Probá de nuevo en un momento.",
+  },
+  /** Variante A: deja los datos y agenda en el momento. */
+  agenda: {
+    title: "Dejá tus datos y *agendá* la llamada",
+    intro:
+      "Son 30 minutos con Manu para ver tu marca, tus números y si el modelo de suscripción aplica a tu producto. Si no aplica, te lo decimos en la llamada.",
+    tituloAgenda: "Elegí el horario que te quede mejor",
+  },
+  /** Variante B: deja los datos y lo contactamos. */
+  contacto: {
+    title: "Dejá tus datos y *te escribimos*",
+    intro:
+      "Te escribimos por WhatsApp para ver tu marca, tus números y si el modelo de suscripción aplica a tu producto. Si no aplica, te lo decimos ahí.",
+    graciasTitulo: "Listo, ya tenemos tus datos",
+    graciasTexto:
+      "Te escribimos por WhatsApp en las próximas horas al número que dejaste. Revisá que sea el correcto.",
+  },
+  /** El calendario vive en GoHighLevel; el slug es el de la subcuenta. */
+  calendario: {
+    url: "https://api.leadconnectorhq.com/widget/bookings/genesis-os-consultoria",
+  },
+  legal:
+    "Al enviar tus datos aceptás que nos pongamos en contacto con vos por WhatsApp, teléfono o email.",
 };
 
 /* -------------------------------------------------------------------------- */

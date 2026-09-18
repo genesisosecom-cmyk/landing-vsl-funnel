@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
+import { CapturaDeAtribucion } from "@/components/analytics/CapturaDeAtribucion";
 import { CtaTracker } from "@/components/analytics/CtaTracker";
 import { MetaPixel } from "@/components/analytics/MetaPixel";
 import { site } from "@/content/landing";
@@ -51,6 +52,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         {children}
         <MetaPixel />
         <CtaTracker />
+        <CapturaDeAtribucion />
       </body>
     </html>
   );
