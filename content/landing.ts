@@ -48,8 +48,13 @@ export const site = {
   brand: {
     name: "Génesis OS",
   },
-  // TODO(contenido): reemplazar por el dominio definitivo cuando exista.
-  url: "https://landing-vsl-funnel-v1.vercel.app",
+  /**
+   * El dominio de producción. No es decorativo: con esto se arma el
+   * event_source_url que va a la Conversions API, y si no coincide con la URL
+   * real donde ocurrió el evento, Meta lo atribuye peor y la deduplicación
+   * contra el evento del navegador se degrada.
+   */
+  url: "https://www.genesisecom.com",
   seo: {
     title: "Génesis OS — El mes arranca cobrado",
     description:
