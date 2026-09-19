@@ -18,13 +18,18 @@ const CLASES: Record<Tono, string> = {
   negro: "tono-negro",
 };
 
+/**
+ * Cada sección declara su tono y se separa de la anterior con un divisor que
+ * se desvanece en los bordes: la línea de lado a lado cortaba la página en
+ * franjas, y el ojo se frenaba en cada una.
+ */
 export function Section({ id, tono = "blanco", pad = "normal", className = "", children }: Props) {
   return (
-    <section
-      id={id}
-      className={`${CLASES[tono]} border-t border-linea bg-tono text-texto ${className}`}
-    >
-      <div className={`container-page ${pad === "chico" ? "py-12" : "section-pad"}`}>{children}</div>
+    <section id={id} className={`${CLASES[tono]} relative bg-tono text-texto ${className}`}>
+      <span aria-hidden="true" className="divisor" />
+      <div className={`container-page relative ${pad === "chico" ? "py-16" : "section-pad"}`}>
+        {children}
+      </div>
     </section>
   );
 }

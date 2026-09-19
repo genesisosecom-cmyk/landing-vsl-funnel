@@ -13,17 +13,19 @@
 
   /* balance reparte las líneas y evita que la última quede con una palabra. */
   h1 {
-    @apply font-sans text-h1 font-semibold max-md:text-[2.75rem];
+    @apply font-sans text-h1 font-bold tracking-[-0.03em] max-md:text-[2.75rem];
     text-wrap: balance;
   }
 
+  /* Los títulos de sección crecen: en una landing de venta el h2 es el que
+     sostiene el scroll, y a 30 px se perdía entre el cuerpo. */
   h2 {
-    @apply font-sans text-h2 font-medium;
+    @apply font-sans text-[2rem] font-semibold leading-[1.12] tracking-[-0.02em] lg:text-[2.625rem];
     text-wrap: balance;
   }
 
   h3 {
-    @apply font-sans text-h3 font-medium;
+    @apply font-sans text-h3 font-semibold tracking-[-0.01em];
   }
 
   ::selection {
@@ -50,6 +52,9 @@
 
   .tono-hueso {
     --fondo: #f4f2ef;
+    /* Un vignette apenas perceptible: el centro un poco más claro que los
+       bordes. Saca la sensación de "plancha" de las secciones largas. */
+    background-image: radial-gradient(120% 80% at 50% 0%, #f8f6f3 0%, #f4f2ef 55%, #efece8 100%);
     --pieza: #ffffff;
     --titulo: #0b0b0b;
     --texto: #565c63;
@@ -88,6 +93,39 @@
   }
   .border-linea {
     border-color: var(--linea);
+  }
+
+  /* Divisor de sección: se desvanece en los bordes en vez de cortar de lado a
+     lado. Mismo color de línea, mucho menos peso. */
+  .divisor {
+    @apply pointer-events-none absolute inset-x-0 top-0 h-px;
+    background: linear-gradient(90deg, transparent 0%, var(--linea) 18%, var(--linea) 82%, transparent 100%);
+  }
+
+  /* La luz de la Semilla, como fondo: un halo naranja muy tenue que se apaga
+     hacia los bordes. Es lo que hace que un fondo negro no sea sólo negro. */
+  .halo {
+    @apply pointer-events-none absolute;
+    background: radial-gradient(closest-side, rgba(240, 100, 30, 0.28) 0%, rgba(240, 100, 30, 0.08) 45%, transparent 100%);
+    filter: blur(24px);
+  }
+
+  /* Grano fino sobre el hero: da textura de papel a un fondo blanco plano.
+     Es un SVG de ruido inline, sin pedidos extra. */
+  .grano {
+    @apply pointer-events-none absolute inset-0 opacity-[0.045] mix-blend-multiply;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  /* Subrayado a mano para la palabra de acento del título: un trazo naranja
+     tenue, apenas por debajo de la línea base. Sólo en el hero. */
+  .subrayado {
+    white-space: nowrap;
+    background-image: linear-gradient(180deg, transparent 72%, rgba(240, 100, 30, 0.28) 72%, rgba(240, 100, 30, 0.28) 92%, transparent 92%);
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    padding: 0 0.08em;
+    margin: 0 -0.08em;
   }
 
   .container-page {

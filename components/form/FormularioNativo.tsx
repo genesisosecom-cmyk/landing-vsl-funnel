@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
 import { anotarEvento, atribucionDeLaVisita, idDeVisita } from "@/lib/visita";
 import { aplicar } from "@/content/landing";
+import { FlechaDeCta, clasesDeCta } from "@/components/ui/CtaButton";
 
 const copia = aplicar.formulario;
 
@@ -36,9 +37,14 @@ const VACIO: Campos = {
   frecuencia: "",
 };
 
-const etiquetaCampo = "dato mb-2 block";
+const etiquetaCampo = "dato mb-2.5 block";
+/*
+ * Los campos van sobre hueso dentro de la tarjeta blanca: se distinguen del
+ * fondo sin borde pesado, y al enfocar pasan a blanco con el aro naranja,
+ * que es el único momento en que el naranja entra al formulario.
+ */
 const caja =
-  "w-full rounded-pieza border border-linea bg-blanco px-4 py-3 text-cuerpo text-negro outline-none transition-colors placeholder:text-gris-claro focus:border-brasa focus:ring-2 focus:ring-brasa/20";
+  "w-full rounded-xl border border-arena bg-hueso/70 px-4 py-3.5 text-cuerpo text-negro outline-none transition-all duration-200 placeholder:text-gris-claro hover:border-gris-claro focus:border-naranja focus:bg-blanco focus:ring-4 focus:ring-naranja/15";
 
 /**
  * El formulario propio de la landing.
@@ -111,7 +117,7 @@ export function FormularioNativo({ flujo, origen, destino, className = "" }: Pro
   }
 
   return (
-    <form onSubmit={enviar} noValidate={false} className={`flex flex-col gap-6 ${className}`}>
+    <form onSubmit={enviar} noValidate={false} className={`flex flex-col gap-7 ${className}`}>
       <fieldset disabled={enviando} className="contents">
         <div className="grid gap-5 sm:grid-cols-2">
           <Texto
@@ -175,10 +181,10 @@ export function FormularioNativo({ flujo, origen, destino, className = "" }: Pro
 
         <button
           type="submit"
-          className="inline-flex items-center justify-center gap-3 rounded-cta bg-naranja px-10 py-5 font-data text-[0.9375rem] font-semibold uppercase tracking-dato text-negro shadow-cta transition-colors hover:bg-brasa hover:text-blanco focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brasa disabled:cursor-not-allowed disabled:opacity-60 max-sm:px-6 max-sm:py-4 max-sm:text-[0.8125rem]"
+          className={`${clasesDeCta("lg")} mt-1 w-full disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:translate-y-0`}
         >
           {enviando ? copia.enviando : copia.enviar}
-          {!enviando && <span aria-hidden="true">&rarr;</span>}
+          {!enviando && <FlechaDeCta />}
         </button>
 
         <p className="text-[0.8125rem] text-sutil">
@@ -263,18 +269,23 @@ function Opciones({
   return (
     <fieldset>
       <legend className={etiquetaCampo}>{etiqueta}</legend>
-      <div className="flex flex-wrap gap-3">
+      <div className="flex flex-wrap gap-2.5">
         {opciones.map((opcion) => {
           const elegida = valor === opcion;
           return (
             <label
               key={opcion}
-              className={`cursor-pointer rounded-cta border px-4 py-3 text-[0.9375rem] transition-colors has-[:focus-visible]:outline has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-brasa ${
+              className={`inline-flex cursor-pointer items-center gap-2 rounded-cta border px-4 py-3 text-[0.9375rem] transition-all duration-200 has-[:focus-visible]:outline has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-brasa ${
                 elegida
-                  ? "border-brasa bg-brasa text-blanco"
-                  : "border-linea bg-blanco text-negro hover:border-brasa"
+                  ? "border-negro bg-negro text-blanco shadow-[0_8px_18px_-10px_rgba(11,11,11,0.6)]"
+                  : "border-arena bg-hueso/70 text-negro hover:border-gris-claro hover:bg-blanco"
               }`}
             >
+              {elegida && (
+                <svg aria-hidden="true" viewBox="0 0 16 16" className="h-3.5 w-3.5 shrink-0 text-naranja">
+                  <path d="M3 8.5l3 3 7-7" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              )}
               <input
                 type="radio"
                 name={nombre}

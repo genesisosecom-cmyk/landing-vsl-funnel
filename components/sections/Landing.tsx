@@ -34,10 +34,10 @@ export function Landing({ flujo }: { flujo: Flujo }) {
         <FormularioEnLanding flujo={flujo} destino="/gracias" />
 
         <Program />
-        <CtaBand href={aplicarUrl} tono="blanco" />
+        <CtaBand href={aplicarUrl} />
 
         <ResultsMosaic />
-        <CtaBand href={aplicarUrl} tono="blanco" />
+        <CtaBand href={aplicarUrl} />
       </main>
       <SiteFooter />
     </>

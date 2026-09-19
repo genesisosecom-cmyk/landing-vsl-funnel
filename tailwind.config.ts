@@ -63,7 +63,21 @@ const config: Config = {
       },
       boxShadow: {
         pieza: "0 18px 50px -24px rgba(11, 11, 11, 0.25)",
-        cta: "0 10px 24px -12px rgba(194, 65, 12, 0.6)",
+        "pieza-alta": "0 30px 70px -30px rgba(11, 11, 11, 0.35)",
+        /** Para fotos y capturas: más larga y con un toque cálido. */
+        foto: "0 40px 90px -40px rgba(11, 11, 11, 0.45), 0 12px 30px -20px rgba(194, 65, 12, 0.25)",
+        /** El marco del VSL: sombra profunda más un aro de luz naranja tenue. */
+        marco: "0 50px 120px -40px rgba(11, 11, 11, 0.6), 0 0 0 1px rgba(240, 100, 30, 0.25), 0 0 80px -20px rgba(240, 100, 30, 0.35)",
+        cta: "0 14px 30px -12px rgba(194, 65, 12, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.28)",
+        "cta-hover": "0 20px 40px -14px rgba(194, 65, 12, 0.65), inset 0 1px 0 rgba(255, 255, 255, 0.2)",
+      },
+      backgroundImage: {
+        /** El botón: naranja arriba, apenas más oscuro abajo. Da volumen sin verse plástico. */
+        cta: "linear-gradient(180deg, #F0641E 0%, #E4581A 100%)",
+        "cta-hover": "linear-gradient(180deg, #D04A10 0%, #C2410C 100%)",
+      },
+      transitionTimingFunction: {
+        suave: "cubic-bezier(0.22, 1, 0.36, 1)",
       },
     },
   },

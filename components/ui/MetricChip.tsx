@@ -1,11 +1,17 @@
 import type { Dato } from "@/content/landing";
 
-/** Chip de métrica al pie de cada caso: etiqueta en gris, cifra en el acento. */
+/**
+ * Ficha de métrica. La cifra grande, en Archivo, arriba; la etiqueta chica
+ * abajo. Antes era una píldora con los dos en una línea y la cifra —que es lo
+ * que vale— se leía al mismo tamaño que la etiqueta.
+ */
 export function MetricChip({ label, value }: Dato) {
   return (
-    <div className="inline-flex flex-wrap items-baseline gap-x-3 gap-y-1 rounded-lg border border-linea bg-hueso px-4 py-2.5">
+    <div className="flex flex-col gap-1.5 rounded-xl border border-linea bg-hueso px-5 py-4">
+      <span className="font-data text-[1.625rem] font-semibold leading-none tracking-[-0.02em] text-acento">
+        {value}
+      </span>
       <span className="dato">{label}</span>
-      <span className="font-sans text-[0.9375rem] font-semibold text-acento">{value}</span>
     </div>
   );
 }
