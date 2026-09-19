@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { atribucionSegura } from "@/lib/atribucion";
 import {
+  avisoRepetido,
   citaSinAtribucion,
   completarAtribucion,
   detalleDeAtribucion,
@@ -56,6 +57,12 @@ export async function POST(pedido: Request) {
 
   if (!tieneOrigen(atribucion)) {
     return NextResponse.json({ ok: true, unida: false, sinOrigen: true });
+  }
+
+  // Recargar la página de gracias no puede pegarle la atribución de esta
+  // persona a la cita de la siguiente.
+  if (await avisoRepetido(visitaId)) {
+    return NextResponse.json({ ok: true, unida: false, repetido: true });
   }
 
   const leadId = await citaSinAtribucion(contactId);

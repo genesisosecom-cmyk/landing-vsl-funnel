@@ -318,3 +318,14 @@ export async function asociarEvento(eventoId: number, leadId: string): Promise<v
     body: JSON.stringify({ lead_id: leadId }),
   });
 }
+
+/** ¿Esta visita ya avisó una cita hace poco? Entonces es una recarga. */
+export async function avisoRepetido(visitaId: string): Promise<boolean> {
+  const respuesta = await rest(
+    `${TABLA_EVENTOS}?select=id&tipo=eq.cita&visita_id=eq.${encodeURIComponent(visitaId)}&creado_en=gte.${desdeHace(VENTANA_MINUTOS)}&limit=1`,
+  );
+  if (!respuesta?.ok) return false;
+
+  const filas = (await respuesta.json().catch(() => [])) as unknown[];
+  return filas.length > 0;
+}

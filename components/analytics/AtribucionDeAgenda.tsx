@@ -13,21 +13,13 @@ import { atribucionDeLaVisita, idDeVisita } from "@/lib/visita";
  * Si el redirect de GHL trae el id del contacto, va también: con eso la unión
  * del lado del servidor es exacta en vez de por proximidad de tiempo.
  *
- * Una sola vez por reserva. Si la persona recarga la página de gracias no se
- * vuelve a mandar, porque si no estaría pisando la atribución de la cita
- * siguiente con la suya.
+ * Manda siempre. El no repetir lo resuelve el servidor, que descarta un aviso
+ * de la misma visita dentro de la ventana: un candado en sessionStorage era
+ * por pestaña, y bastaba con haber abierto esta página antes en esa misma
+ * pestaña para que la reserva de verdad nunca avisara.
  */
 export function AtribucionDeAgenda({ contactId }: { contactId?: string }) {
   useEffect(() => {
-    const marca = "gen_cita_avisada";
-
-    try {
-      if (sessionStorage.getItem(marca)) return;
-      sessionStorage.setItem(marca, "1");
-    } catch {
-      /* en modo privado se manda igual: perder la atribución es peor. */
-    }
-
     fetch("/api/agenda/atribucion", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
