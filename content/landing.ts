@@ -197,11 +197,36 @@ export const results = {
     height: 680,
   } satisfies Media,
   items: [
+    /*
+     * Conversaciones del canal privado de cada cliente. Van recortadas: quedan
+     * afuera la barra de estado, el encabezado del canal, el campo de escribir
+     * y —a propósito— el link de Fathom a una llamada grabada y el de Google
+     * Docs al documento de un cliente, que son URLs de acceso directo y no
+     * pueden quedar publicadas.
+     */
+    {
+      src: "/resultados/discord-1.jpg",
+      alt: "Andrés cuenta que hizo 950 K de profit en el día y arranca con el modelo de suscripción",
+      width: 736,
+      height: 1035,
+    },
+    {
+      src: "/resultados/discord-2.jpg",
+      alt: "Emir repasa con Manu cómo viene la semana, el stock y los productos que va a testear",
+      width: 736,
+      height: 880,
+    },
     {
       src: "/resultados/prueba-social-1.jpg",
       alt: "Tablero de tienda: 15 órdenes, $1,2 M de facturación y $229,6 K de ganancia",
       width: 1238,
       height: 807,
+    },
+    {
+      src: "/resultados/discord-3.jpg",
+      alt: "Tablero mensual de un cliente y la preparación del documento de cuellos de botella para la llamada",
+      width: 945,
+      height: 1080,
     },
     {
       src: "/resultados/prueba-social-2.jpg",
