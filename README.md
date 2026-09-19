@@ -78,15 +78,28 @@ latin-ext (`public/fonts/*.woff2`): 145 KB entre las dos contra 1,37 MB de los
 
 ## Las dos landings del A/B
 
-El reparto lo hace Meta mandando cada anuncio a una URL distinta; la app no
-sortea nada.
+El reparto lo hace `/ir`, no Meta. Todos los anuncios apuntan a la misma URL y
+el sorteo es nuestro: 50/50 de verdad, sin que el algoritmo le dé más
+presupuesto a la variante que arranca mejor y arruine la comparación a los tres
+días. La variante queda en una cookie de 90 días, así que el que vuelve ve
+siempre la misma landing.
 
 | Ruta | Qué es |
 |---|---|
-| `/` | Redirige a `/formulario` |
+| `/` | Entra al repartidor, arrastrando la query |
+| `/ir` | El repartidor: sortea, guarda la variante y redirige |
 | `/formulario` · `/agenda` | La misma landing, con distinto mecanismo de conversión |
 | `/gracias` | Cierre de los dos flujos |
 | `/tracking` | Panel interno, con contraseña |
+
+`/ir` pasa todos los parámetros enteros al destino: si se pierde `fbclid` en el
+salto, el píxel no puede armar la cookie `_fbc` y el lead queda sin anuncio.
+Redirige con 307 y sin caché — un 301 lo cachean el navegador y el CDN, y a
+partir de ahí la gente queda clavada en una variante.
+
+`REPARTO_FORMULARIO` cambia el porcentaje que va a `/formulario`; en 100 apaga
+la variante de agenda sin tocar un solo anuncio. `/ir?v=agenda` fuerza una
+variante para probar a mano.
 
 Los cuatro botones de la landing bajan con scroll a la sección `#aplicar`, que
 está debajo de "por dentro" en lugar de una banda de CTA. No navegan: el flujo

@@ -10,8 +10,19 @@
 export const COOKIE_ATRIBUCION = "gen_atr";
 export const DIAS_DE_VIDA = 90;
 
-/** Los dos flujos del A/B. Cada uno es una URL distinta y Meta reparte entre ellas. */
+/**
+ * Los dos flujos del A/B. El reparto lo hace /ir, no Meta: todos los anuncios
+ * apuntan a la misma URL y nosotros decidimos quién ve cuál.
+ */
 export const FLUJOS = ["formulario", "agenda"] as const;
+
+/**
+ * La variante asignada, para que el mismo visitante vea siempre la misma.
+ *
+ * Sin esto alguien que vuelve por un segundo click cae en la otra landing y
+ * las dos columnas del panel dejan de medir lo que dicen medir.
+ */
+export const COOKIE_VARIANTE = "gen_var";
 export type Flujo = (typeof FLUJOS)[number];
 
 export function esFlujo(valor: string | undefined): valor is Flujo {

@@ -21,6 +21,11 @@ configurada o no responde, el lead igual llega a GHL y a Meta.
 
 ## Los dos flujos del A/B
 
+El reparto lo hace `/ir`: todos los anuncios apuntan ahí, la ruta sortea la
+variante, la guarda en la cookie `gen_var` (90 días) y redirige con 307 sin
+caché, pasando todos los parámetros al destino. La decisión de qué variante
+gana se toma leyendo `/tracking`, no mirando el reparto de presupuesto de Meta.
+
 **`/formulario`** — formulario propio embebido en la página. El POST a
 `/api/lead` lleva los datos y la atribución juntos, así que no hay pieza
 intermedia donde perder el origen. Se ve todo el recorrido: entró, tocó un

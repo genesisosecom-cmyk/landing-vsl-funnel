@@ -1,15 +1,18 @@
 import { redirect } from "next/navigation";
 
 /**
- * La raíz manda al flujo por defecto, arrastrando la query.
+ * La raíz entra por el repartidor, igual que los anuncios.
  *
- * Las dos landings del A/B viven en /formulario y /agenda, y Meta reparte
- * entre ellas. Nadie tiene que caer en una landing sin flujo asignado.
+ * Podría mandar directo a /formulario, pero entonces todo el tráfico que no
+ * viene de un anuncio —el link de la bio, un mail, alguien que escribe el
+ * dominio— se contaría como visita de esa variante y le inflaría el
+ * denominador. El panel mostraría una conversión peor de la real para
+ * formulario y el A/B quedaría sesgado por tráfico que nunca fue parte del
+ * test.
  *
  * Los parámetros se copian a propósito: un redirect pelado los tira, y quien
- * llegue a la raíz con utm_source o fbclid —un link de la bio, un mail, un
- * anuncio mal cargado— perdería el origen antes de que la landing alcance a
- * leerlo.
+ * llegue con utm_source o fbclid perdería el origen antes de que la landing
+ * alcance a leerlo.
  */
 export default async function Raiz({
   searchParams,
@@ -25,5 +28,5 @@ export default async function Raiz({
   }
 
   const query = parametros.toString();
-  redirect(query ? `/formulario?${query}` : "/formulario");
+  redirect(query ? `/ir?${query}` : "/ir");
 }
