@@ -318,11 +318,6 @@ export const aplicar = {
 export const footer = {
   /** Obligatorio si se corre tráfico pago mostrando cifras de facturación. */
   disclaimer:
-    "PLACEHOLDER — descargo de resultados: los casos mostrados son reales y no garantizan resultados. Dependen del producto, del mercado y del trabajo de cada marca. Esta página no está afiliada a Meta, Google ni a ninguna otra plataforma.",
-  links: [
-    { label: "Términos y condiciones", href: "#" },
-    { label: "Política de privacidad", href: "#" },
-    { label: "Contacto", href: "#" },
-  ],
+    "Los casos mostrados son reales y no garantizan resultados. Dependen del producto, del mercado y del trabajo de cada marca. Esta página no está afiliada a Meta, Google ni a ninguna otra plataforma.",
   usuario: "@manudomzz",
 };

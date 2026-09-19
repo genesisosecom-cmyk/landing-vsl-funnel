@@ -13,17 +13,11 @@ export function SiteFooter() {
           </span>
         </div>
 
-        <p className="max-w-prose text-[0.8125rem] leading-relaxed text-sutil">
+        {/* La línea la traía la navegación que había acá abajo; sin ella el
+            descargo quedaba pegado al logo. */}
+        <p className="max-w-prose border-t border-linea pt-8 text-[0.8125rem] leading-relaxed text-sutil">
           {footer.disclaimer}
         </p>
-
-        <nav className="flex flex-wrap gap-x-8 gap-y-2 border-t border-linea pt-8">
-          {footer.links.map((link) => (
-            <a key={link.label} className="dato hover:text-blanco" href={link.href}>
-              {link.label}
-            </a>
-          ))}
-        </nav>
       </div>
     </footer>
   );
