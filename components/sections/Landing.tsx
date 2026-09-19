@@ -1,4 +1,5 @@
 import { Hero } from "@/components/sections/Hero";
+import { Navbar } from "@/components/sections/Navbar";
 import { CtaBand } from "@/components/sections/CtaBand";
 import { FounderCase } from "@/components/sections/FounderCase";
 import { FormularioEnLanding } from "@/components/sections/FormularioEnLanding";
@@ -22,6 +23,7 @@ export function Landing({ flujo }: { flujo: Flujo }) {
 
   return (
     <>
+      <Navbar href={aplicarUrl} />
       <main>
         {/* El botón del hero es el primero: el de abajo del video. */}
         <Hero href={aplicarUrl} />

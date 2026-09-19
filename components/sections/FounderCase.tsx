@@ -15,8 +15,8 @@ export function FounderCase() {
   const [primero, ...resto] = founderCase.body;
 
   return (
-    <Section id="mi-caso" tono="blanco">
-      <div className="flex flex-col items-center gap-14">
+    <Section id="mi-caso" tono="blanco" className="overflow-hidden">
+      <div className="relative flex flex-col items-center gap-14">
         <SectionHeading label={founderCase.eyebrow} title={founderCase.title} />
 
         <div className="grid w-full items-center gap-12 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:gap-16">
@@ -27,6 +27,11 @@ export function FounderCase() {
            * enorme, y es el mismo gesto de "pieza apoyada" del hero.
            */}
           <div className="relative max-lg:max-w-md max-lg:self-center max-lg:justify-self-center">
+            {/* La luz cae desde arriba a la izquierda de la foto. */}
+            <span
+              aria-hidden="true"
+              className="halo-claro -left-24 -top-24 h-[28rem] w-[28rem]"
+            />
             <span
               aria-hidden="true"
               className="absolute -inset-2 translate-x-3 translate-y-3 rounded-pieza bg-hueso"

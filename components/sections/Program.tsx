@@ -6,8 +6,12 @@ import { program } from "@/content/landing";
 /** La oferta: seis entregables numerados, sólo texto. */
 export function Program() {
   return (
-    <Section id="programa" tono="hueso">
-      <div className="flex flex-col items-center gap-10">
+    <Section id="programa" tono="hueso" className="overflow-hidden">
+      {/* Dos luces en esquinas opuestas, para que la grilla no flote en un
+          fondo plano. */}
+      <span aria-hidden="true" className="halo-claro -left-40 top-10 h-[34rem] w-[34rem]" />
+      <span aria-hidden="true" className="halo-claro -right-40 bottom-0 h-[34rem] w-[34rem]" />
+      <div className="relative flex flex-col items-center gap-10">
         <SectionHeading
           label={program.eyebrow}
           title={program.title}

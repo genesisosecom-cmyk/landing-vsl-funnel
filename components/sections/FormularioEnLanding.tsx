@@ -39,16 +39,21 @@ export function FormularioEnLanding({ flujo, destino }: { flujo: Flujo; destino:
           {highlight(esAgenda ? aplicar.tituloAgendaEnLanding : aplicar.tituloEnLanding)}
         </h2>
 
-        {esAgenda ? (
-          <CalendarioGhl className="w-full max-w-[1040px] overflow-hidden rounded-pieza border border-linea/70 bg-pieza shadow-pieza-alta" />
-        ) : (
-          <FormularioNativo
-            flujo={flujo}
-            origen="seccion"
-            destino={destino}
-            className="w-full max-w-[720px] rounded-pieza border border-linea/70 bg-pieza p-10 shadow-pieza-alta max-sm:p-6"
-          />
-        )}
+        {/* El filo de luz en el borde superior de la tarjeta: la luz de la
+            sección "cayendo" sobre ella. */}
+        <div className={`relative w-full ${esAgenda ? "max-w-[1040px]" : "max-w-[720px]"}`}>
+          <span aria-hidden="true" className="filo z-10" />
+          {esAgenda ? (
+            <CalendarioGhl className="w-full overflow-hidden rounded-pieza border border-linea/70 bg-pieza shadow-pieza-alta" />
+          ) : (
+            <FormularioNativo
+              flujo={flujo}
+              origen="seccion"
+              destino={destino}
+              className="w-full rounded-pieza border border-linea/70 bg-pieza p-10 shadow-pieza-alta max-sm:p-6"
+            />
+          )}
+        </div>
       </div>
     </Section>
   );

@@ -108,6 +108,41 @@
     @apply pointer-events-none absolute;
     background: radial-gradient(closest-side, rgba(240, 100, 30, 0.28) 0%, rgba(240, 100, 30, 0.08) 45%, transparent 100%);
     filter: blur(24px);
+    animation: respirar 7s ease-in-out infinite alternate;
+  }
+
+  /* La misma luz para fondos claros: más tenue, porque sobre hueso o blanco
+     el naranja se vuelve rosado enseguida. */
+  .halo-claro {
+    @apply pointer-events-none absolute;
+    background: radial-gradient(closest-side, rgba(240, 100, 30, 0.16) 0%, rgba(255, 179, 92, 0.06) 45%, transparent 100%);
+    filter: blur(28px);
+    animation: respirar 9s ease-in-out infinite alternate;
+  }
+
+  /* Un filo de luz: la línea de un píxel que "atrapa" la luz en el borde
+     superior de una tarjeta. Naranja en el centro, nada en las puntas. */
+  .filo {
+    @apply pointer-events-none absolute inset-x-10 top-0 h-px;
+    background: linear-gradient(90deg, transparent 0%, rgba(240, 100, 30, 0.75) 50%, transparent 100%);
+  }
+
+  /* Las luces respiran apenas: una variación de opacidad tan lenta que no se
+     ve moverse, pero hace que la página no parezca una captura. */
+  @keyframes respirar {
+    from {
+      opacity: 0.72;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .halo,
+    .halo-claro {
+      animation: none;
+    }
   }
 
   /* Grano fino sobre el hero: da textura de papel a un fondo blanco plano.

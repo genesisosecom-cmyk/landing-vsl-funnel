@@ -16,7 +16,12 @@ export function Hero({ href }: { href: string }) {
   return (
     <header className="tono-blanco relative overflow-hidden bg-tono text-texto">
       <span aria-hidden="true" className="grano" />
-      {/* El halo va detrás del video, no del texto: sobre el título ensucia. */}
+      {/* Una luz chica arriba, detrás del logo, y la grande detrás del video.
+          Sobre el título, ninguna: ahí ensucia. */}
+      <span
+        aria-hidden="true"
+        className="halo-claro left-1/2 top-0 h-[14rem] w-[28rem] -translate-x-1/2 -translate-y-1/2"
+      />
       <span
         aria-hidden="true"
         className="halo left-1/2 top-[68%] h-[40rem] w-[64rem] -translate-x-1/2 -translate-y-1/2 opacity-60"

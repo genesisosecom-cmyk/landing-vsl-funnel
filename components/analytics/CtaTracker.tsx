@@ -23,7 +23,14 @@ export function CtaTracker() {
       const cta = destino?.closest?.('[data-cta="primary"]');
       if (!cta) return;
 
-      const posicion = Array.from(document.querySelectorAll('[data-cta="primary"]')).indexOf(cta) + 1;
+      // Los botones con nombre propio (la barra) no cuentan en la posición:
+      // si no, el de la barra sería siempre el primero y correría al resto.
+      const conPosicion = Array.from(
+        document.querySelectorAll('[data-cta="primary"]:not([data-cta-nombre])'),
+      );
+      const nombre = cta.getAttribute("data-cta-nombre");
+      const posicion = nombre ?? String(conPosicion.indexOf(cta) + 1);
+
       window.fbq?.("track", "InitiateCheckout", { content_name: `cta_${posicion}` });
 
       anotarEvento("cta_click", {

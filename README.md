@@ -123,6 +123,9 @@ Definido en `components/sections/Landing.tsx`. Es el de la referencia:
 `bloque de valor → prueba → CTA`, con el mismo botón repetido y las secciones
 alternando blanco y hueso.
 
+0. Barra fija, discreta: no existe mientras se ve el hero y aparece al
+   scrollear, con el logo y el mismo botón. En mobile queda sólo la Semilla.
+   Su botón mide como `cta_barra`, fuera de la numeración por posición.
 1. Hero centrado: logo, título, bajada y VSL
 2. CTA
 3. **Mi caso** — responde "¿esto funciona?". Foto de Manu, métricas y capturas

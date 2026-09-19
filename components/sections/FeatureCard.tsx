@@ -13,7 +13,7 @@ export function FeatureCard({ feature, index }: { feature: Feature; index: numbe
   const numero = String(index + 1).padStart(2, "0");
 
   return (
-    <article className="group relative flex h-full flex-col gap-4 overflow-hidden rounded-pieza border border-linea/70 bg-pieza p-10 shadow-pieza transition-all duration-300 ease-suave hover:-translate-y-1 hover:shadow-pieza-alta max-sm:p-7">
+    <article className="group relative flex h-full flex-col gap-4 overflow-hidden rounded-pieza border border-linea/70 bg-pieza p-10 shadow-pieza transition-all duration-300 ease-suave hover:-translate-y-1 hover:border-naranja/30 hover:shadow-[0_30px_70px_-30px_rgba(11,11,11,0.35),0_0_40px_-12px_rgba(240,100,30,0.35)] max-sm:p-7">
       <span
         aria-hidden="true"
         className="pointer-events-none absolute -right-1 -top-3 select-none font-data text-[6rem] font-bold leading-none tracking-[-0.06em] text-hueso transition-colors duration-300 group-hover:text-naranja/10"

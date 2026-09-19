@@ -18,8 +18,12 @@ const marco =
 
 export function ResultsMosaic() {
   return (
-    <Section id="resultados" tono="hueso">
-      <div className="flex flex-col items-center gap-12">
+    <Section id="resultados" tono="hueso" className="overflow-hidden">
+      <span
+        aria-hidden="true"
+        className="halo-claro left-1/2 top-[22rem] h-[30rem] w-[70rem] -translate-x-1/2 -translate-y-1/2"
+      />
+      <div className="relative flex flex-col items-center gap-12">
         <SectionHeading label={results.eyebrow} title={results.title} />
 
         <Image

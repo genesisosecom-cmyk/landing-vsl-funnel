@@ -11,6 +11,7 @@ export function SiteFooter() {
   return (
     <footer className="tono-negro relative overflow-hidden bg-negro">
       <span aria-hidden="true" className="divisor" />
+      <span aria-hidden="true" className="halo -bottom-40 right-[2%] h-[30rem] w-[30rem] opacity-70" />
       <Semilla
         variant="mono"
         className="pointer-events-none absolute -bottom-24 right-[4%] h-[26rem] w-auto text-naranja opacity-[0.07]"

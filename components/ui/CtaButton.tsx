@@ -4,6 +4,12 @@ type Props = {
   href: string;
   size?: "md" | "lg";
   className?: string;
+  /**
+   * Nombre fijo para la medición, en vez de la posición en la página. Es para
+   * el botón de la barra: si contara por posición sería el primero y correría
+   * los números de todos los demás.
+   */
+  nombre?: string;
 };
 
 /**
@@ -40,9 +46,14 @@ export function FlechaDeCta() {
 }
 
 /** El único CTA de la página, repetido con el mismo texto y destino. */
-export function CtaButton({ href, size = "md", className = "" }: Props) {
+export function CtaButton({ href, size = "md", className = "", nombre }: Props) {
   return (
-    <a href={href} data-cta="primary" className={`${clasesDeCta(size)} ${className}`}>
+    <a
+      href={href}
+      data-cta="primary"
+      data-cta-nombre={nombre}
+      className={`${clasesDeCta(size)} ${className}`}
+    >
       {site.cta.label}
       <FlechaDeCta />
     </a>
