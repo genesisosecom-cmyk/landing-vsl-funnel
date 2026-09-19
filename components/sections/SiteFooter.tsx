@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Logotipo } from "@/components/brand/Logotipo";
 import { footer } from "@/content/landing";
 
@@ -15,9 +16,16 @@ export function SiteFooter() {
 
         {/* La línea la traía la navegación que había acá abajo; sin ella el
             descargo quedaba pegado al logo. */}
-        <p className="max-w-prose border-t border-linea pt-8 text-[0.8125rem] leading-relaxed text-sutil">
-          {footer.disclaimer}
-        </p>
+        <div className="flex flex-col gap-4 border-t border-linea pt-8">
+          <p className="max-w-prose text-[0.8125rem] leading-relaxed text-sutil">
+            {footer.disclaimer}
+          </p>
+
+          {/* Meta pide poder llegar a la política desde donde se piden los datos. */}
+          <Link href="/privacidad" className="dato self-start hover:text-blanco">
+            Política de privacidad
+          </Link>
+        </div>
       </div>
     </footer>
   );

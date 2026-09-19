@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { AtribucionDeAgenda } from "@/components/analytics/AtribucionDeAgenda";
 import { Logotipo } from "@/components/brand/Logotipo";
+import { Pasos } from "@/components/ui/Pasos";
 import { Semilla } from "@/components/brand/Semilla";
 import { aplicar } from "@/content/landing";
 
@@ -37,6 +38,8 @@ export default async function Gracias({
           {copia.titulo}
         </h1>
         <p className="max-w-prose text-texto">{copia.texto}</p>
+
+        <Pasos pasos={copia.pasos} />
       </div>
 
       {vinoDeUnaCita && <AtribucionDeAgenda contactId={contact_id ?? contactId} />}

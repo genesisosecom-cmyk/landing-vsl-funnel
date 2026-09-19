@@ -89,7 +89,8 @@ siempre la misma landing.
 | `/` | Entra al repartidor, arrastrando la query |
 | `/ir` | El repartidor: sortea, guarda la variante y redirige |
 | `/formulario` · `/agenda` | La misma landing, con distinto mecanismo de conversión |
-| `/gracias` | Cierre de los dos flujos |
+| `/gracias` | Cierre de los dos flujos, con los pasos de lo que sigue |
+| `/privacidad` | Política de privacidad |
 | `/tracking` | Panel interno, con contraseña |
 
 `/ir` pasa todos los parámetros enteros al destino: si se pierde `fbclid` en el
@@ -102,7 +103,7 @@ la variante de agenda sin tocar un solo anuncio. `/ir?v=agenda` fuerza una
 variante para probar a mano.
 
 Los cuatro botones de la landing bajan con scroll a la sección `#aplicar`, que
-está debajo de "por dentro" en lugar de una banda de CTA. No navegan: el flujo
+está después del caso propio en lugar de una banda de CTA. No navegan: el flujo
 arranca ahí.
 
 Lo único que cambia entre los dos flujos es qué hay embebido en esa sección:
@@ -117,23 +118,27 @@ un teléfono escrito distinto.
 
 ## Orden del funnel
 
-Definido en `app/page.tsx`. Es el de la referencia: `bloque de valor → prueba →
-CTA`, con el mismo botón repetido cinco veces y las secciones alternando blanco
-y hueso.
+Definido en `components/sections/Landing.tsx`. Es el de la referencia:
+`bloque de valor → prueba → CTA`, con el mismo botón repetido y las secciones
+alternando blanco y hueso.
 
 1. Hero centrado: logo, título, bajada y VSL
 2. CTA
 3. **Mi caso** — responde "¿esto funciona?". Foto de Manu, métricas y capturas
    de sus tableros. Sin video.
 4. CTA
-5. **Génesis OS por dentro** — capturas del campus, la comunidad y el tablero.
-   Sin video.
-6. CTA
-7. Oferta: seis entregables en zig-zag
-8. CTA
-9. **Resultados de alumnos** — mosaico de capturas, sin etiquetas ni texto
+5. **La pantalla de conversión** — formulario propio o calendario, según el
+   flujo del A/B
+6. Oferta: seis entregables, sólo texto, en dos columnas
+7. CTA
+8. **Resultados de alumnos** — mosaico de capturas, sin etiquetas ni texto
    encima. Responde "¿me va a funcionar a mí?"
-10. CTA de cierre y pie con descargo de resultados
+9. CTA de cierre y pie con descargo de resultados
+
+Había una sección **"Génesis OS por dentro"** entre el caso propio y el
+formulario. Se sacó antes de largar los anuncios: sus cuatro capturas nunca se
+reemplazaron y eran placeholders grises, justo en la última sección antes de
+convertir.
 
 El ajuste sobre la referencia es el reparto de la prueba social: la referencia
 usa el mismo formato de tarjeta en los dos bloques y un collage aparte; acá el
@@ -154,6 +159,8 @@ Verificada sin overflow horizontal a 1920, 1440, 1366 y 390.
 
 - [ ] URL real del checkout en `site.cta.href`.
 - [ ] Aprobar el copy marcado `BORRADOR` y completar los `PLACEHOLDER`.
+- [ ] Hacer revisar la política de privacidad por alguien que la valide
+      legalmente, y poner un mail de contacto real en `site.contacto.email`.
 - [ ] Assets reales (y pasar los `<img>` a `next/image` cuando dejen de ser SVG;
       el mosaico de resultados ya lo usa).
 - [ ] Reemplazar el wordmark por el SVG en curvas de la carpeta de marca.

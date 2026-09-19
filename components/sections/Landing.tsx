@@ -1,7 +1,6 @@
 import { Hero } from "@/components/sections/Hero";
 import { CtaBand } from "@/components/sections/CtaBand";
 import { FounderCase } from "@/components/sections/FounderCase";
-import { InsideLook } from "@/components/sections/InsideLook";
 import { FormularioEnLanding } from "@/components/sections/FormularioEnLanding";
 import { Program } from "@/components/sections/Program";
 import { ResultsMosaic } from "@/components/sections/ResultsMosaic";
@@ -30,8 +29,8 @@ export function Landing({ flujo }: { flujo: Flujo }) {
         <FounderCase />
         <CtaBand href={aplicarUrl} />
 
-        <InsideLook />
-        {/* Acá iba una banda de CTA; ahora el formulario va embebido de una. */}
+        {/* Antes acá iba "por dentro", con capturas del campus. Se sacó: eran
+            placeholders y era la última sección antes de convertir. */}
         <FormularioEnLanding flujo={flujo} destino="/gracias" />
 
         <Program />

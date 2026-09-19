@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
 import { anotarEvento, atribucionDeLaVisita, idDeVisita } from "@/lib/visita";
@@ -179,6 +180,14 @@ export function FormularioNativo({ flujo, origen, destino, className = "" }: Pro
           {enviando ? copia.enviando : copia.enviar}
           {!enviando && <span aria-hidden="true">&rarr;</span>}
         </button>
+
+        <p className="text-[0.8125rem] text-sutil">
+          {copia.consentimiento}{" "}
+          <Link href="/privacidad" className="text-acento underline underline-offset-2">
+            política de privacidad
+          </Link>
+          .
+        </p>
       </fieldset>
     </form>
   );

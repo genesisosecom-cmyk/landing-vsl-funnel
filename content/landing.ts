@@ -64,6 +64,16 @@ export const site = {
   tracking: {
     metaPixelId: "29155340914068656",
   },
+  /**
+   * El mail de contacto para temas de datos personales.
+   *
+   * Tiene que ser una casilla real y atendida: la ley obliga a responder los
+   * pedidos de acceso, rectificación y supresión, y es adonde va a escribir
+   * quien quiera que borremos sus datos.
+   */
+  contacto: {
+    email: "hola@genesisecom.com",
+  },
   /** El texto del CTA es único; el destino depende del flujo del test. */
   cta: {
     label: "Quiero entrar a Génesis",
@@ -127,17 +137,6 @@ export const founderCase = {
 /* 3. Demo "por dentro"                                                        */
 /* -------------------------------------------------------------------------- */
 
-export const insideLook = {
-  eyebrow: "Por dentro",
-  title: "Cómo funciona *Génesis OS* desde adentro",
-  /** La primera va destacada a lo ancho; las otras en grilla. */
-  media: [
-    { src: "/placeholders/dentro-1.svg", alt: "PLACEHOLDER — el campus por dentro", width: 1280, height: 720 },
-    { src: "/placeholders/dentro-2.svg", alt: "PLACEHOLDER — la comunidad", width: 800, height: 600 },
-    { src: "/placeholders/dentro-3.svg", alt: "PLACEHOLDER — el tablero del alumno", width: 800, height: 600 },
-    { src: "/placeholders/dentro-4.svg", alt: "PLACEHOLDER — las llamadas grabadas", width: 800, height: 600 },
-  ] satisfies Media[],
-};
 
 /* -------------------------------------------------------------------------- */
 /* 4. Oferta — entregables                                                     */
@@ -272,6 +271,7 @@ export const aplicar = {
    */
   formulario: {
     enviar: "Enviar mi aplicación",
+    consentimiento: "Al enviar aceptás nuestra",
     enviando: "Enviando…",
     error: "No pudimos enviar tu aplicación. Probá de nuevo en un momento.",
     campos: {
@@ -309,15 +309,54 @@ export const aplicar = {
      */
     url: "https://api.leadconnectorhq.com/widget/booking/6wIBPZIlrpaCsJpMpv2j",
   },
+  /**
+   * El cierre de los dos flujos.
+   *
+   * Los pasos no son decorativos: el que sabe qué va a pasar y cuándo atiende
+   * el WhatsApp. El que no, lo toma por spam. En los dos casos el contacto es
+   * en minutos u horas, y conviene decirlo con todas las letras.
+   */
   gracias: {
     titulo: "Listo, ya tenemos tu aplicación",
     texto:
-      "Si tu marca encaja con el modelo, te escribimos por WhatsApp al número que dejaste. Revisá que sea el correcto.",
+      "Revisá que el teléfono que dejaste sea el correcto: es por ahí que seguimos.",
+    pasos: [
+      {
+        titulo: "Revisamos tu aplicación",
+        texto: "La miramos hoy mismo, para ver si el modelo de suscripción aplica a tu producto.",
+      },
+      {
+        titulo: "Te escribimos por WhatsApp",
+        texto:
+          "En los próximos minutos u horas, al número que dejaste. Tené el teléfono a mano: si no contestás, la aplicación queda ahí.",
+      },
+      {
+        titulo: "Coordinamos la llamada",
+        texto:
+          "Si tu marca encaja, agendamos 40 minutos con Manu para revisar tus números y armar el plan.",
+      },
+    ],
     /** Lo que ve quien llega acá después de reservar, no después del formulario. */
     agendado: {
       titulo: "Listo, tu llamada quedó agendada",
-      texto:
-        "Te llega la confirmación por mail con el horario y el link. Conectate desde la computadora, en un lugar tranquilo: son 40 minutos para revisar tu marca y tus números.",
+      texto: "Te llega la confirmación por mail con el horario y el link.",
+      pasos: [
+        {
+          titulo: "Te escribimos por WhatsApp",
+          texto:
+            "En los próximos minutos u horas, para confirmar que vas a estar. La confirmación es obligatoria: sin ella el horario se libera para otra persona.",
+        },
+        {
+          titulo: "Preparás tus números",
+          texto:
+            "Facturación, recompra y stock de los últimos meses. La llamada rinde el doble si los tenés a mano.",
+        },
+        {
+          titulo: "La llamada, de 40 minutos",
+          texto:
+            "Conectate desde la computadora, no desde el celular, en un lugar tranquilo. Si no podés asistir, reprogramá con al menos 6 horas de anticipación.",
+        },
+      ],
     },
   },
 };
@@ -331,4 +370,74 @@ export const footer = {
   disclaimer:
     "Los casos mostrados son reales y no garantizan resultados. Dependen del producto, del mercado y del trabajo de cada marca. Esta página no está afiliada a Meta, Google ni a ninguna otra plataforma.",
   usuario: "@manudomzz",
+};
+
+/* -------------------------------------------------------------------------- */
+/* Política de privacidad                                                      */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * BORRADOR — redactada sobre lo que la landing efectivamente hace y guarda.
+ * Describe el tratamiento real, no un texto genérico copiado. Aun así hay que
+ * hacerla revisar por alguien que la valide legalmente antes de publicarla, y
+ * actualizarla si cambia lo que se recolecta o con quién se comparte.
+ */
+export const privacidad = {
+  titulo: "Política de privacidad",
+  actualizado: "19 de septiembre de 2026",
+  intro:
+    "Esta página explica qué datos tuyos recibimos cuando usás genesisecom.com, para qué los usamos y cómo pedir que los borremos.",
+  secciones: [
+    {
+      titulo: "Quién es responsable de tus datos",
+      cuerpo: [
+        "Génesis OS, operado por Manuel Domínguez. Para cualquier tema de datos personales escribinos a hola@genesisecom.com.",
+      ],
+    },
+    {
+      titulo: "Qué datos recolectamos",
+      cuerpo: [
+        "Los que nos dejás: nombre, email, teléfono, usuario de Instagram y las respuestas de las preguntas sobre tu marca. Si reservás una llamada, además el horario elegido.",
+        "Los que se registran solos cuando navegás: la dirección IP, el navegador, la página por la que entraste, de qué anuncio venís (los parámetros utm_source, utm_campaign y similares, y el identificador de click de Meta) y la fecha y hora de tu visita, tu paso por los botones y el envío del formulario.",
+      ],
+    },
+    {
+      titulo: "Para qué los usamos",
+      cuerpo: [
+        "Para contactarte por WhatsApp, teléfono o email sobre tu aplicación, y para coordinar y sostener la llamada si corresponde.",
+        "Para entender qué anuncio y qué versión de la página traen las aplicaciones, y así dejar de gastar en lo que no funciona.",
+        "No vendemos tus datos ni los cedemos a terceros para que te ofrezcan sus productos.",
+      ],
+    },
+    {
+      titulo: "Con quién los compartimos",
+      cuerpo: [
+        "GoHighLevel, que es el sistema donde guardamos los contactos y desde donde te escribimos.",
+        "Meta, a quien le informamos que hubo una conversión para medir y optimizar los anuncios. El email y el teléfono se le envían cifrados con un método que no permite reconstruir el dato original.",
+        "Vercel y Supabase, que alojan la página y la base donde queda el registro de tu aplicación.",
+        "Cada uno trata los datos sólo para prestarnos ese servicio.",
+      ],
+    },
+    {
+      titulo: "Cookies",
+      cuerpo: [
+        "Usamos una cookie propia que recuerda de qué anuncio llegaste y qué versión de la página te tocó. Dura 90 días y no te identifica: guarda el origen de la visita, no quién sos.",
+        "El píxel de Meta instala sus propias cookies para medir las conversiones. Podés bloquearlas desde la configuración de tu navegador; la página funciona igual.",
+      ],
+    },
+    {
+      titulo: "Cuánto tiempo los guardamos",
+      cuerpo: [
+        "Mientras la relación comercial siga abierta, y hasta dos años después del último contacto. Si nos pedís que los borremos, lo hacemos antes.",
+      ],
+    },
+    {
+      titulo: "Tus derechos",
+      cuerpo: [
+        "Podés pedirnos que te digamos qué datos tuyos tenemos, que los corrijamos si están mal, o que los borremos. Escribinos a hola@genesisecom.com y te respondemos dentro de los plazos que fija la ley.",
+        "El titular de los datos personales tiene la facultad de ejercer el derecho de acceso a los mismos en forma gratuita a intervalos no inferiores a seis meses, salvo que se acredite un interés legítimo al efecto, conforme lo establecido en el artículo 14, inciso 3 de la Ley Nº 25.326.",
+        "La Agencia de Acceso a la Información Pública, en su carácter de órgano de control de la Ley Nº 25.326, tiene la atribución de atender las denuncias y reclamos que interpongan quienes resulten afectados en sus derechos por incumplimiento de las normas vigentes en materia de protección de datos personales.",
+      ],
+    },
+  ],
 };
