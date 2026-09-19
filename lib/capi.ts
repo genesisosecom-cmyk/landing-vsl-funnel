@@ -58,7 +58,21 @@ export async function enviarEvento(evento: EventoCapi): Promise<{ ok: boolean; d
     }).filter(([, v]) => v),
   );
 
+  /*
+   * Código de prueba de Events Manager.
+   *
+   * La herramienta "Probar eventos" sólo muestra eventos de servidor que
+   * vengan marcados con este código: sin él llegan igual y Meta los cuenta,
+   * pero el probador no los lista y parece que no pasó nada.
+   *
+   * Ojo: los eventos marcados quedan como prueba y NO cuentan para los
+   * informes ni para la optimización. Es para depurar un rato y sacarlo, no
+   * para dejarlo puesto.
+   */
+  const codigoDePrueba = process.env.META_TEST_EVENT_CODE;
+
   const cuerpo = {
+    ...(codigoDePrueba ? { test_event_code: codigoDePrueba } : {}),
     data: [
       {
         event_name: evento.nombre,
