@@ -174,3 +174,147 @@ export async function listarEventos(limite = 2000): Promise<FilaEvento[]> {
   if (!respuesta?.ok) return [];
   return (await respuesta.json().catch(() => [])) as FilaEvento[];
 }
+
+/* -------------------------------------------------------------------------- */
+/* Atribución tardía del flujo de agenda                                       */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * En agenda la cita entra por el webhook de GHL y la atribución de primera
+ * mano llega por otro lado: la página de gracias, adonde GHL manda de vuelta
+ * al visitante después de reservar. Ahí volvemos a estar en nuestro dominio,
+ * con nuestra cookie intacta.
+ *
+ * Los dos avisos pueden llegar en cualquier orden, así que cada uno busca al
+ * otro dentro de una ventana de tiempo.
+ *
+ * Cuando el redirect de GHL trae el id del contacto, la unión es exacta y la
+ * ventana no decide nada. Sin ese id se cae al heurístico —la cita sin
+ * atribuir más reciente—, y ahí la ventana tiene que ser corta: el redirect
+ * ocurre segundos después del webhook, mientras que una cita vieja que nunca
+ * recibió su aviso se queda esperando para siempre y se la llevaría la
+ * siguiente. El redirect llega segundos después, así que cinco minutos deja
+ * pasar el caso normal de sobra y acota el error.
+ */
+const VENTANA_MINUTOS = 5;
+
+function desdeHace(minutos: number): string {
+  return new Date(Date.now() - minutos * 60 * 1000).toISOString();
+}
+
+/** La atribución viaja en `detalle` aplanada, para que el panel la muestre legible. */
+export function detalleDeAtribucion(a: Atribucion): Record<string, string> {
+  return Object.fromEntries(
+    Object.entries({
+      utm_source: a.utmSource,
+      utm_medium: a.utmMedium,
+      utm_campaign: a.utmCampaign,
+      utm_content: a.utmContent,
+      utm_term: a.utmTerm,
+      fbclid: a.fbclid,
+      fbp: a.fbp,
+      fbc: a.fbc,
+      referrer: a.referrer,
+      landing: a.landing,
+      desde: a.desde,
+    }).filter(([, v]) => v),
+  ) as Record<string, string>;
+}
+
+function atribucionDeDetalle(d: Record<string, unknown>): Atribucion {
+  const texto = (v: unknown) => (typeof v === "string" && v ? v : undefined);
+
+  return {
+    utmSource: texto(d.utm_source),
+    utmMedium: texto(d.utm_medium),
+    utmCampaign: texto(d.utm_campaign),
+    utmContent: texto(d.utm_content),
+    utmTerm: texto(d.utm_term),
+    fbclid: texto(d.fbclid),
+    fbp: texto(d.fbp),
+    fbc: texto(d.fbc),
+    referrer: texto(d.referrer),
+    landing: texto(d.landing),
+    desde: texto(d.desde),
+  };
+}
+
+/**
+ * La cita a la que corresponde esta atribución.
+ *
+ * Con el id de contacto de GHL la unión es exacta. Sin él, la cita sin
+ * atribuir más reciente dentro de la ventana.
+ */
+export async function citaSinAtribucion(contactId?: string): Promise<string | null> {
+  if (contactId) {
+    const exacta = await rest(
+      `${TABLA_LEADS}?select=id&flujo=eq.agenda&ghl_contact_id=eq.${encodeURIComponent(contactId)}&order=creado_en.desc&limit=1`,
+    );
+
+    if (exacta?.ok) {
+      const filas = (await exacta.json().catch(() => [])) as { id: string }[];
+      if (filas[0]?.id) return filas[0].id;
+    }
+  }
+
+  const respuesta = await rest(
+    `${TABLA_LEADS}?select=id&flujo=eq.agenda&visita_id=is.null&creado_en=gte.${desdeHace(VENTANA_MINUTOS)}&order=creado_en.desc&limit=1`,
+  );
+  if (!respuesta?.ok) return null;
+
+  const filas = (await respuesta.json().catch(() => [])) as { id: string }[];
+  return filas[0]?.id ?? null;
+}
+
+export async function completarAtribucion(
+  id: string,
+  visitaId: string,
+  a: Atribucion,
+): Promise<boolean> {
+  const respuesta = await rest(`${TABLA_LEADS}?id=eq.${id}`, {
+    method: "PATCH",
+    body: JSON.stringify({
+      visita_id: visitaId,
+      utm_source: a.utmSource ?? null,
+      utm_medium: a.utmMedium ?? null,
+      utm_campaign: a.utmCampaign ?? null,
+      utm_content: a.utmContent ?? null,
+      utm_term: a.utmTerm ?? null,
+      fbclid: a.fbclid ?? null,
+      fbp: a.fbp ?? null,
+      fbc: a.fbc ?? null,
+      referrer: a.referrer ?? null,
+      landing: a.landing ?? null,
+      primera_visita: a.desde ?? null,
+    }),
+  });
+
+  return Boolean(respuesta?.ok);
+}
+
+/** La atribución que dejó una página de gracias y todavía no tiene cita. */
+export async function atribucionEnEspera(): Promise<
+  { eventoId: number; visitaId: string; atribucion: Atribucion } | null
+> {
+  const respuesta = await rest(
+    `${TABLA_EVENTOS}?select=id,visita_id,detalle&tipo=eq.cita&lead_id=is.null&visita_id=not.is.null&creado_en=gte.${desdeHace(VENTANA_MINUTOS)}&order=creado_en.desc&limit=1`,
+  );
+  if (!respuesta?.ok) return null;
+
+  const filas = (await respuesta.json().catch(() => [])) as FilaEvento[];
+  const fila = filas[0];
+  if (!fila?.visita_id) return null;
+
+  return {
+    eventoId: fila.id,
+    visitaId: fila.visita_id,
+    atribucion: atribucionDeDetalle(fila.detalle ?? {}),
+  };
+}
+
+export async function asociarEvento(eventoId: number, leadId: string): Promise<void> {
+  await rest(`${TABLA_EVENTOS}?id=eq.${eventoId}`, {
+    method: "PATCH",
+    body: JSON.stringify({ lead_id: leadId }),
+  });
+}

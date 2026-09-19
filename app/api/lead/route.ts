@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { enviarEvento } from "@/lib/capi";
 import { upsertContacto } from "@/lib/ghl";
 import { guardarLead, registrarEvento } from "@/lib/db";
-import { esFlujo, type Atribucion } from "@/lib/atribucion";
+import { atribucionSegura, esFlujo } from "@/lib/atribucion";
 import { site } from "@/content/landing";
 
 /**
@@ -21,25 +21,6 @@ function texto(valor: unknown): string | undefined {
   if (typeof valor !== "string") return undefined;
   const limpio = valor.trim().slice(0, LARGO_MAXIMO);
   return limpio || undefined;
-}
-
-/** Sólo se copian las claves que conocemos: el cuerpo llega del navegador. */
-function atribucionDe(crudo: unknown): Atribucion {
-  const a = (typeof crudo === "object" && crudo !== null ? crudo : {}) as Record<string, unknown>;
-
-  return {
-    utmSource: texto(a.utmSource),
-    utmMedium: texto(a.utmMedium),
-    utmCampaign: texto(a.utmCampaign),
-    utmContent: texto(a.utmContent),
-    utmTerm: texto(a.utmTerm),
-    fbclid: texto(a.fbclid),
-    fbp: texto(a.fbp),
-    fbc: texto(a.fbc),
-    referrer: texto(a.referrer),
-    landing: texto(a.landing),
-    desde: texto(a.desde),
-  };
 }
 
 export async function POST(pedido: Request) {
@@ -61,7 +42,7 @@ export async function POST(pedido: Request) {
   const origen = texto(cuerpo.origen);
   const eventId = texto(cuerpo.eventId);
   const visitaId = texto(cuerpo.visitaId);
-  const atribucion = atribucionDe(cuerpo.atribucion);
+  const atribucion = atribucionSegura(cuerpo.atribucion);
 
   const ip = pedido.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || undefined;
   const userAgent = pedido.headers.get("user-agent") ?? undefined;

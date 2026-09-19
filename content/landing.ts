@@ -313,6 +313,12 @@ export const aplicar = {
     titulo: "Listo, ya tenemos tu aplicación",
     texto:
       "Si tu marca encaja con el modelo, te escribimos por WhatsApp al número que dejaste. Revisá que sea el correcto.",
+    /** Lo que ve quien llega acá después de reservar, no después del formulario. */
+    agendado: {
+      titulo: "Listo, tu llamada quedó agendada",
+      texto:
+        "Te llega la confirmación por mail con el horario y el link. Conectate desde la computadora, en un lugar tranquilo: son 40 minutos para revisar tu marca y tus números.",
+    },
   },
 };
 

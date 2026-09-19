@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
 import { enviarEvento } from "@/lib/capi";
 import { obtenerContacto } from "@/lib/ghl";
-import { guardarLead, registrarEvento } from "@/lib/db";
+import { asociarEvento, atribucionEnEspera, guardarLead, registrarEvento } from "@/lib/db";
+import { fusionarAtribucion } from "@/lib/atribucion";
 import { site } from "@/content/landing";
 
 /**
@@ -73,7 +74,15 @@ export async function POST(pedido: Request) {
     Object.keys(cita ?? {}).join(","),
   );
 
-  const atribucion = ficha?.atribucion ?? {};
+  /*
+   * La atribución sale de dos lados. La de GHL es la que guardó al crear el
+   * contacto: no trae las cookies del píxel y, si la persona ya existía en el
+   * CRM, es la de aquella primera vez. La nuestra la deja la página de gracias
+   * cuando GHL devuelve al visitante después de reservar, y esa es de primera
+   * mano — por eso pisa, y la de GHL tapa los huecos.
+   */
+  const espera = await atribucionEnEspera();
+  const atribucion = fusionarAtribucion(ficha?.atribucion ?? {}, espera?.atribucion ?? {});
   const url = `${site.url}/agenda`;
 
   // Primero el Lead: en este flujo el formulario del calendario es el
@@ -103,6 +112,7 @@ export async function POST(pedido: Request) {
   if (!capiSchedule.ok) console.warn("[CAPI-SCHEDULE]", capiSchedule.detalle);
 
   const leadId = await guardarLead({
+    visitaId: espera?.visitaId,
     flujo: "agenda",
     origen: "calendario",
     nombre,
@@ -120,10 +130,14 @@ export async function POST(pedido: Request) {
   if (leadId) {
     await registrarEvento({
       tipo: "cita",
+      visitaId: espera?.visitaId,
       leadId,
       flujo: "agenda",
       detalle: { cita: clave, inicio: inicio ?? "" },
     });
+
+    // La atribución que estaba esperando ya tiene cita: se le engancha.
+    if (espera) await asociarEvento(espera.eventoId, leadId);
   }
 
   return NextResponse.json({ ok: true });
