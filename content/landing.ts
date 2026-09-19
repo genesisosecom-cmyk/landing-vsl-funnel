@@ -146,7 +146,7 @@ export const program = {
   /** Numerados, sin imagen: la sección es sólo texto. */
   features: [
     {
-      title: "Seguimiento *1:1* con Manu",
+      title: "Seguimiento *1:1* conmigo",
       body: "Sabés operar, lo que no sabés es cuál es el próximo paso, y hasta hoy lo venías adivinando solo con la plata de tu negocio como costo del error. Acá tenés al lado a alguien que ya hizo esta migración con su propia marca: dejás de probar a ciegas y de tener miedo a romper lo que hoy te factura.",
     },
     {
@@ -154,7 +154,7 @@ export const program = {
       body: "No cambiás de producto ni tirás lo que construiste: el mismo producto que ya vendés pasa a volver solo cuando al cliente se le termina. Dejás de empezar de cero en cada venta y de pagar adquisición por un cliente que ya era tuyo.",
     },
     {
-      title: "Llamadas *1:1* semanales",
+      title: "Llamadas *1:1* a pedido conmigo",
       body: "El error que hoy descubrís a fin de mes, acá lo corregís a los siete días, con tus números arriba de la mesa y no con una sensación. Dejás de perder meses enteros yendo para el lado equivocado y de quedarte trabado esperando a que alguien te conteste.",
     },
     {
