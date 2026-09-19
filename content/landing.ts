@@ -147,7 +147,7 @@ export const program = {
   features: [
     {
       title: "Seguimiento *1:1* conmigo",
-      body: "Sabés operar, lo que no sabés es cuál es el próximo paso, y hasta hoy lo venías adivinando solo con la plata de tu negocio como costo del error. Acá tenés al lado a alguien que ya hizo esta migración con su propia marca: dejás de probar a ciegas y de tener miedo a romper lo que hoy te factura.",
+      body: "Sabés operar, lo que no sabés es cuál es el próximo paso, y hasta hoy lo venías adivinando solo con la plata de tu negocio como costo del error. Acá me tenés al lado a mí, que ya hice esta migración con mi propia marca: dejás de probar a ciegas y de tener miedo a romper lo que hoy te factura.",
     },
     {
       title: "Rediseño del *producto* a ciclo de reposición",
@@ -155,7 +155,7 @@ export const program = {
     },
     {
       title: "Llamadas *1:1* a pedido conmigo",
-      body: "El error que hoy descubrís a fin de mes, acá lo corregís a los siete días, con tus números arriba de la mesa y no con una sensación. Dejás de perder meses enteros yendo para el lado equivocado y de quedarte trabado esperando a que alguien te conteste.",
+      body: "El error que hoy descubrís a fin de mes, acá lo corregís cuando aparece: pedís la llamada y la tenés, con tus números arriba de la mesa y no con una sensación. Dejás de perder meses enteros yendo para el lado equivocado y de quedarte trabado esperando a que alguien te conteste.",
     },
     {
       title: "El sistema de *retención* y cobro recurrente",
