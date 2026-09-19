@@ -81,8 +81,24 @@ export function anotarEvento(
  */
 export function atribucionDeLaVisita(): Atribucion {
   const guardada = leerAtribucion(leerCookie(COOKIE_ATRIBUCION));
-  if (Object.keys(guardada).length > 0) return guardada;
-  return atribucionDeLaUrl();
+  const base = Object.keys(guardada).length > 0 ? guardada : atribucionDeLaUrl();
+
+  /*
+   * _fbp y _fbc las escribe el píxel, y el píxel carga después que nosotros:
+   * va con strategy="afterInteractive", así que el efecto que guarda la
+   * atribución corre antes de que fbevents.js llegue a escribirlas. En una
+   * visita nueva eso hacía que _fbp no entrara nunca a la cookie de primera
+   * visita, y como es first-touch tampoco se corregía después.
+   *
+   * Por eso se releen acá, al momento de mandar: no son datos de origen que
+   * haya que congelar, son identificadores de este navegador, y el valor
+   * bueno es el de ahora. _fbp es de las mejores señales de coincidencia que
+   * tiene Meta, así que perderla sale caro.
+   */
+  const fbp = leerCookie("_fbp");
+  const fbc = leerCookie("_fbc");
+
+  return { ...base, fbp: fbp ?? base.fbp, fbc: fbc ?? base.fbc };
 }
 
 /** Lo que se puede leer de la URL y de las cookies del píxel en esta carga. */
