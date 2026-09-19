@@ -89,7 +89,8 @@ siempre la misma landing.
 | `/` | Entra al repartidor, arrastrando la query |
 | `/ir` | El repartidor: sortea, guarda la variante y redirige |
 | `/formulario` · `/agenda` | La misma landing, con distinto mecanismo de conversión |
-| `/gracias` | Cierre de los dos flujos, con los pasos de lo que sigue |
+| `/gracias` | Cierre del flujo de formulario, con los pasos de lo que sigue |
+| `/gracias/agenda` | Cierre del flujo de agenda; además manda la atribución de la cita |
 | `/privacidad` | Política de privacidad |
 | `/tracking` | Panel interno, con contraseña |
 

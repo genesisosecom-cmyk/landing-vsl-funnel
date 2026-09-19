@@ -76,10 +76,12 @@ Ver `.env.example`. Las que hacen falta para el panel:
    `https://www.genesisecom.com/api/ghl/cita?token=<GHL_WEBHOOK_SECRET>`.
    Sin esto el flujo de agenda no manda ninguna conversión a Meta.
 2. **Calendario** → el redirect posterior a la reserva apunta a
-   `https://www.genesisecom.com/gracias?agendado=1`. Sin el `?agendado=1` la
-   página no manda la atribución y se pierde el camino 2 de arriba. Si GHL
-   permite agregar el id del contacto al redirect, mejor todavía:
-   `…/gracias?agendado=1&contact_id={{contact.id}}`.
+   `https://www.genesisecom.com/gracias/agenda`. Es una ruta y no una query a
+   propósito: `?agendado=1` se pierde si el campo lo recorta o si alguien copia
+   la URL sin él, y entonces la cita queda sin atribución y el visitante lee el
+   mensaje del formulario. Si GHL permite agregar el id del contacto, mejor
+   todavía: `…/gracias/agenda?contact_id={{contact.id}}`, que hace exacta la
+   unión con la cita.
 3. Los campos personalizados ya existen; sus IDs están fijos en `lib/ghl.ts`.
 
 ## Base de datos
