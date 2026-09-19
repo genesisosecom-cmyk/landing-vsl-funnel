@@ -1,9 +1,9 @@
 import { Section } from "@/components/ui/Section";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-import { FeatureRow } from "./FeatureRow";
+import { FeatureCard } from "./FeatureCard";
 import { program } from "@/content/landing";
 
-/** La oferta: seis entregables numerados, cada uno con su captura. */
+/** La oferta: seis entregables numerados, sólo texto. */
 export function Program() {
   return (
     <Section id="programa" tono="hueso">
@@ -14,9 +14,9 @@ export function Program() {
           subtitle={program.subtitle}
         />
 
-        <div className="flex w-full flex-col gap-6">
+        <div className="grid w-full gap-6 lg:grid-cols-2">
           {program.features.map((feature, i) => (
-            <FeatureRow key={feature.title} feature={feature} index={i} />
+            <FeatureCard key={feature.title} feature={feature} index={i} />
           ))}
         </div>
       </div>
