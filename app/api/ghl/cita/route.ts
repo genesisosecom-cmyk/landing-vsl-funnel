@@ -41,11 +41,37 @@ export async function POST(pedido: Request) {
     [contacto.firstName, contacto.lastName].filter(Boolean).join(" ") ??
     undefined;
 
-  // El id de la cita hace de eventId: si GHL reintenta, Meta deduplica y el
-  // índice único de cita_id evita la fila repetida en la base.
   const cita = cuerpo?.appointment ?? cuerpo?.calendar ?? {};
-  const idCita: string = cita?.id ?? cuerpo?.id ?? `cita-${telefono ?? email ?? "desconocido"}`;
   const inicio: string | undefined = cita?.startTime ?? cita?.start_time ?? undefined;
+
+  /*
+   * La llave de la cita. Se usa como eventId de Meta y como clave única en la
+   * base, así que tiene que cumplir dos cosas a la vez: repetirse cuando GHL
+   * reintenta el mismo webhook, y no repetirse nunca entre reservas distintas.
+   *
+   * Por eso no alcanza con `calendar.id`: en el payload de GHL ese campo puede
+   * ser el id del calendario, que es el mismo para todas las reservas. Si lo
+   * usáramos solo, la segunda cita chocaría con la primera y Meta las contaría
+   * como una. Se prueba primero el id de la cita, y se compone con el contacto
+   * y el horario, que entre los tres no colisionan.
+   */
+  const idCita: string =
+    cita?.appointmentId ?? cuerpo?.appointmentId ?? cita?.id ?? cuerpo?.id ?? "";
+
+  const clave =
+    [idCita, contactId, inicio].filter(Boolean).join("-") ||
+    `cita-${telefono ?? email ?? "desconocido"}-${Date.now()}`;
+
+  /*
+   * Las claves del payload, sin los valores: el primer webhook real dice qué
+   * forma manda GHL de verdad, sin dejar datos personales en los logs.
+   */
+  console.info(
+    "[GHL-CITA] claves:",
+    Object.keys(cuerpo ?? {}).join(","),
+    "| cita:",
+    Object.keys(cita ?? {}).join(","),
+  );
 
   const atribucion = ficha?.atribucion ?? {};
   const url = `${site.url}/agenda`;
@@ -55,7 +81,7 @@ export async function POST(pedido: Request) {
   // optimizar. Después el Schedule, que es la conversión de verdad.
   const capiLead = await enviarEvento({
     nombre: "Lead",
-    eventId: `lead-${idCita}`,
+    eventId: `lead-${clave}`,
     email,
     telefono,
     atribucion,
@@ -65,7 +91,7 @@ export async function POST(pedido: Request) {
 
   const capiSchedule = await enviarEvento({
     nombre: "Schedule",
-    eventId: `schedule-${idCita}`,
+    eventId: `schedule-${clave}`,
     email,
     telefono,
     atribucion,
@@ -83,11 +109,11 @@ export async function POST(pedido: Request) {
     email,
     telefono,
     atribucion,
-    eventId: `lead-${idCita}`,
+    eventId: `lead-${clave}`,
     ghlContactId: contactId,
     capiDetalle: `lead: ${capiLead.detalle} | schedule: ${capiSchedule.detalle}`,
     agendadoEn: new Date().toISOString(),
-    citaId: idCita,
+    citaId: clave,
     citaInicio: inicio,
   });
 
@@ -96,7 +122,7 @@ export async function POST(pedido: Request) {
       tipo: "cita",
       leadId,
       flujo: "agenda",
-      detalle: { cita: idCita, inicio: inicio ?? "" },
+      detalle: { cita: clave, inicio: inicio ?? "" },
     });
   }
 
