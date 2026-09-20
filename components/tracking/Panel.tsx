@@ -41,6 +41,10 @@ export function Panel({ leads, eventos }: { leads: FilaLead[]; eventos: FilaEven
 
   const embudos = useMemo(() => FLUJOS.map((f) => embudoDe(f, leads, eventos)), [leads, eventos]);
 
+  // El embudo por creativo: con varios anuncios corriendo, es el cruce que
+  // decide cuál se apaga. El que no trae visitas no aparece.
+  const creativos = useMemo(() => porCreativo(leads, eventos), [leads, eventos]);
+
   // Los eventos de una visita se agrupan una vez y no en cada fila abierta.
   const porVisita = useMemo(() => {
     const mapa = new Map<string, FilaEvento[]>();
@@ -71,6 +75,44 @@ export function Panel({ leads, eventos }: { leads: FilaLead[]; eventos: FilaEven
             <Embudo key={embudo.flujo} {...embudo} />
           ))}
         </section>
+
+        {creativos.length > 0 && (
+          <section className="flex flex-col gap-4">
+            <h2 className="dato">Por creativo</h2>
+
+            <div className="overflow-x-auto rounded-pieza border border-linea">
+              <table className="w-full border-collapse text-left text-[0.875rem]">
+                <thead>
+                  <tr className="border-b border-linea bg-hueso">
+                    {["Anuncio", "Campaña", "Visitas", "Clicks", "Empezó", "Leads", "Citas", "Conv."].map(
+                      (titulo) => (
+                        <th key={titulo} className="dato whitespace-nowrap px-4 py-3">
+                          {titulo}
+                        </th>
+                      ),
+                    )}
+                  </tr>
+                </thead>
+                <tbody>
+                  {creativos.map((c) => (
+                    <tr key={`${c.campana}/${c.anuncio}`} className="border-b border-linea last:border-0">
+                      <td className="px-4 py-3 text-titulo">{c.anuncio}</td>
+                      <td className="px-4 py-3 text-sutil">{c.campana}</td>
+                      <td className="px-4 py-3 font-data">{c.visitas}</td>
+                      <td className="px-4 py-3 font-data">{c.clicks}</td>
+                      <td className="px-4 py-3 font-data">{c.empezados}</td>
+                      <td className="px-4 py-3 font-data text-titulo">{c.leads}</td>
+                      <td className="px-4 py-3 font-data">{c.citas}</td>
+                      <td className="px-4 py-3 font-data text-acento">
+                        {c.visitas > 0 ? `${((c.leads / c.visitas) * 100).toFixed(1)}%` : "—"}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </section>
+        )}
 
         <section className="flex flex-col gap-4">
           <div className="flex flex-wrap gap-2">
@@ -151,6 +193,60 @@ function embudoDe(flujo: Flujo, leads: FilaLead[], eventos: FilaEvento[]): Datos
     leads: leadsDelFlujo.length,
     citas: leadsDelFlujo.filter((l) => l.cita_id).length,
   };
+}
+
+type FilaCreativo = {
+  anuncio: string;
+  campana: string;
+  visitas: number;
+  clicks: number;
+  empezados: number;
+  leads: number;
+  citas: number;
+};
+
+/**
+ * Agrupa el embudo por anuncio.
+ *
+ * Los eventos traen el creativo en `detalle`; los leads, en su propia columna.
+ * Se cuentan por separado y se juntan por el par campaña/anuncio, que es lo
+ * que identifica un creativo cuando el mismo nombre se reusa entre campañas.
+ */
+function porCreativo(leads: FilaLead[], eventos: FilaEvento[]): FilaCreativo[] {
+  const filas = new Map<string, FilaCreativo>();
+
+  const traer = (anuncio: string, campana: string) => {
+    const clave = `${campana}/${anuncio}`;
+    const existente = filas.get(clave);
+    if (existente) return existente;
+
+    const nueva: FilaCreativo = { anuncio, campana, visitas: 0, clicks: 0, empezados: 0, leads: 0, citas: 0 };
+    filas.set(clave, nueva);
+    return nueva;
+  };
+
+  const texto = (valor: unknown) => (typeof valor === "string" && valor ? valor : "");
+
+  for (const evento of eventos) {
+    const anuncio = texto(evento.detalle?.utm_content);
+    const campana = texto(evento.detalle?.utm_campaign);
+    // Sin anuncio no vino de pauta: es tráfico directo y no entra a la tabla.
+    if (!anuncio) continue;
+
+    const fila = traer(anuncio, campana);
+    if (evento.tipo === "visita") fila.visitas += 1;
+    if (evento.tipo === "cta_click") fila.clicks += 1;
+    if (evento.tipo === "form_iniciado") fila.empezados += 1;
+  }
+
+  for (const lead of leads) {
+    if (!lead.utm_content) continue;
+    const fila = traer(lead.utm_content, lead.utm_campaign ?? "");
+    fila.leads += 1;
+    if (lead.cita_id) fila.citas += 1;
+  }
+
+  return [...filas.values()].sort((a, b) => b.visitas - a.visitas || b.leads - a.leads);
 }
 
 function Embudo({ flujo, visitas, clicks, empezados, leads, citas }: DatosEmbudo) {

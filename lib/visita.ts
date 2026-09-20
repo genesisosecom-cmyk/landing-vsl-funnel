@@ -54,7 +54,23 @@ export function anotarEvento(
   tipo: string,
   datos: { flujo?: string; detalle?: Record<string, unknown> } = {},
 ): void {
-  const cuerpo = JSON.stringify({ tipo, visitaId: idDeVisita(), ...datos });
+  /*
+   * Todo evento viaja con el anuncio del que vino.
+   *
+   * Antes sólo lo llevaba la visita, y el panel podía decir cuánta gente
+   * trajo cada creativo pero no cuánta tocaba el botón ni empezaba a
+   * completar. Con tres creativos corriendo, ese cruce es justamente lo que
+   * decide cuál se apaga.
+   */
+  const a = atribucionDeLaVisita();
+  const detalle = {
+    ...datos.detalle,
+    utm_source: a.utmSource ?? "",
+    utm_campaign: a.utmCampaign ?? "",
+    utm_content: a.utmContent ?? "",
+  };
+
+  const cuerpo = JSON.stringify({ tipo, visitaId: idDeVisita(), ...datos, detalle });
 
   try {
     fetch("/api/evento", {

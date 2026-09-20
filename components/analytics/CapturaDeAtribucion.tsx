@@ -49,16 +49,11 @@ export function CapturaDeAtribucion() {
       /* modo privado: preferimos anotar de más antes que no anotar. */
     }
 
+    // Los UTM los agrega anotarEvento para todos los eventos por igual.
     const a = leerAtribucion(cookie(COOKIE_ATRIBUCION));
     anotarEvento("visita", {
       flujo: window.location.pathname.replace(/^\//, "").split("/")[0],
-      detalle: {
-        landing: window.location.pathname,
-        utm_source: a.utmSource ?? "",
-        utm_campaign: a.utmCampaign ?? "",
-        utm_content: a.utmContent ?? "",
-        referrer: a.referrer ?? "",
-      },
+      detalle: { landing: window.location.pathname, referrer: a.referrer ?? "" },
     });
   }, []);
 
