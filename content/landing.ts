@@ -258,6 +258,17 @@ export const results = {
 /* -------------------------------------------------------------------------- */
 
 /** BORRADOR — copy de las páginas del flujo, a aprobar. */
+/** Los tramos de facturación del formulario, en orden. */
+const OPCIONES_FACTURACION = [
+  "Menos de 10M",
+  "Entre 10M y 30M",
+  "Entre 30M y 50M",
+  "Entre 50M y 100M",
+  "Más de 100M",
+] as const;
+
+export type Facturacion = (typeof OPCIONES_FACTURACION)[number];
+
 export const aplicar = {
   titulo: "Completá la aplicación",
   intro:
@@ -282,7 +293,19 @@ export const aplicar = {
     },
     facturacion: {
       etiqueta: "¿Cuánto está facturando tu marca mensualmente?",
-      opciones: ["Menos de 10M", "Entre 10M y 30M", "Entre 30M y 50M", "Entre 50M y 100M", "Más de 100M"],
+      opciones: OPCIONES_FACTURACION,
+      /**
+       * Las respuestas que hacen que el lead alimente al píxel.
+       *
+       * Un Lead descalificado no es una señal neutra: Meta sale a buscar más
+       * gente parecida a esa. De los primeros seis leads, cinco facturaban por
+       * debajo del piso, y el píxel aprendió de esos cinco.
+       *
+       * El `satisfies` no es decorativo: si alguien cambia el texto de una
+       * opción arriba y no acá, el build falla en vez de dejar de calificar a
+       * todo el mundo en silencio.
+       */
+      califican: ["Entre 30M y 50M", "Entre 50M y 100M", "Más de 100M"] satisfies readonly Facturacion[],
     },
     frecuencia: {
       etiqueta: "¿Cada cuánto se le termina el producto a tu cliente?",

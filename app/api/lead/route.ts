@@ -3,6 +3,7 @@ import { enviarEvento } from "@/lib/capi";
 import { upsertContacto } from "@/lib/ghl";
 import { guardarLead, registrarEvento } from "@/lib/db";
 import { atribucionSegura, esFlujo } from "@/lib/atribucion";
+import { esLeadCalificado } from "@/lib/calificacion";
 import { site } from "@/content/landing";
 
 /**
@@ -64,17 +65,26 @@ export async function POST(pedido: Request) {
     console.error("[LEAD-SIN-GUARDAR]", ghl.error, JSON.stringify({ nombre, email, telefono, instagram }));
   }
 
-  const capi = await enviarEvento({
-    nombre: "Lead",
-    eventId: eventId ?? `lead-${Date.now()}`,
-    email,
-    telefono,
-    atribucion,
-    ip,
-    userAgent,
-    url: `${site.url}/${flujo}`,
-    datos: { content_name: `lead_${flujo}`, flujo, origen },
-  });
+  /*
+   * Sólo los leads calificados alimentan al píxel. El resto entra a GHL y al
+   * panel igual — el lead existe y se contacta —, pero no le enseña a Meta a
+   * buscar más gente como él.
+   */
+  const calificado = esLeadCalificado(facturacion);
+
+  const capi = calificado
+    ? await enviarEvento({
+        nombre: "Lead",
+        eventId: eventId ?? `lead-${Date.now()}`,
+        email,
+        telefono,
+        atribucion,
+        ip,
+        userAgent,
+        url: `${site.url}/${flujo}`,
+        datos: { content_name: `lead_${flujo}`, flujo, origen },
+      })
+    : { ok: true, detalle: `sin evento: ${facturacion ?? "sin facturación"} no califica` };
 
   const leadId = await guardarLead({
     visitaId,
@@ -91,6 +101,7 @@ export async function POST(pedido: Request) {
     ghlContactId: ghl.ok ? ghl.contactId : undefined,
     ghlError: ghl.ok ? undefined : ghl.error,
     capiDetalle: capi.detalle,
+    calificado,
     ip,
     userAgent,
   });
@@ -101,7 +112,7 @@ export async function POST(pedido: Request) {
       visitaId,
       leadId,
       flujo,
-      detalle: { origen: origen ?? "", ghl: ghl.ok ? "ok" : "error" },
+      detalle: { origen: origen ?? "", ghl: ghl.ok ? "ok" : "error", calificado: String(calificado) },
       ip,
       userAgent,
     });

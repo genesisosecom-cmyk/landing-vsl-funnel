@@ -7,7 +7,7 @@ misma cookie de atribución (`gen_atr`, first-touch, 90 días):
 
 | Dónde | Para qué | Qué guarda |
 | --- | --- | --- |
-| **Meta** (píxel + Conversions API) | que los anuncios optimicen | `PageView`, `InitiateCheckout`, `Lead`, `Schedule` |
+| **Meta** (píxel + Conversions API) | que los anuncios optimicen | `PageView`, `InitiateCheckout`, `Lead` (sólo calificados), `Schedule` |
 | **GoHighLevel** | contactar al lead | contacto, tags, campos de UTM y las dos preguntas |
 | **`/tracking`** (Supabase) | leer el embudo lead por lead | visita, clicks, formulario empezado, lead, cita |
 
@@ -18,6 +18,29 @@ bloqueadores) y justo son los de abajo del embudo.
 
 Nada de esto puede hacer fallar el envío de un lead: si la base no está
 configurada o no responde, el lead igual llega a GHL y a Meta.
+
+## Qué lead alimenta al píxel
+
+El `Lead` sale **sólo si la facturación declarada es de 30M para arriba**
+(`aplicar.formulario.facturacion.califican`, en `content/landing.ts`).
+
+No es un capricho: Meta optimiza buscando más gente parecida a la que disparó
+el evento. De los primeros seis leads, cinco facturaban por debajo del piso del
+programa, y el píxel aprendió de esos cinco a traer más gente como ellos.
+
+El lead descalificado **entra igual** a GoHighLevel y al panel — existe y se
+contacta. Lo único que no hace es enseñarle nada al algoritmo. La columna
+`calificado` de `genesis_leads` guarda la decisión, y el panel mide la
+conversión sobre calificados, no sobre leads totales.
+
+La regla vive en `lib/calificacion.ts` y la aplican los tres lados que pueden
+disparar el evento: el navegador, `/api/lead` y el webhook de citas. Si los
+tres no coincidieran, alcanzaría con que uno disparara para que el evento
+llegara igual.
+
+En el flujo de agenda la pregunta la hace el formulario del calendario de GHL;
+si no llega la respuesta, no califica. Ante la duda no se alimenta: una señal
+de más es peor que una de menos.
 
 ## Los dos flujos del A/B
 

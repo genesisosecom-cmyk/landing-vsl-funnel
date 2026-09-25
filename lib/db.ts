@@ -65,6 +65,8 @@ export type LeadGuardado = {
   ghlContactId?: string;
   ghlError?: string;
   capiDetalle?: string;
+  /** Si disparó Lead a Meta. null cuando no se pudo saber. */
+  calificado?: boolean;
   ip?: string;
   userAgent?: string;
   agendadoEn?: string;
@@ -99,6 +101,7 @@ function filaDeLead(lead: LeadGuardado) {
     ghl_contact_id: lead.ghlContactId ?? null,
     ghl_error: lead.ghlError ?? null,
     capi_detalle: lead.capiDetalle ?? null,
+    calificado: lead.calificado ?? null,
     ip: lead.ip ?? null,
     user_agent: lead.userAgent ?? null,
     agendado_en: lead.agendadoEn ?? null,

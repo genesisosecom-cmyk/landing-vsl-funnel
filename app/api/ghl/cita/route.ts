@@ -3,6 +3,7 @@ import { enviarEvento } from "@/lib/capi";
 import { obtenerContacto } from "@/lib/ghl";
 import { asociarEvento, atribucionEnEspera, guardarLead, registrarEvento } from "@/lib/db";
 import { fusionarAtribucion } from "@/lib/atribucion";
+import { esLeadCalificado } from "@/lib/calificacion";
 import { site } from "@/content/landing";
 
 /**
@@ -85,18 +86,29 @@ export async function POST(pedido: Request) {
   const atribucion = fusionarAtribucion(ficha?.atribucion ?? {}, espera?.atribucion ?? {});
   const url = `${site.url}/agenda`;
 
-  // Primero el Lead: en este flujo el formulario del calendario es el
-  // formulario, y sin este evento el conjunto de anuncios no tiene con qué
-  // optimizar. Después el Schedule, que es la conversión de verdad.
-  const capiLead = await enviarEvento({
-    nombre: "Lead",
-    eventId: `lead-${clave}`,
-    email,
-    telefono,
-    atribucion,
-    url,
-    datos: { content_name: "lead_agenda", flujo: "agenda", origen: "calendario" },
-  });
+  /*
+   * El Lead, con la misma regla que el formulario propio: sólo si la
+   * facturación declarada llega al piso. Acá la pregunta la hace el formulario
+   * del calendario de GHL, así que puede no venir — y sin dato no califica,
+   * porque una señal de más le enseña a Meta a traer más gente como esa.
+   *
+   * El Schedule sale siempre: no es el evento por el que se optimiza, y sirve
+   * para saber cuántas agendas trajo cada creativo.
+   */
+  const facturacion = ficha?.facturacion;
+  const calificado = esLeadCalificado(facturacion);
+
+  const capiLead = calificado
+    ? await enviarEvento({
+        nombre: "Lead",
+        eventId: `lead-${clave}`,
+        email,
+        telefono,
+        atribucion,
+        url,
+        datos: { content_name: "lead_agenda", flujo: "agenda", origen: "calendario" },
+      })
+    : { ok: true, detalle: `sin evento: ${facturacion ?? "sin facturación"} no califica` };
 
   const capiSchedule = await enviarEvento({
     nombre: "Schedule",
@@ -116,6 +128,8 @@ export async function POST(pedido: Request) {
     flujo: "agenda",
     origen: "calendario",
     nombre,
+    facturacion,
+    calificado,
     email,
     telefono,
     atribucion,

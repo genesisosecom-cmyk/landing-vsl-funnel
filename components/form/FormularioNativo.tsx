@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
 import { anotarEvento, atribucionDeLaVisita, idDeVisita } from "@/lib/visita";
 import { aplicar } from "@/content/landing";
+import { esLeadCalificado } from "@/lib/calificacion";
 import { FlechaDeCta, clasesDeCta } from "@/components/ui/CtaButton";
 
 const copia = aplicar.formulario;
@@ -101,12 +102,24 @@ export function FormularioNativo({ flujo, origen, destino, className = "" }: Pro
 
       if (!respuesta.ok) throw new Error(`respuesta ${respuesta.status}`);
 
-      window.fbq?.(
-        "track",
-        "Lead",
-        { flujo, origen, content_name: `lead_${flujo}` },
-        { eventID: eventId },
-      );
+      /*
+       * El Lead del píxel sólo para los calificados, con la misma regla que
+       * aplica el servidor: si los dos lados no coincidieran, uno dispararía y
+       * el otro no, y el evento llegaría igual — deduplicar no sirve de nada
+       * cuando el que sobra es el único que salió.
+       *
+       * El lead descalificado ya quedó guardado arriba: existe en GHL y en el
+       * panel, y se contacta igual. Lo único que no hace es enseñarle a Meta
+       * a traer más gente como él.
+       */
+      if (esLeadCalificado(campos.facturacion)) {
+        window.fbq?.(
+          "track",
+          "Lead",
+          { flujo, origen, content_name: `lead_${flujo}` },
+          { eventID: eventId },
+        );
+      }
 
       router.push(destino);
     } catch (fallo) {

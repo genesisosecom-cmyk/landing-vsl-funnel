@@ -120,7 +120,12 @@ export async function upsertContacto(lead: Lead): Promise<ResultadoGhl> {
  */
 export async function obtenerContacto(
   contactId: string,
-): Promise<{ contacto: Record<string, unknown>; atribucion: Atribucion } | null> {
+): Promise<{
+  contacto: Record<string, unknown>;
+  atribucion: Atribucion;
+  /** Lo que haya respondido en el formulario del calendario, si lo pregunta. */
+  facturacion?: string;
+} | null> {
   const token = process.env.GHL_TOKEN;
   if (!token || !contactId) return null;
 
@@ -148,7 +153,12 @@ export async function obtenerContacto(
       landing: fuente?.url ?? undefined,
     };
 
-    return { contacto, atribucion };
+    const campos = Array.isArray(contacto.customFields) ? contacto.customFields : [];
+    const facturacion = campos.find(
+      (c: { id?: string }) => c?.id === CAMPOS.facturacion,
+    )?.value;
+
+    return { contacto, atribucion, facturacion: facturacion || undefined };
   } catch {
     return null;
   }

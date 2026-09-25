@@ -84,7 +84,17 @@ export function Panel({ leads, eventos }: { leads: FilaLead[]; eventos: FilaEven
               <table className="w-full border-collapse text-left text-[0.875rem]">
                 <thead>
                   <tr className="border-b border-linea bg-hueso">
-                    {["Anuncio", "Campaña", "Visitas", "Clicks", "Empezó", "Leads", "Citas", "Conv."].map(
+                    {[
+                      "Anuncio",
+                      "Campaña",
+                      "Visitas",
+                      "Clicks",
+                      "Empezó",
+                      "Leads",
+                      "Calif.",
+                      "Citas",
+                      "Conv. calif.",
+                    ].map(
                       (titulo) => (
                         <th key={titulo} className="dato whitespace-nowrap px-4 py-3">
                           {titulo}
@@ -101,10 +111,13 @@ export function Panel({ leads, eventos }: { leads: FilaLead[]; eventos: FilaEven
                       <td className="px-4 py-3 font-data">{c.visitas}</td>
                       <td className="px-4 py-3 font-data">{c.clicks}</td>
                       <td className="px-4 py-3 font-data">{c.empezados}</td>
-                      <td className="px-4 py-3 font-data text-titulo">{c.leads}</td>
+                      <td className="px-4 py-3 font-data">{c.leads}</td>
+                      <td className="px-4 py-3 font-data text-titulo">{c.calificados}</td>
                       <td className="px-4 py-3 font-data">{c.citas}</td>
+                      {/* La conversión que importa es sobre calificados: es la
+                          que decide qué creativo se queda. */}
                       <td className="px-4 py-3 font-data text-acento">
-                        {c.visitas > 0 ? `${((c.leads / c.visitas) * 100).toFixed(1)}%` : "—"}
+                        {c.visitas > 0 ? `${((c.calificados / c.visitas) * 100).toFixed(1)}%` : "—"}
                       </td>
                     </tr>
                   ))}
@@ -136,7 +149,18 @@ export function Panel({ leads, eventos }: { leads: FilaLead[]; eventos: FilaEven
             <table className="w-full border-collapse text-left text-[0.875rem]">
               <thead>
                 <tr className="border-b border-linea bg-hueso">
-                  {["Fecha", "Flujo", "Nombre", "Contacto", "Campaña", "Anuncio", "Factura", "GHL", "Cita"].map(
+                  {[
+                    "Fecha",
+                    "Flujo",
+                    "Nombre",
+                    "Contacto",
+                    "Campaña",
+                    "Anuncio",
+                    "Factura",
+                    "Píxel",
+                    "GHL",
+                    "Cita",
+                  ].map(
                     (titulo) => (
                       <th key={titulo} className="dato whitespace-nowrap px-4 py-3">
                         {titulo}
@@ -148,7 +172,7 @@ export function Panel({ leads, eventos }: { leads: FilaLead[]; eventos: FilaEven
               <tbody>
                 {visibles.length === 0 && (
                   <tr>
-                    <td colSpan={9} className="px-4 py-10 text-center text-sutil">
+                    <td colSpan={10} className="px-4 py-10 text-center text-sutil">
                       Todavía no hay leads con este filtro.
                     </td>
                   </tr>
@@ -178,6 +202,7 @@ type DatosEmbudo = {
   clicks: number;
   empezados: number;
   leads: number;
+  calificados: number;
   citas: number;
 };
 
@@ -191,6 +216,7 @@ function embudoDe(flujo: Flujo, leads: FilaLead[], eventos: FilaEvento[]): Datos
     clicks: delFlujo.filter((e) => e.tipo === "cta_click").length,
     empezados: delFlujo.filter((e) => e.tipo === "form_iniciado").length,
     leads: leadsDelFlujo.length,
+    calificados: leadsDelFlujo.filter((l) => l.calificado).length,
     citas: leadsDelFlujo.filter((l) => l.cita_id).length,
   };
 }
@@ -202,6 +228,7 @@ type FilaCreativo = {
   clicks: number;
   empezados: number;
   leads: number;
+  calificados: number;
   citas: number;
 };
 
@@ -220,7 +247,16 @@ function porCreativo(leads: FilaLead[], eventos: FilaEvento[]): FilaCreativo[] {
     const existente = filas.get(clave);
     if (existente) return existente;
 
-    const nueva: FilaCreativo = { anuncio, campana, visitas: 0, clicks: 0, empezados: 0, leads: 0, citas: 0 };
+    const nueva: FilaCreativo = {
+      anuncio,
+      campana,
+      visitas: 0,
+      clicks: 0,
+      empezados: 0,
+      leads: 0,
+      calificados: 0,
+      citas: 0,
+    };
     filas.set(clave, nueva);
     return nueva;
   };
@@ -243,13 +279,14 @@ function porCreativo(leads: FilaLead[], eventos: FilaEvento[]): FilaCreativo[] {
     if (!lead.utm_content) continue;
     const fila = traer(lead.utm_content, lead.utm_campaign ?? "");
     fila.leads += 1;
+    if (lead.calificado) fila.calificados += 1;
     if (lead.cita_id) fila.citas += 1;
   }
 
   return [...filas.values()].sort((a, b) => b.visitas - a.visitas || b.leads - a.leads);
 }
 
-function Embudo({ flujo, visitas, clicks, empezados, leads, citas }: DatosEmbudo) {
+function Embudo({ flujo, visitas, clicks, empezados, leads, calificados, citas }: DatosEmbudo) {
   // En el flujo de agenda no hay formulario propio: el paso "empezó" no existe
   // porque ocurre dentro del iframe de GHL, donde no vemos nada.
   const pasos: [string, number][] = [
@@ -257,21 +294,23 @@ function Embudo({ flujo, visitas, clicks, empezados, leads, citas }: DatosEmbudo
     ["Clicks CTA", clicks],
     ...(flujo === "agenda" ? [] : ([["Empezó", empezados]] as [string, number][])),
     ["Leads", leads],
+    ["Calificados", calificados],
     ["Citas", citas],
   ];
 
-  const conversion = visitas > 0 ? ((leads / visitas) * 100).toFixed(1) : "—";
+  // La conversión se mide sobre los calificados: los demás no son el negocio.
+  const conversion = visitas > 0 ? ((calificados / visitas) * 100).toFixed(1) : "—";
 
   return (
     <div className="rounded-pieza border border-linea p-6">
       <div className="mb-4 flex items-baseline justify-between">
         <h2 className="font-data text-[0.875rem] uppercase tracking-dato text-titulo">/{flujo}</h2>
         <p className="text-[0.875rem] text-sutil">
-          conversión <span className="text-acento">{conversion}%</span>
+          conv. calificada <span className="text-acento">{conversion}%</span>
         </p>
       </div>
 
-      <dl className="grid grid-cols-2 gap-4 sm:grid-cols-5">
+      <dl className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
         {pasos.map(([etiqueta, valor]) => (
           <div key={etiqueta} className="flex flex-col justify-between">
             <dt className="dato">{etiqueta}</dt>
@@ -310,6 +349,13 @@ function Fila({
         <td className="px-4 py-3">{lead.utm_campaign ?? "—"}</td>
         <td className="px-4 py-3">{lead.utm_content ?? "—"}</td>
         <td className="px-4 py-3">{lead.facturacion ?? "—"}</td>
+        <td className="px-4 py-3">
+          {lead.calificado ? (
+            <span className="text-acento">calificado</span>
+          ) : (
+            <span className="text-sutil">no</span>
+          )}
+        </td>
         <td className="px-4 py-3">
           {lead.ghl_contact_id ? (
             <span className="text-acento">ok</span>
@@ -353,6 +399,7 @@ function Detalle({ lead }: { lead: FilaLead }) {
     ["event_id (Meta)", lead.event_id],
     ["contacto GHL", lead.ghl_contact_id],
     ["error GHL", lead.ghl_error],
+    ["alimentó al píxel", lead.calificado ? "sí" : "no"],
     ["Conversions API", lead.capi_detalle],
   ];
 
