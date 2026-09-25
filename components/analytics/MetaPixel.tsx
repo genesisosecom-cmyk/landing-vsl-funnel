@@ -1,5 +1,9 @@
+"use client";
+
+import { usePathname } from "next/navigation";
 import Script from "next/script";
 import { site } from "@/content/landing";
+import { seMide } from "@/lib/medicion";
 
 /**
  * Píxel de Meta.
@@ -11,12 +15,16 @@ import { site } from "@/content/landing";
  * navegación del cliente y contaría PageView de más.
  *
  * El <noscript> va en el body, que es donde puede vivir una imagen.
+ *
+ * Es cliente sólo para leer la ruta: el panel no se mide, y nuestras visitas al
+ * tablero no tienen por qué entrar a los públicos de retargeting.
  */
 export function MetaPixel() {
   const id = site.tracking.metaPixelId;
+  const ruta = usePathname();
 
   // Sin ID no se carga nada: así el pixel no corre en desarrollo si no se configura.
-  if (!id) return null;
+  if (!id || !seMide(ruta ?? "/")) return null;
 
   return (
     <>

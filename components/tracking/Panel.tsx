@@ -1,8 +1,8 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import type { FilaEvento, FilaLead } from "@/lib/db";
-import { FLUJOS, type Flujo } from "@/lib/atribucion";
+import type { FilaEvento, FilaLead, FilaResumen } from "@/lib/db";
+import { FLUJOS, normalizarUtm, type Flujo } from "@/lib/atribucion";
 
 /**
  * Panel de tracking, lead por lead.
@@ -12,8 +12,10 @@ import { FLUJOS, type Flujo } from "@/lib/atribucion";
  * cada fila se abre y muestra de qué anuncio vino ese lead en concreto y qué
  * hizo antes de dejar los datos.
  *
- * Todo el filtrado es en memoria: son cientos de filas, no millones, y así el
- * panel responde sin ida y vuelta al servidor.
+ * Los números del embudo llegan ya sumados de la base (`resumen`), no de los
+ * eventos crudos: PostgREST corta en 1000 filas y contar acá significaba
+ * quedarse callado con el tráfico más viejo. `eventos` trae sólo los recorridos
+ * de los leads que se listan, que es para lo único que hacen falta uno por uno.
  */
 
 const FORMATO_FECHA = new Intl.DateTimeFormat("es-AR", {
@@ -30,7 +32,15 @@ function fecha(iso: string | null | undefined): string {
 
 type Filtro = "todos" | Flujo;
 
-export function Panel({ leads, eventos }: { leads: FilaLead[]; eventos: FilaEvento[] }) {
+export function Panel({
+  leads,
+  eventos,
+  resumen,
+}: {
+  leads: FilaLead[];
+  eventos: FilaEvento[];
+  resumen: FilaResumen[];
+}) {
   const [filtro, setFiltro] = useState<Filtro>("todos");
   const [abierto, setAbierto] = useState<string | null>(null);
 
@@ -39,11 +49,16 @@ export function Panel({ leads, eventos }: { leads: FilaLead[]; eventos: FilaEven
     [leads, filtro],
   );
 
-  const embudos = useMemo(() => FLUJOS.map((f) => embudoDe(f, leads, eventos)), [leads, eventos]);
+  const embudos = useMemo(() => FLUJOS.map((f) => embudoDe(f, leads, resumen)), [leads, resumen]);
 
   // El embudo por creativo: con varios anuncios corriendo, es el cruce que
   // decide cuál se apaga. El que no trae visitas no aparece.
-  const creativos = useMemo(() => porCreativo(leads, eventos), [leads, eventos]);
+  const creativos = useMemo(() => porCreativo(leads, resumen), [leads, resumen]);
+
+  const totalDeEventos = useMemo(
+    () => resumen.reduce((total, fila) => total + fila.eventos, 0),
+    [resumen],
+  );
 
   // Los eventos de una visita se agrupan una vez y no en cada fila abierta.
   const porVisita = useMemo(() => {
@@ -65,8 +80,11 @@ export function Panel({ leads, eventos }: { leads: FilaLead[]; eventos: FilaEven
             <p className="dato">Génesis OS</p>
             <h1 className="text-[2rem] leading-tight text-titulo">Tracking</h1>
           </div>
-          <p className="text-[0.875rem] text-sutil">
-            {leads.length} leads · {eventos.length} eventos registrados
+          <p className="text-right text-[0.875rem] text-sutil">
+            {leads.length} leads · {totalDeEventos} eventos registrados
+            <span className="block text-anotacion">
+              cada paso del embudo cuenta personas distintas, no recargas
+            </span>
           </p>
         </header>
 
@@ -206,15 +224,20 @@ type DatosEmbudo = {
   citas: number;
 };
 
-function embudoDe(flujo: Flujo, leads: FilaLead[], eventos: FilaEvento[]): DatosEmbudo {
-  const delFlujo = eventos.filter((e) => e.flujo === flujo);
+function embudoDe(flujo: Flujo, leads: FilaLead[], resumen: FilaResumen[]): DatosEmbudo {
+  const delFlujo = resumen.filter((r) => r.flujo === flujo);
   const leadsDelFlujo = leads.filter((l) => l.flujo === flujo);
+
+  // Personas distintas, no eventos: con eventos, una persona que recarga tres
+  // veces valía tres visitas y la conversión salía más baja de lo que es.
+  const personas = (tipo: string) =>
+    delFlujo.filter((r) => r.tipo === tipo).reduce((total, r) => total + r.visitas, 0);
 
   return {
     flujo,
-    visitas: delFlujo.filter((e) => e.tipo === "visita").length,
-    clicks: delFlujo.filter((e) => e.tipo === "cta_click").length,
-    empezados: delFlujo.filter((e) => e.tipo === "form_iniciado").length,
+    visitas: personas("visita"),
+    clicks: personas("cta_click"),
+    empezados: personas("form_iniciado"),
     leads: leadsDelFlujo.length,
     calificados: leadsDelFlujo.filter((l) => l.calificado).length,
     citas: leadsDelFlujo.filter((l) => l.cita_id).length,
@@ -235,11 +258,13 @@ type FilaCreativo = {
 /**
  * Agrupa el embudo por anuncio.
  *
- * Los eventos traen el creativo en `detalle`; los leads, en su propia columna.
- * Se cuentan por separado y se juntan por el par campaña/anuncio, que es lo
- * que identifica un creativo cuando el mismo nombre se reusa entre campañas.
+ * El resumen trae el creativo tal como entró por la URL; los leads, en su
+ * propia columna. Se cuentan por separado y se juntan por el par
+ * campaña/anuncio, que es lo que identifica un creativo cuando el mismo nombre
+ * se reusa entre campañas. `normalizarUtm` en las dos puntas: si no, un click
+ * que llegó encodeado dos veces abre una fila aparte para el mismo anuncio.
  */
-function porCreativo(leads: FilaLead[], eventos: FilaEvento[]): FilaCreativo[] {
+function porCreativo(leads: FilaLead[], resumen: FilaResumen[]): FilaCreativo[] {
   const filas = new Map<string, FilaCreativo>();
 
   const traer = (anuncio: string, campana: string) => {
@@ -261,23 +286,22 @@ function porCreativo(leads: FilaLead[], eventos: FilaEvento[]): FilaCreativo[] {
     return nueva;
   };
 
-  const texto = (valor: unknown) => (typeof valor === "string" && valor ? valor : "");
+  const texto = (valor: string | null | undefined) => normalizarUtm(valor ?? undefined) ?? "";
 
-  for (const evento of eventos) {
-    const anuncio = texto(evento.detalle?.utm_content);
-    const campana = texto(evento.detalle?.utm_campaign);
+  for (const linea of resumen) {
+    const anuncio = texto(linea.utm_content);
     // Sin anuncio no vino de pauta: es tráfico directo y no entra a la tabla.
     if (!anuncio) continue;
 
-    const fila = traer(anuncio, campana);
-    if (evento.tipo === "visita") fila.visitas += 1;
-    if (evento.tipo === "cta_click") fila.clicks += 1;
-    if (evento.tipo === "form_iniciado") fila.empezados += 1;
+    const fila = traer(anuncio, texto(linea.utm_campaign));
+    if (linea.tipo === "visita") fila.visitas += linea.visitas;
+    if (linea.tipo === "cta_click") fila.clicks += linea.visitas;
+    if (linea.tipo === "form_iniciado") fila.empezados += linea.visitas;
   }
 
   for (const lead of leads) {
     if (!lead.utm_content) continue;
-    const fila = traer(lead.utm_content, lead.utm_campaign ?? "");
+    const fila = traer(texto(lead.utm_content), texto(lead.utm_campaign));
     fila.leads += 1;
     if (lead.calificado) fila.calificados += 1;
     if (lead.cita_id) fila.citas += 1;
@@ -291,7 +315,7 @@ function Embudo({ flujo, visitas, clicks, empezados, leads, calificados, citas }
   // porque ocurre dentro del iframe de GHL, donde no vemos nada.
   const pasos: [string, number][] = [
     ["Visitas", visitas],
-    ["Clicks CTA", clicks],
+    ["Tocó el CTA", clicks],
     ...(flujo === "agenda" ? [] : ([["Empezó", empezados]] as [string, number][])),
     ["Leads", leads],
     ["Calificados", calificados],
@@ -346,8 +370,8 @@ function Fila({
           <span className="block">{lead.telefono ?? "—"}</span>
           <span className="block text-sutil">{lead.email ?? lead.instagram ?? ""}</span>
         </td>
-        <td className="px-4 py-3">{lead.utm_campaign ?? "—"}</td>
-        <td className="px-4 py-3">{lead.utm_content ?? "—"}</td>
+        <td className="px-4 py-3">{normalizarUtm(lead.utm_campaign ?? undefined) ?? "—"}</td>
+        <td className="px-4 py-3">{normalizarUtm(lead.utm_content ?? undefined) ?? "—"}</td>
         <td className="px-4 py-3">{lead.facturacion ?? "—"}</td>
         <td className="px-4 py-3">
           {lead.calificado ? (

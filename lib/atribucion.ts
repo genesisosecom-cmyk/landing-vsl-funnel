@@ -62,6 +62,32 @@ export function serializarAtribucion(atribucion: Atribucion): string {
 }
 
 /**
+ * Deshace el doble encodeado que llega en algunos clicks de Meta.
+ *
+ * El nombre del anuncio viaja en la URL encodeado por Meta, y hay navegaciones
+ * —las del scraper de Facebook, y algunos clicks desde la app— donde llega
+ * encodeado dos veces. El navegador decodifica una sola vez, así que lo que
+ * queda guardado es `DOLOR+3+%7C+MARGEN` en lugar de `DOLOR 3 | MARGEN`, y el
+ * panel ve dos creativos distintos donde hay uno solo.
+ *
+ * Se toca sólo lo que evidentemente quedó a medio decodificar: si el valor ya
+ * trae espacios y nada que parezca un escape, se deja como está.
+ */
+export function normalizarUtm(valor: string | undefined): string | undefined {
+  if (!valor) return valor;
+
+  const aMedias = /%[0-9A-Fa-f]{2}/.test(valor) || (!valor.includes(" ") && valor.includes("+"));
+  if (!aMedias) return valor;
+
+  try {
+    return decodeURIComponent(valor.replace(/\+/g, " ")) || valor;
+  } catch {
+    // Un % suelto —una campaña "50% OFF"— rompe decodeURIComponent: se deja.
+    return valor;
+  }
+}
+
+/**
  * Limpia una atribución que llegó de afuera.
  *
  * El cuerpo lo manda el navegador, así que sólo se copian las claves que
@@ -77,11 +103,11 @@ export function atribucionSegura(crudo: unknown): Atribucion {
   };
 
   return {
-    utmSource: texto(a.utmSource),
-    utmMedium: texto(a.utmMedium),
-    utmCampaign: texto(a.utmCampaign),
-    utmContent: texto(a.utmContent),
-    utmTerm: texto(a.utmTerm),
+    utmSource: normalizarUtm(texto(a.utmSource)),
+    utmMedium: normalizarUtm(texto(a.utmMedium)),
+    utmCampaign: normalizarUtm(texto(a.utmCampaign)),
+    utmContent: normalizarUtm(texto(a.utmContent)),
+    utmTerm: normalizarUtm(texto(a.utmTerm)),
     fbclid: texto(a.fbclid),
     fbp: texto(a.fbp),
     fbc: texto(a.fbc),

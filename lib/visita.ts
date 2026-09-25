@@ -7,7 +7,12 @@
  * panel sólo podría mostrar los que completaron, que es justo la mitad
  * aburrida del embudo.
  */
-import { COOKIE_ATRIBUCION, leerAtribucion, type Atribucion } from "./atribucion";
+import {
+  COOKIE_ATRIBUCION,
+  leerAtribucion,
+  normalizarUtm,
+  type Atribucion,
+} from "./atribucion";
 
 export const COOKIE_VISITA = "gen_vid";
 export const DIAS_DE_VIDA_VISITA = 90;
@@ -124,12 +129,16 @@ export function atribucionDeLaUrl(): Atribucion {
   const parametros = new URLSearchParams(window.location.search);
   const fbclid = parametros.get("fbclid") ?? undefined;
 
+  // normalizarUtm porque hay clicks de Meta que llegan encodeados dos veces y
+  // el mismo creativo terminaba contado como dos.
+  const utm = (nombre: string) => normalizarUtm(parametros.get(nombre) ?? undefined);
+
   return {
-    utmSource: parametros.get("utm_source") ?? undefined,
-    utmMedium: parametros.get("utm_medium") ?? undefined,
-    utmCampaign: parametros.get("utm_campaign") ?? undefined,
-    utmContent: parametros.get("utm_content") ?? undefined,
-    utmTerm: parametros.get("utm_term") ?? undefined,
+    utmSource: utm("utm_source"),
+    utmMedium: utm("utm_medium"),
+    utmCampaign: utm("utm_campaign"),
+    utmContent: utm("utm_content"),
+    utmTerm: utm("utm_term"),
     fbclid,
     fbp: leerCookie("_fbp"),
     // _fbc la arma el píxel a partir del fbclid, pero puede tardar: si no está

@@ -17,6 +17,8 @@ const CLAVE = process.env.SUPABASE_SERVICE_KEY;
 
 const TABLA_LEADS = "genesis_leads";
 const TABLA_EVENTOS = "genesis_eventos";
+/** Vista: el embudo ya contado por Postgres. Ver docs/sql/tracking.sql. */
+const VISTA_RESUMEN = "genesis_resumen";
 
 export function hayBase(): boolean {
   return Boolean(URL_BASE && CLAVE);
@@ -171,11 +173,64 @@ export async function listarLeads(limite = 300): Promise<FilaLead[]> {
   return (await respuesta.json().catch(() => [])) as FilaLead[];
 }
 
-/** Los eventos de las visitas que aparecen en el panel, para armar la línea de tiempo. */
-export async function listarEventos(limite = 2000): Promise<FilaEvento[]> {
-  const respuesta = await rest(`${TABLA_EVENTOS}?select=*&order=creado_en.desc&limit=${limite}`);
+/** Una fila del embudo ya sumado: un tipo de evento, en un flujo, para un creativo. */
+export type FilaResumen = {
+  tipo: string;
+  flujo: string;
+  utm_campaign: string;
+  utm_content: string;
+  /** Eventos, contando repeticiones (dos cargas de la misma persona son dos). */
+  eventos: number;
+  /** Visitantes distintos: es lo que se lee como embudo. */
+  visitas: number;
+};
+
+/**
+ * El embudo, contado en la base.
+ *
+ * Antes el panel se traía los eventos crudos y los sumaba en memoria, y eso
+ * tenía un techo que no se veía: PostgREST devuelve 1000 filas como máximo,
+ * pida lo que pida el cliente. Con 1300 eventos el panel mostraba el último
+ * tramo de tráfico y el primer día entero simplemente no existía, sin ningún
+ * aviso de que faltaba algo.
+ *
+ * Ahora la cuenta la hace Postgres y vuelve una fila por tipo/flujo/creativo:
+ * son decenas, y crecen con la cantidad de anuncios, no con la de visitas.
+ */
+export async function listarResumen(): Promise<FilaResumen[]> {
+  const respuesta = await rest(`${VISTA_RESUMEN}?select=*`);
   if (!respuesta?.ok) return [];
-  return (await respuesta.json().catch(() => [])) as FilaEvento[];
+  return (await respuesta.json().catch(() => [])) as FilaResumen[];
+}
+
+/**
+ * Los eventos de visitas concretas, para la línea de tiempo de cada lead.
+ *
+ * Se piden por id en lugar de traer los últimos N: son los recorridos de los
+ * leads que el panel muestra, y así ninguno queda sin su línea de tiempo por
+ * haber caído del otro lado del corte.
+ */
+export async function eventosDeVisitas(visitas: (string | null)[]): Promise<FilaEvento[]> {
+  const unicas = [...new Set(visitas.filter((v): v is string => Boolean(v)))];
+  if (unicas.length === 0) return [];
+
+  // En tandas para no armar una URL de kilómetros; las tandas van en paralelo.
+  const tandas: string[][] = [];
+  for (let i = 0; i < unicas.length; i += 50) tandas.push(unicas.slice(i, i + 50));
+
+  const respuestas = await Promise.all(
+    tandas.map((tanda) =>
+      rest(
+        `${TABLA_EVENTOS}?select=*&visita_id=in.(${tanda.join(",")})&order=creado_en.desc&limit=1000`,
+      ),
+    ),
+  );
+
+  const filas = await Promise.all(
+    respuestas.map(async (r) => (r?.ok ? ((await r.json().catch(() => [])) as FilaEvento[]) : [])),
+  );
+
+  return filas.flat();
 }
 
 /* -------------------------------------------------------------------------- */

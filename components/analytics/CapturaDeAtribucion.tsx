@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import { seMide } from "@/lib/medicion";
 import { anotarEvento, atribucionDeLaUrl, leerCookie as cookie } from "@/lib/visita";
 import {
   COOKIE_ATRIBUCION,
@@ -19,6 +20,8 @@ import {
  */
 export function CapturaDeAtribucion() {
   useEffect(() => {
+    if (!seMide(location.pathname)) return;
+
     const guardada = leerAtribucion(cookie(COOKIE_ATRIBUCION));
     const nueva: Atribucion = atribucionDeLaUrl();
 
@@ -42,6 +45,8 @@ export function CapturaDeAtribucion() {
   // origen una sola vez, pero cada llegada a la página es una fila del panel.
   // sessionStorage evita contar de nuevo al volver atrás o recargar.
   useEffect(() => {
+    if (!seMide(location.pathname)) return;
+
     try {
       if (sessionStorage.getItem("gen_visita_anotada")) return;
       sessionStorage.setItem("gen_visita_anotada", "1");

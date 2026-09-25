@@ -78,12 +78,43 @@ La atribución llega por dos caminos que se completan entre sí:
 El webhook y el aviso de gracias pueden llegar en cualquier orden, así que cada
 uno busca al otro. Si el redirect trae el id del contacto —`?agendado=1&contact_id=…`—
 la unión es exacta; si no, se cae a la cita sin atribuir más reciente dentro de
-una ventana de diez minutos.
+una ventana de cinco minutos.
 
 Un límite honesto: el webhook suele ganar la carrera, así que el `Lead` y el
 `Schedule` que salen a Meta se arman con lo que haya en ese momento. La
 atribución tardía corrige la fila del panel y los campos de GHL, no el evento
 que ya salió — que igual matchea por mail y teléfono hasheados.
+
+## Cómo cuenta el panel
+
+Los números del embudo salen de la vista `genesis_resumen`, no de los eventos
+crudos. El motivo es un techo que no se veía: PostgREST devuelve **1000 filas
+como máximo**, pida lo que pida el cliente, así que el panel contaba sobre los
+últimos 1000 eventos y el tráfico más viejo desaparecía en silencio. Con 1313
+eventos ya se estaba comiendo el primer día entero de pauta.
+
+Contando en la base, el panel trae una fila por tipo/flujo/creativo: crecen con
+la cantidad de anuncios, no con la de visitas.
+
+Dos cosas que conviene tener claras al leerlo:
+
+- **Cada paso cuenta personas distintas, no repeticiones.** Alguien que recarga
+  tres veces es una visita, no tres. Antes eran tres, y la conversión salía más
+  baja de lo que era.
+- **Los eventos uno por uno se piden sólo para los leads listados**
+  (`eventosDeVisitas`), que es para lo único que hacen falta: la línea de tiempo
+  de cada fila.
+
+`/tracking` no se mide a sí mismo (`lib/medicion.ts`): abrir el panel no anota
+una visita ni manda un `PageView` al píxel. Antes sí, y eran cuarenta visitas
+nuestras mezcladas con las de la pauta.
+
+Un detalle del nombre del creativo: hay clicks —los del scraper de Facebook,
+algunos desde la app— donde los UTM llegan encodeados dos veces y el navegador
+decodifica una sola, así que lo que se guardaba era `DOLOR+3+%7C+MARGEN` en vez
+de `DOLOR 3 | MARGEN` y el panel abría dos filas para el mismo anuncio.
+`normalizarUtm` lo deshace al capturar y también al leer, para que las filas
+viejas se junten con las nuevas.
 
 ## Configuración en Vercel
 

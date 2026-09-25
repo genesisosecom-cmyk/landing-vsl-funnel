@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { cookies } from "next/headers";
 import { Acceso } from "@/components/tracking/Acceso";
 import { Panel } from "@/components/tracking/Panel";
-import { hayBase, listarEventos, listarLeads } from "@/lib/db";
+import { eventosDeVisitas, hayBase, listarLeads, listarResumen } from "@/lib/db";
 import { COOKIE_PANEL, sesionValida } from "@/lib/panel";
 
 export const metadata: Metadata = {
@@ -33,8 +33,11 @@ export default async function Tracking({
     );
   }
 
-  // Las dos consultas son independientes: van juntas para no encadenar esperas.
-  const [leads, eventos] = await Promise.all([listarLeads(), listarEventos()]);
+  // El embudo sale ya sumado de la base; los leads, fila por fila.
+  const [leads, resumen] = await Promise.all([listarLeads(), listarResumen()]);
 
-  return <Panel leads={leads} eventos={eventos} />;
+  // La línea de tiempo se pide después porque depende de qué visitas hay que mirar.
+  const eventos = await eventosDeVisitas(leads.map((l) => l.visita_id));
+
+  return <Panel leads={leads} eventos={eventos} resumen={resumen} />;
 }

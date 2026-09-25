@@ -75,3 +75,28 @@ alter table public.genesis_eventos enable row level security;
 -- Las tablas nuevas heredan permisos para anon/authenticated en Supabase.
 revoke all on public.genesis_leads from anon, authenticated;
 revoke all on public.genesis_eventos from anon, authenticated;
+
+-- El embudo, ya sumado.
+--
+-- El panel lo contaba trayéndose los eventos crudos, y ahí había un techo que
+-- no se veía: PostgREST devuelve 1000 filas como máximo, pida lo que pida el
+-- cliente. Con 1300 eventos el panel mostraba el último tramo de tráfico y el
+-- primer día entero no existía, sin ningún aviso de que faltaba algo.
+--
+-- Una fila por tipo/flujo/creativo: crecen con la cantidad de anuncios, no con
+-- la de visitas. `visitas` cuenta personas distintas, que es como se lee el
+-- embudo; `eventos` cuenta repeticiones incluidas.
+create or replace view public.genesis_resumen
+with (security_invoker = true) as
+select
+  e.tipo,
+  coalesce(e.flujo, '') as flujo,
+  coalesce(e.detalle->>'utm_campaign', '') as utm_campaign,
+  coalesce(e.detalle->>'utm_content', '') as utm_content,
+  count(*)::int as eventos,
+  count(distinct e.visita_id)::int as visitas
+from public.genesis_eventos e
+group by 1, 2, 3, 4;
+
+revoke all on public.genesis_resumen from anon, authenticated;
+grant select on public.genesis_resumen to service_role;
