@@ -1,23 +1,31 @@
 import { NextResponse } from "next/server";
 import { enviarEvento } from "@/lib/capi";
 import { obtenerContacto } from "@/lib/ghl";
-import { asociarEvento, atribucionEnEspera, guardarLead, registrarEvento } from "@/lib/db";
-import { fusionarAtribucion } from "@/lib/atribucion";
-import { esLeadCalificado } from "@/lib/calificacion";
+import {
+  anotarCita,
+  atribucionDeFila,
+  guardarLead,
+  leadDelContacto,
+  registrarEvento,
+} from "@/lib/db";
+import { FLUJO, fusionarAtribucion } from "@/lib/atribucion";
 import { site } from "@/content/landing";
 
 /**
  * Webhook de GoHighLevel para "cita agendada".
  *
- * En el flujo de agenda esta ruta es la única fuente de leads: el visitante
- * completa el formulario del calendario, que vive dentro del iframe de GHL, y
- * nosotros no vemos nada de eso desde la página. Por eso acá se dispara el
- * Lead además del Schedule: sin eso Meta no recibe ninguna conversión de ese
- * lado del A/B y deja de optimizar por él.
+ * Con un solo flujo, la cita ya no es una puerta de entrada: el lead entró por
+ * el formulario de la landing, lo escribimos por WhatsApp y la llamada se
+ * agenda después. Así que esta ruta no crea leads, los completa.
  *
- * La atribución se lee del contacto en GHL, no del webhook: los UTM viajan en
- * la URL del iframe, GHL los guarda al crear el contacto y `obtenerContacto`
- * los trae de vuelta. Es el puente entre el anuncio y la agenda.
+ * Por eso **acá no sale ningún Lead**. Lo dispara el formulario, y sólo si la
+ * facturación declarada califica. Si además lo mandáramos desde acá, la misma
+ * persona contaría dos veces en Meta —dos `event_id` distintos, nada que
+ * deduplicar— y encima haría calificar por la puerta de atrás a alguien que el
+ * formulario había dejado afuera.
+ *
+ * El Schedule sí sale siempre: no es el evento por el que se optimiza, y es la
+ * única forma de saber cuántas llamadas agendadas trajo cada creativo.
  *
  * Se valida con un token en la URL: los webhooks de GHL no van firmados.
  */
@@ -75,84 +83,83 @@ export async function POST(pedido: Request) {
     Object.keys(cita ?? {}).join(","),
   );
 
-  /*
-   * La atribución sale de dos lados. La de GHL es la que guardó al crear el
-   * contacto: no trae las cookies del píxel y, si la persona ya existía en el
-   * CRM, es la de aquella primera vez. La nuestra la deja la página de gracias
-   * cuando GHL devuelve al visitante después de reservar, y esa es de primera
-   * mano — por eso pisa, y la de GHL tapa los huecos.
-   */
-  const espera = await atribucionEnEspera();
-  const atribucion = fusionarAtribucion(ficha?.atribucion ?? {}, espera?.atribucion ?? {});
-  const url = `${site.url}/agenda`;
+  // De quién es esta cita. La unión es por identidad, no por ventana de tiempo.
+  const lead = await leadDelContacto({ contactId, email, telefono });
 
   /*
-   * El Lead, con la misma regla que el formulario propio: sólo si la
-   * facturación declarada llega al piso. Acá la pregunta la hace el formulario
-   * del calendario de GHL, así que puede no venir — y sin dato no califica,
-   * porque una señal de más le enseña a Meta a traer más gente como esa.
-   *
-   * El Schedule sale siempre: no es el evento por el que se optimiza, y sirve
-   * para saber cuántas agendas trajo cada creativo.
+   * La atribución de la fila del lead es la mejor que tenemos: es de primera
+   * mano y trae _fbp y _fbc, que GHL no guarda. La de GHL tapa los huecos —y es
+   * todo lo que hay cuando la cita no corresponde a ningún lead nuestro.
    */
-  const facturacion = ficha?.facturacion;
-  const calificado = esLeadCalificado(facturacion);
+  const atribucion = fusionarAtribucion(ficha?.atribucion ?? {}, lead ? atribucionDeFila(lead) : {});
+  const url = `${site.url}${lead?.landing ?? `/${FLUJO}`}`;
 
-  const capiLead = calificado
-    ? await enviarEvento({
-        nombre: "Lead",
-        eventId: `lead-${clave}`,
-        email,
-        telefono,
-        atribucion,
-        url,
-        datos: { content_name: "lead_agenda", flujo: "agenda", origen: "calendario" },
-      })
-    : { ok: true, detalle: `sin evento: ${facturacion ?? "sin facturación"} no califica` };
-
-  const capiSchedule = await enviarEvento({
+  const capi = await enviarEvento({
     nombre: "Schedule",
     eventId: `schedule-${clave}`,
     email,
     telefono,
     atribucion,
     url,
-    datos: { content_name: "agenda_confirmada", flujo: "agenda" },
+    datos: { content_name: "agenda_confirmada", flujo: lead?.flujo ?? FLUJO },
   });
 
-  if (!capiLead.ok) console.warn("[CAPI-LEAD-AGENDA]", capiLead.detalle);
-  if (!capiSchedule.ok) console.warn("[CAPI-SCHEDULE]", capiSchedule.detalle);
+  if (!capi.ok) console.warn("[CAPI-SCHEDULE]", capi.detalle);
 
+  const detalle = { cita: clave, inicio: inicio ?? "" };
+
+  if (lead) {
+    /*
+     * `anotarCita` no escribe si la fila ya tenía una cita, y devuelve si
+     * escribió. Con eso, el reintento del webhook no duplica el evento de la
+     * línea de tiempo, y una reprogramación no se cuenta como una llamada nueva.
+     */
+    const anotada = await anotarCita(lead.id, {
+      citaId: clave,
+      inicio,
+      capiDetalle: `schedule: ${capi.detalle}`,
+    });
+
+    if (anotada) {
+      await registrarEvento({
+        tipo: "cita",
+        visitaId: lead.visita_id ?? undefined,
+        leadId: lead.id,
+        flujo: lead.flujo,
+        detalle,
+      });
+    } else {
+      console.info("[GHL-CITA] el lead ya tenía cita anotada:", lead.id);
+    }
+
+    return NextResponse.json({ ok: true, lead: lead.id, anotada });
+  }
+
+  /*
+   * Nadie en la base con ese contacto: alguien agendó sin pasar por la landing
+   * —le mandamos el link nosotros, vino de otro lado—. Se guarda para que la
+   * llamada exista en el panel, sin Lead y sin marcarla como calificada: no
+   * sabemos de dónde vino ni qué factura, y una señal inventada es peor que
+   * ninguna.
+   */
   const leadId = await guardarLead({
-    visitaId: espera?.visitaId,
-    flujo: "agenda",
+    flujo: FLUJO,
     origen: "calendario",
     nombre,
-    facturacion,
-    calificado,
+    facturacion: ficha?.facturacion,
     email,
     telefono,
     atribucion,
-    eventId: `lead-${clave}`,
     ghlContactId: contactId,
-    capiDetalle: `lead: ${capiLead.detalle} | schedule: ${capiSchedule.detalle}`,
+    capiDetalle: `schedule: ${capi.detalle}`,
     agendadoEn: new Date().toISOString(),
     citaId: clave,
     citaInicio: inicio,
   });
 
   if (leadId) {
-    await registrarEvento({
-      tipo: "cita",
-      visitaId: espera?.visitaId,
-      leadId,
-      flujo: "agenda",
-      detalle: { cita: clave, inicio: inicio ?? "" },
-    });
-
-    // La atribución que estaba esperando ya tiene cita: se le engancha.
-    if (espera) await asociarEvento(espera.eventoId, leadId);
+    await registrarEvento({ tipo: "cita", leadId, flujo: FLUJO, detalle });
   }
 
-  return NextResponse.json({ ok: true });
+  return NextResponse.json({ ok: true, lead: leadId, nuevo: true });
 }

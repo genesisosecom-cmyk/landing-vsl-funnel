@@ -7,7 +7,7 @@ misma cookie de atribución (`gen_atr`, first-touch, 90 días):
 
 | Dónde | Para qué | Qué guarda |
 | --- | --- | --- |
-| **Meta** (píxel + Conversions API) | que los anuncios optimicen | `PageView`, `InitiateCheckout`, `Lead` (sólo calificados), `Schedule` |
+| **Meta** (píxel + Conversions API) | que los anuncios optimicen | `PageView`, `InitiateCheckout`, `Lead` (sólo calificados), `Schedule` (llamada agendada) |
 | **GoHighLevel** | contactar al lead | contacto, tags, campos de UTM y las dos preguntas |
 | **`/tracking`** (Supabase) | leer el embudo lead por lead | visita, clicks, formulario empezado, lead, cita |
 
@@ -33,57 +33,53 @@ contacta. Lo único que no hace es enseñarle nada al algoritmo. La columna
 `calificado` de `genesis_leads` guarda la decisión, y el panel mide la
 conversión sobre calificados, no sobre leads totales.
 
-La regla vive en `lib/calificacion.ts` y la aplican los tres lados que pueden
-disparar el evento: el navegador, `/api/lead` y el webhook de citas. Si los
-tres no coincidieran, alcanzaría con que uno disparara para que el evento
-llegara igual.
+La regla vive en `lib/calificacion.ts` y la aplican los dos lados que disparan
+el evento: el navegador y `/api/lead`. Los dos usan la misma función porque si
+no coincidieran, alcanzaría con que uno disparara para que el evento llegara
+igual — deduplicar no sirve de nada cuando el que sobra es el único que salió.
 
-En el flujo de agenda la pregunta la hace el formulario del calendario de GHL;
-si no llega la respuesta, no califica. Ante la duda no se alimenta: una señal
-de más es peor que una de menos.
+## El flujo
 
-## Los dos flujos del A/B
+Uno solo: la landing con el formulario propio embebido.
 
-El reparto lo hace `/ir`: todos los anuncios apuntan ahí, la ruta sortea la
-variante, la guarda en la cookie `gen_var` (90 días) y redirige con 307 sin
-caché, pasando todos los parámetros al destino. La decisión de qué variante
-gana se toma leyendo `/tracking`, no mirando el reparto de presupuesto de Meta.
+`/ir` es la URL que tienen los anuncios publicados y hoy sólo redirige a
+`/formulario`, pasando todos los parámetros enteros. `/agenda` también redirige
+ahí. El POST a `/api/lead` lleva los datos y la atribución juntos, así que no hay
+pieza intermedia donde perder el origen, y se ve todo el recorrido: entró, tocó
+un botón, empezó a completar, dejó los datos.
 
-**`/formulario`** — formulario propio embebido en la página. El POST a
-`/api/lead` lleva los datos y la atribución juntos, así que no hay pieza
-intermedia donde perder el origen. Se ve todo el recorrido: entró, tocó un
-botón, empezó a completar, dejó los datos.
+Hubo un A/B contra `/agenda`, que embebía el calendario de GHL sin formulario
+previo. Se cerró: dentro del iframe no se podía preguntar la facturación antes de
+convertir —así que ningún lead de esa variante podía calificar— ni ver nada del
+recorrido. Las filas viejas siguen en la base y el panel las sigue mostrando: la
+lista de flujos sale de los datos, no de una constante.
 
-**`/agenda`** — calendario de GHL embebido, sin formulario previo. Los datos
-los pide el formulario del propio calendario. Del recorrido dentro del iframe
-no vemos nada: ese flujo tiene visitas, clicks y citas, pero no "empezó a
-completar".
+## La llamada agendada
 
-La atribución llega por dos caminos que se completan entre sí:
+La llamada se agenda después del formulario, en el calendario de GHL que le
+mandamos por WhatsApp. El workflow de GHL avisa a `/api/ghl/cita` y esa ruta
+**completa la fila del lead**: no crea una nueva.
 
-1. **Por GHL.** Los UTM viajan en la URL del iframe, GHL los guarda al crear el
-   contacto, y el webhook de citas los lee de vuelta con `obtenerContacto`.
-   Verificado con una reserva real: `utm_source`, `utm_medium`, `utm_campaign`,
-   `utm_content` y `fbclid` llegan enteros. Tiene dos agujeros: no guarda `_fbp`
-   ni `_fbc`, y **sólo escribe la atribución cuando crea el contacto** — si la
-   persona ya estaba en el CRM queda la de aquella primera vez. Con una
-   audiencia de retargeting, eso no es un caso raro.
+La unión es por identidad —el `ghl_contact_id` que guardamos al crear el lead, y
+si falta, el mail o el teléfono— y no tiene ventana de tiempo: entre el
+formulario y la llamada pueden pasar días, que es lo normal. Antes esto era un
+heurístico con ventana de cinco minutos, porque en el flujo de agenda la reserva
+y el aviso de la página de gracias llegaban casi juntos y sin nada en común; ese
+heurístico una vez se llevó la fila equivocada.
 
-2. **Por `/gracias`.** Después de reservar, GHL devuelve al visitante a nuestra
-   página de agradecimiento con `?agendado=1`. Ahí volvemos a estar en nuestro
-   dominio con la cookie intacta, y `AtribucionDeAgenda` manda la atribución de
-   primera mano a `/api/agenda/atribucion`, que la pega a la cita. Ésta gana
-   sobre la de GHL y la de GHL tapa los huecos.
+De ahí sale un `Schedule` —nunca un `Lead`, ver arriba— con la atribución
+guardada en la fila del lead, que es de primera mano y trae `_fbp` y `_fbc`. Lo
+que GHL tenga guardado del contacto tapa los huecos.
 
-El webhook y el aviso de gracias pueden llegar en cualquier orden, así que cada
-uno busca al otro. Si el redirect trae el id del contacto —`?agendado=1&contact_id=…`—
-la unión es exacta; si no, se cae a la cita sin atribuir más reciente dentro de
-una ventana de cinco minutos.
+Dos casos que el webhook maneja solo:
 
-Un límite honesto: el webhook suele ganar la carrera, así que el `Lead` y el
-`Schedule` que salen a Meta se arman con lo que haya en ese momento. La
-atribución tardía corrige la fila del panel y los campos de GHL, no el evento
-que ya salió — que igual matchea por mail y teléfono hasheados.
+- **GHL reintenta** el mismo aviso: la fila sólo se escribe si todavía no tenía
+  cita, así que el evento de la línea de tiempo no se duplica. A Meta el
+  reintento no le molesta, el `event_id` es el mismo.
+- **Agendó alguien que nunca pasó por la landing** (le mandamos el link, vino de
+  otro lado): se guarda la fila para que la llamada exista en el panel, sin
+  `Lead` y sin marcarla como calificada. No sabemos de dónde vino ni qué factura,
+  y una señal inventada es peor que ninguna.
 
 ## Cómo cuenta el panel
 
@@ -132,10 +128,9 @@ Ver `.env.example`. Las que hacen falta para el panel:
 2. **Calendario** → el redirect posterior a la reserva apunta a
    `https://www.genesisecom.com/gracias/agenda`. Es una ruta y no una query a
    propósito: `?agendado=1` se pierde si el campo lo recorta o si alguien copia
-   la URL sin él, y entonces la cita queda sin atribución y el visitante lee el
-   mensaje del formulario. Si GHL permite agregar el id del contacto, mejor
-   todavía: `…/gracias/agenda?contact_id={{contact.id}}`, que hace exacta la
-   unión con la cita.
+   la URL sin él, y entonces el que acaba de reservar lee el mensaje del
+   formulario. Ya no hace falta pasarle el id del contacto: la cita se une al
+   lead del lado del servidor.
 3. Los campos personalizados ya existen; sus IDs están fijos en `lib/ghl.ts`.
 
 ## Base de datos

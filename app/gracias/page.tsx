@@ -6,15 +6,19 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
-/** El cierre del flujo de formulario. La agenda tiene su propia ruta. */
+/**
+ * El cierre del formulario.
+ *
+ * `?agendado=1` sigue reconocido por si quedó configurado así en GHL: el que
+ * reserva una llamada tiene su mensaje propio, y su ruta propia en
+ * /gracias/agenda.
+ */
 export default async function Gracias({
   searchParams,
 }: {
-  searchParams: Promise<{ agendado?: string; contact_id?: string; contactId?: string }>;
+  searchParams: Promise<{ agendado?: string }>;
 }) {
-  const { agendado, contact_id, contactId } = await searchParams;
+  const { agendado } = await searchParams;
 
-  return (
-    <PantallaDeGracias agendado={agendado === "1"} contactId={contact_id ?? contactId} />
-  );
+  return <PantallaDeGracias agendado={agendado === "1"} />;
 }

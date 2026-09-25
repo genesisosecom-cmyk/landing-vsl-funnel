@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import type { FilaEvento, FilaLead, FilaResumen } from "@/lib/db";
-import { FLUJOS, normalizarUtm, type Flujo } from "@/lib/atribucion";
+import { FLUJO, normalizarUtm } from "@/lib/atribucion";
 
 /**
  * Panel de tracking, lead por lead.
@@ -30,7 +30,24 @@ function fecha(iso: string | null | undefined): string {
   return iso ? FORMATO_FECHA.format(new Date(iso)) : "—";
 }
 
-type Filtro = "todos" | Flujo;
+type Filtro = string;
+
+/**
+ * Los flujos que hay en los datos, no los que existen hoy.
+ *
+ * Hoy la landing es una sola, pero el A/B contra `/agenda` dejó 539 visitas y
+ * una cita en la base. Si la lista fuera fija en "formulario", esa historia
+ * desaparecería del panel de un día para el otro. Sale de los datos: cuando
+ * agenda deje de aparecer, la columna se va sola.
+ */
+function flujosPresentes(leads: FilaLead[], resumen: FilaResumen[]): string[] {
+  const vistos = new Set<string>([FLUJO]);
+  for (const fila of resumen) if (fila.flujo) vistos.add(fila.flujo);
+  for (const lead of leads) if (lead.flujo) vistos.add(lead.flujo);
+
+  // El flujo vivo primero; el resto, alfabético.
+  return [...vistos].sort((a, b) => (a === FLUJO ? -1 : b === FLUJO ? 1 : a.localeCompare(b)));
+}
 
 export function Panel({
   leads,
@@ -49,7 +66,12 @@ export function Panel({
     [leads, filtro],
   );
 
-  const embudos = useMemo(() => FLUJOS.map((f) => embudoDe(f, leads, resumen)), [leads, resumen]);
+  const flujos = useMemo(() => flujosPresentes(leads, resumen), [leads, resumen]);
+
+  const embudos = useMemo(
+    () => flujos.map((f) => embudoDe(f, leads, resumen)),
+    [flujos, leads, resumen],
+  );
 
   // El embudo por creativo: con varios anuncios corriendo, es el cruce que
   // decide cuál se apaga. El que no trae visitas no aparece.
@@ -147,7 +169,7 @@ export function Panel({
 
         <section className="flex flex-col gap-4">
           <div className="flex flex-wrap gap-2">
-            {(["todos", ...FLUJOS] as Filtro[]).map((opcion) => (
+            {["todos", ...flujos].map((opcion) => (
               <button
                 key={opcion}
                 type="button"
@@ -215,7 +237,7 @@ export function Panel({
 }
 
 type DatosEmbudo = {
-  flujo: Flujo;
+  flujo: string;
   visitas: number;
   clicks: number;
   empezados: number;
@@ -224,7 +246,7 @@ type DatosEmbudo = {
   citas: number;
 };
 
-function embudoDe(flujo: Flujo, leads: FilaLead[], resumen: FilaResumen[]): DatosEmbudo {
+function embudoDe(flujo: string, leads: FilaLead[], resumen: FilaResumen[]): DatosEmbudo {
   const delFlujo = resumen.filter((r) => r.flujo === flujo);
   const leadsDelFlujo = leads.filter((l) => l.flujo === flujo);
 
@@ -311,8 +333,9 @@ function porCreativo(leads: FilaLead[], resumen: FilaResumen[]): FilaCreativo[] 
 }
 
 function Embudo({ flujo, visitas, clicks, empezados, leads, calificados, citas }: DatosEmbudo) {
-  // En el flujo de agenda no hay formulario propio: el paso "empezó" no existe
-  // porque ocurre dentro del iframe de GHL, donde no vemos nada.
+  // En el flujo de agenda —el que se dio de baja— no había formulario propio: el
+  // paso "empezó" no existe porque ocurría dentro del iframe de GHL, donde no
+  // veíamos nada. Mostrarlo en cero diría algo falso.
   const pasos: [string, number][] = [
     ["Visitas", visitas],
     ["Tocó el CTA", clicks],

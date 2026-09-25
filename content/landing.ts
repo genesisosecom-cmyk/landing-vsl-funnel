@@ -270,10 +270,7 @@ const OPCIONES_FACTURACION = [
 export type Facturacion = (typeof OPCIONES_FACTURACION)[number];
 
 export const aplicar = {
-  titulo: "Completá la aplicación",
-  intro:
-    "Son tres preguntas para entender tu marca. Si el modelo aplica a tu producto, seguimos; si no, te lo decimos.",
-  /** Título del formulario embebido dentro de la landing, bajo "por dentro". */
+  /** Título de la sección de conversión, que es donde bajan todos los botones. */
   tituloEnLanding: "Aplicá para entrar a *Génesis OS*",
   /**
    * El formulario propio. Las preguntas son las mismas que hacía el Typeform,
@@ -318,22 +315,8 @@ export const aplicar = {
       ],
     },
   },
-  /** Título del calendario embebido dentro de la landing, en el flujo de agenda. */
-  tituloAgendaEnLanding: "Agendá tu llamada con *Manu*",
-  calendario: {
-    /**
-     * "Genesis OS | Validacion" en GoHighLevel, 40 minutos.
-     *
-     * Va la URL por id y no por slug: el slug se puede renombrar desde el
-     * panel de GHL y el día que pase, la landing queda con un calendario roto
-     * sin que nadie toque el código. El id no cambia.
-     *
-     * El redirect posterior a la reserva se configura en GHL, no acá.
-     */
-    url: "https://api.leadconnectorhq.com/widget/booking/6wIBPZIlrpaCsJpMpv2j",
-  },
   /**
-   * El cierre de los dos flujos.
+   * El cierre.
    *
    * Los pasos no son decorativos: el que sabe qué va a pasar y cuándo atiende
    * el WhatsApp. El que no, lo toma por spam. En los dos casos el contacto es
@@ -359,7 +342,11 @@ export const aplicar = {
           "Si tu marca encaja, agendamos 40 minutos con Manu para revisar tus números y armar el plan.",
       },
     ],
-    /** Lo que ve quien llega acá después de reservar, no después del formulario. */
+    /**
+     * Lo que ve quien llega acá después de reservar la llamada, no después del
+     * formulario. La reserva pasó en el calendario de GHL, que le mandamos por
+     * WhatsApp; el calendario lo devuelve a /gracias/agenda.
+     */
     agendado: {
       titulo: "Listo, tu llamada quedó agendada",
       texto: "Te llega la confirmación por mail con el horario y el link.",

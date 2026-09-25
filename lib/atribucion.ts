@@ -11,22 +11,18 @@ export const COOKIE_ATRIBUCION = "gen_atr";
 export const DIAS_DE_VIDA = 90;
 
 /**
- * Los dos flujos del A/B. El reparto lo hace /ir, no Meta: todos los anuncios
- * apuntan a la misma URL y nosotros decidimos quién ve cuál.
- */
-export const FLUJOS = ["formulario", "agenda"] as const;
-
-/**
- * La variante asignada, para que el mismo visitante vea siempre la misma.
+ * El único flujo que existe.
  *
- * Sin esto alguien que vuelve por un segundo click cae en la otra landing y
- * las dos columnas del panel dejan de medir lo que dicen medir.
+ * Hubo un A/B contra `/agenda` —el calendario de GHL embebido, sin formulario
+ * previo— y se cerró a favor del formulario propio. El campo sigue viajando con
+ * cada evento y cada lead porque las filas viejas dicen "agenda" y el panel las
+ * sigue mostrando: sacarlo sería borrar la historia del test.
  */
-export const COOKIE_VARIANTE = "gen_var";
-export type Flujo = (typeof FLUJOS)[number];
+export const FLUJO = "formulario" as const;
+export type Flujo = typeof FLUJO;
 
 export function esFlujo(valor: string | undefined): valor is Flujo {
-  return FLUJOS.includes(valor as Flujo);
+  return valor === FLUJO;
 }
 
 export type Atribucion = {

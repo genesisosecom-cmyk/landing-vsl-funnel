@@ -5,14 +5,13 @@ import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
 import { anotarEvento, atribucionDeLaVisita, idDeVisita } from "@/lib/visita";
 import { aplicar } from "@/content/landing";
+import { FLUJO } from "@/lib/atribucion";
 import { esLeadCalificado } from "@/lib/calificacion";
 import { FlechaDeCta, clasesDeCta } from "@/components/ui/CtaButton";
 
 const copia = aplicar.formulario;
 
 type Props = {
-  /** "formulario" o "agenda": el flujo del A/B. */
-  flujo: string;
   /** Desde qué parte de la página se completó. */
   origen: string;
   /** A dónde va el visitante cuando termina. */
@@ -58,7 +57,7 @@ const caja =
  * El event_id se genera acá y se usa dos veces: en el Lead del navegador y en
  * el del servidor. Meta los deduplica y cuenta uno solo.
  */
-export function FormularioNativo({ flujo, origen, destino, className = "" }: Props) {
+export function FormularioNativo({ origen, destino, className = "" }: Props) {
   const router = useRouter();
   const [campos, setCampos] = useState<Campos>(VACIO);
   const [enviando, setEnviando] = useState(false);
@@ -69,7 +68,7 @@ export function FormularioNativo({ flujo, origen, destino, className = "" }: Pro
   function cambiar(clave: keyof Campos, valor: string) {
     if (!empezado.current) {
       empezado.current = true;
-      anotarEvento("form_iniciado", { flujo, detalle: { origen, campo: clave } });
+      anotarEvento("form_iniciado", { flujo: FLUJO, detalle: { origen, campo: clave } });
     }
     setCampos((previos) => ({ ...previos, [clave]: valor }));
   }
@@ -92,7 +91,7 @@ export function FormularioNativo({ flujo, origen, destino, className = "" }: Pro
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           ...campos,
-          flujo,
+          flujo: FLUJO,
           origen,
           eventId,
           visitaId: idDeVisita(),
@@ -116,7 +115,7 @@ export function FormularioNativo({ flujo, origen, destino, className = "" }: Pro
         window.fbq?.(
           "track",
           "Lead",
-          { flujo, origen, content_name: `lead_${flujo}` },
+          { flujo: FLUJO, origen, content_name: `lead_${FLUJO}` },
           { eventID: eventId },
         );
       }

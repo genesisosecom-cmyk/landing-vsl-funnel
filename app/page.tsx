@@ -1,14 +1,12 @@
 import { redirect } from "next/navigation";
 
 /**
- * La raíz entra por el repartidor, igual que los anuncios.
+ * La raíz manda a la landing.
  *
- * Podría mandar directo a /formulario, pero entonces todo el tráfico que no
- * viene de un anuncio —el link de la bio, un mail, alguien que escribe el
- * dominio— se contaría como visita de esa variante y le inflaría el
- * denominador. El panel mostraría una conversión peor de la real para
- * formulario y el A/B quedaría sesgado por tráfico que nunca fue parte del
- * test.
+ * Antes pasaba por `/ir` para no sesgar el A/B: el tráfico que no venía de un
+ * anuncio —el link de la bio, un mail, alguien que escribe el dominio— tenía
+ * que repartirse igual que el pago. Sin A/B ese motivo desapareció y el salto
+ * de más sólo costaba tiempo.
  *
  * Los parámetros se copian a propósito: un redirect pelado los tira, y quien
  * llegue con utm_source o fbclid perdería el origen antes de que la landing
@@ -28,5 +26,5 @@ export default async function Raiz({
   }
 
   const query = parametros.toString();
-  redirect(query ? `/ir?${query}` : "/ir");
+  redirect(query ? `/formulario?${query}` : "/formulario");
 }

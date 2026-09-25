@@ -6,17 +6,16 @@ import { FormularioEnLanding } from "@/components/sections/FormularioEnLanding";
 import { Program } from "@/components/sections/Program";
 import { ResultsMosaic } from "@/components/sections/ResultsMosaic";
 import { SiteFooter } from "@/components/sections/SiteFooter";
-import type { Flujo } from "@/lib/atribucion";
 
 /**
- * La landing, idéntica en los dos flujos del A/B.
+ * La landing.
  *
- * Lo único que cambia entre /formulario y /agenda es qué hay embebido en la
- * sección de conversión: nuestro formulario o el calendario de GHL. El
- * contenido es el mismo para que la diferencia medida sea el mecanismo de
- * conversión y nada más.
+ * Hubo una segunda variante con el calendario de GHL embebido en lugar del
+ * formulario. Se dio de baja: sólo nuestro formulario puede preguntar la
+ * facturación antes de convertir, que es lo que decide si el lead alimenta al
+ * píxel.
  */
-export function Landing({ flujo }: { flujo: Flujo }) {
+export function Landing() {
   // Los botones no navegan: bajan al formulario embebido, que es donde arranca
   // el flujo. Una sola pantalla de conversión para toda la página.
   const aplicarUrl = "#aplicar";
@@ -33,7 +32,7 @@ export function Landing({ flujo }: { flujo: Flujo }) {
 
         {/* Antes acá iba "por dentro", con capturas del campus. Se sacó: eran
             placeholders y era la última sección antes de convertir. */}
-        <FormularioEnLanding flujo={flujo} destino="/gracias" />
+        <FormularioEnLanding destino="/gracias" />
 
         <Program />
         <CtaBand href={aplicarUrl} />

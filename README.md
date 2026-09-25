@@ -76,46 +76,39 @@ Montserrat y Archivo van self-hosted como variables subseteadas a latin +
 latin-ext (`public/fonts/*.woff2`): 145 KB entre las dos contra 1,37 MB de los
 `.ttf` originales. Se cargan con `next/font/local`, sin pedidos a Google Fonts.
 
-## Las dos landings del A/B
-
-El reparto lo hace `/ir`, no Meta. Todos los anuncios apuntan a la misma URL y
-el sorteo es nuestro: 50/50 de verdad, sin que el algoritmo le dé más
-presupuesto a la variante que arranca mejor y arruine la comparación a los tres
-días. La variante queda en una cookie de 90 días, así que el que vuelve ve
-siempre la misma landing.
+## Rutas
 
 | Ruta | Qué es |
 |---|---|
-| `/` | Entra al repartidor, arrastrando la query |
-| `/ir` | El repartidor: sortea, guarda la variante y redirige |
-| `/formulario` · `/agenda` | La misma landing, con distinto mecanismo de conversión |
-| `/gracias` | Cierre del flujo de formulario, con los pasos de lo que sigue |
-| `/gracias/agenda` | Cierre del flujo de agenda; además manda la atribución de la cita |
+| `/` | Manda a la landing, arrastrando la query |
+| `/ir` | La URL de los anuncios publicados; redirige a la landing |
+| `/formulario` | La landing |
+| `/agenda` | Redirect a la landing: era la otra variante del A/B |
+| `/gracias` | Cierre del formulario, con los pasos de lo que sigue |
+| `/gracias/agenda` | Cierre de quien reserva la llamada en el calendario de GHL |
 | `/privacidad` | Política de privacidad |
 | `/tracking` | Panel interno, con contraseña |
 
-`/ir` pasa todos los parámetros enteros al destino: si se pierde `fbclid` en el
-salto, el píxel no puede armar la cookie `_fbc` y el lead queda sin anuncio.
-Redirige con 307 y sin caché — un 301 lo cachean el navegador y el CDN, y a
-partir de ahí la gente queda clavada en una variante.
+Hubo un A/B entre dos mecanismos de conversión: el formulario propio y el
+calendario de GHL embebido, sin formulario previo. Se cerró a favor del
+formulario, porque es el único de los dos que puede preguntar la facturación
+antes de convertir — y eso es lo que decide si el lead alimenta al píxel. Dentro
+del iframe del calendario no se puede preguntar nada ni ver nada.
 
-`REPARTO_FORMULARIO` cambia el porcentaje que va a `/formulario`; en 100 apaga
-la variante de agenda sin tocar un solo anuncio. `/ir?v=agenda` fuerza una
-variante para probar a mano.
+`/ir` quedó como puerta de entrada porque todos los anuncios publicados apuntan
+ahí; hoy es un redirect y nada más. Pasa todos los parámetros enteros al destino:
+si se pierde `fbclid` en el salto, el píxel no puede armar la cookie `_fbc` y el
+lead queda sin anuncio. Un anuncio nuevo puede apuntar directo a `/formulario`.
+
+`/agenda` redirige en lugar de devolver 404: quedó en el historial de los
+navegadores, en los públicos de retargeting y en cualquier link compartido. Los
+dos redirects son 307 y sin caché — un permanente lo cachean el navegador y el
+CDN, y si algún día se vuelve a probar otro flujo, el redirect viejo queda
+clavado en máquinas que no controlamos.
 
 Los cuatro botones de la landing bajan con scroll a la sección `#aplicar`, que
 está después del caso propio en lugar de una banda de CTA. No navegan: el flujo
-arranca ahí.
-
-Lo único que cambia entre los dos flujos es qué hay embebido en esa sección:
-
-- **`/formulario`** → formulario propio → `/gracias`. Lo contactamos nosotros.
-- **`/agenda`** → calendario de GHL directo → `/gracias` (redirect configurado
-  en el propio calendario). Los datos los pide el formulario del calendario.
-
-En agenda no hay formulario previo a propósito: dos formularios seguidos pedían
-los mismos datos dos veces y abrían la puerta a que GHL creara dos contactos por
-un teléfono escrito distinto.
+arranca ahí, con el formulario propio embebido, y termina en `/gracias`.
 
 ## Orden del funnel
 
@@ -131,8 +124,7 @@ alternando blanco y hueso.
 3. **Mi caso** — responde "¿esto funciona?". Foto de Manu, métricas y capturas
    de sus tableros. Sin video.
 4. CTA
-5. **La pantalla de conversión** — formulario propio o calendario, según el
-   flujo del A/B
+5. **La pantalla de conversión** — el formulario propio, embebido
 6. Oferta: seis entregables, sólo texto, en dos columnas
 7. CTA
 8. **Resultados de alumnos** — mosaico de capturas, sin etiquetas ni texto
@@ -173,16 +165,16 @@ Verificada sin overflow horizontal a 1920, 1440, 1366 y 390.
 - [x] Evento de click: `InitiateCheckout` con la posición del botón
       (`components/analytics/CtaTracker.tsx`).
 - [x] Destino del CTA: `/aplicar`.
-- [x] Dos landings (`/formulario` y `/agenda`), lead a GoHighLevel y atribución
-      por anuncio.
-- [x] Formulario propio en `/formulario` y calendario de GHL embebido en
-      `/agenda`.
+- [x] Landing en `/formulario`, lead a GoHighLevel y atribución por anuncio.
+- [x] A/B entre formulario propio y calendario embebido: cerrado a favor del
+      formulario. `/agenda` quedó como redirect.
 - [x] Panel de tracking en `/tracking`, lead por lead (ver `docs/tracking.md`).
 - [ ] `SUPABASE_URL`, `SUPABASE_SERVICE_KEY` y `TRACKING_PASSWORD` en Vercel.
 - [ ] `META_CAPI_TOKEN` en Vercel: sin él los eventos de servidor no salen.
 - [ ] Webhook de citas: crear el workflow en GHL apuntando a
-      `/api/ghl/cita?token=$GHL_WEBHOOK_SECRET`. Sin eso el flujo de agenda no
-      manda ninguna conversión a Meta.
+      `/api/ghl/cita?token=$GHL_WEBHOOK_SECRET`. Sin eso Meta no se entera de
+      ninguna llamada agendada y el panel no muestra cuántas trajo cada
+      creativo.
 - [ ] Decidir si se suman precio, FAQ, garantía y urgencia.
 
 ## Medición
@@ -191,13 +183,17 @@ Verificada sin overflow horizontal a 1920, 1440, 1366 y 390.
 |---|---|---|
 | Carga de la landing | `PageView` | navegador |
 | Click en cualquier CTA | `InitiateCheckout` con la posición del botón | navegador |
-| Formulario enviado (`/formulario`) | `Lead` con flujo y origen | navegador **y** servidor (`/api/lead`), mismo `event_id` |
-| Cita agendada (`/agenda`) | `Lead` + `Schedule` | servidor, desde el webhook de GHL |
+| Formulario enviado | `Lead`, sólo si la facturación califica | navegador **y** servidor (`/api/lead`), mismo `event_id` |
+| Llamada agendada | `Schedule` | servidor, desde el webhook de GHL |
+
+El `Lead` sale de un solo lado, el formulario. El webhook de citas no manda
+`Lead`: la misma persona contaría dos veces en Meta, y haría calificar por la
+puerta de atrás a alguien que el formulario había dejado afuera.
 
 La atribución se captura en la primera visita (`utm_*`, `fbclid`, `_fbp`) en una
-cookie propia de 90 días. En el flujo de formulario viaja en el mismo POST que
-los datos del lead; en el de agenda viaja en la URL del iframe del calendario y
-se recupera leyendo el contacto de GHL. En GoHighLevel queda en el
+cookie propia de 90 días y viaja en el mismo POST que los datos del lead. La
+cita se une después a esa fila por el id de contacto de GHL, así que el
+`Schedule` sale con la atribución de primera mano del lead. En GoHighLevel queda en el
 `attributionSource` del contacto y en los campos `utm_source`, `utm_medium`,
 `utm_content`, `utm_campaign` y `fbclid`.
 

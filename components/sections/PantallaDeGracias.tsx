@@ -1,24 +1,21 @@
-import { AtribucionDeAgenda } from "@/components/analytics/AtribucionDeAgenda";
 import { Logotipo } from "@/components/brand/Logotipo";
 import { Semilla } from "@/components/brand/Semilla";
 import { Pasos } from "@/components/ui/Pasos";
 import { aplicar } from "@/content/landing";
 
 /**
- * El cierre de los dos flujos.
+ * El cierre, con dos mensajes.
  *
- * En la variante de agenda, además de cambiar el mensaje, hace el trabajo
- * invisible: manda la atribución de esta visita para pegarla a la cita que
- * acaba de entrar por el webhook. Es el único momento del flujo de agenda en
- * que volvemos a tener la cookie del visitante a mano.
+ * El del formulario es el del flujo normal. El de agendado lo ve quien reserva
+ * una llamada en el calendario de GHL, que después del formulario le mandamos
+ * por WhatsApp: GHL lo devuelve acá cuando termina.
+ *
+ * Antes esta pantalla también hacía trabajo invisible —mandaba la atribución de
+ * la visita para pegarla a la cita, porque en el flujo de agenda era el único
+ * momento en que volvíamos a tener la cookie a mano—. Ya no hace falta: la cita
+ * se une al lead por el id de contacto de GHL, que es exacto.
  */
-export function PantallaDeGracias({
-  agendado,
-  contactId,
-}: {
-  agendado: boolean;
-  contactId?: string;
-}) {
+export function PantallaDeGracias({ agendado }: { agendado: boolean }) {
   const copia = agendado ? aplicar.gracias.agendado : aplicar.gracias;
 
   return (
@@ -34,8 +31,6 @@ export function PantallaDeGracias({
 
         <Pasos pasos={copia.pasos} />
       </div>
-
-      {agendado && <AtribucionDeAgenda contactId={contactId} />}
     </main>
   );
 }
