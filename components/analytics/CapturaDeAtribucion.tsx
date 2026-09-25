@@ -1,11 +1,11 @@
 "use client";
 
 import { useEffect } from "react";
-import { seMide } from "@/lib/medicion";
 import { anotarEvento, atribucionDeLaUrl, leerCookie as cookie } from "@/lib/visita";
 import {
   COOKIE_ATRIBUCION,
   DIAS_DE_VIDA,
+  esFlujo,
   leerAtribucion,
   serializarAtribucion,
   type Atribucion,
@@ -20,8 +20,6 @@ import {
  */
 export function CapturaDeAtribucion() {
   useEffect(() => {
-    if (!seMide(location.pathname)) return;
-
     const guardada = leerAtribucion(cookie(COOKIE_ATRIBUCION));
     const nueva: Atribucion = atribucionDeLaUrl();
 
@@ -45,7 +43,14 @@ export function CapturaDeAtribucion() {
   // origen una sola vez, pero cada llegada a la página es una fila del panel.
   // sessionStorage evita contar de nuevo al volver atrás o recargar.
   useEffect(() => {
-    if (!seMide(location.pathname)) return;
+    /*
+     * Sólo cuenta como visita la landing. /gracias y /privacidad también montan
+     * esto —el píxel tiene que disparar ahí— pero anotarlas sumaba una visita
+     * de más al creativo cada vez que alguien convertía: el denominador del
+     * embudo crecía justo con las conversiones.
+     */
+    const flujo = window.location.pathname.replace(/^\//, "").split("/")[0];
+    if (!esFlujo(flujo)) return;
 
     try {
       if (sessionStorage.getItem("gen_visita_anotada")) return;
@@ -57,7 +62,7 @@ export function CapturaDeAtribucion() {
     // Los UTM los agrega anotarEvento para todos los eventos por igual.
     const a = leerAtribucion(cookie(COOKIE_ATRIBUCION));
     anotarEvento("visita", {
-      flujo: window.location.pathname.replace(/^\//, "").split("/")[0],
+      flujo,
       detalle: { landing: window.location.pathname, referrer: a.referrer ?? "" },
     });
   }, []);

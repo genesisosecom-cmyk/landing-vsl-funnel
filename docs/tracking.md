@@ -101,9 +101,19 @@ Dos cosas que conviene tener claras al leerlo:
   (`eventosDeVisitas`), que es para lo único que hacen falta: la línea de tiempo
   de cada fila.
 
-`/tracking` no se mide a sí mismo (`lib/medicion.ts`): abrir el panel no anota
-una visita ni manda un `PageView` al píxel. Antes sí, y eran cuarenta visitas
-nuestras mezcladas con las de la pauta.
+Dos cosas que el panel ya no cuenta de más:
+
+- **`/tracking` no se mide a sí mismo.** El píxel y las balizas viven en el
+  layout del grupo `app/(landing)`, que deja el panel afuera; antes estaban en el
+  layout raíz y abrir el tablero anotaba una visita y mandaba un `PageView`. Eran
+  cuarenta visitas nuestras mezcladas con las de la pauta. El grupo no cambia
+  ninguna URL, y el píxel sigue yendo en el HTML: con un guard por ruta del lado
+  del cliente había que inyectarlo después de hidratar, y el que rebota antes de
+  que cargue el JS no contaba.
+- **`/gracias` no cuenta como visita.** El píxel sí dispara ahí —hace falta para
+  los públicos—, pero la baliza del panel no: sumaba una visita al creativo cada
+  vez que alguien convertía, o sea el denominador del embudo crecía justo con las
+  conversiones.
 
 Un detalle del nombre del creativo: hay clicks —los del scraper de Facebook,
 algunos desde la app— donde los UTM llegan encodeados dos veces y el navegador

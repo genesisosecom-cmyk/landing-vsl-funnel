@@ -1,9 +1,5 @@
-"use client";
-
-import { usePathname } from "next/navigation";
 import Script from "next/script";
 import { site } from "@/content/landing";
-import { seMide } from "@/lib/medicion";
 
 /**
  * Píxel de Meta.
@@ -16,15 +12,18 @@ import { seMide } from "@/lib/medicion";
  *
  * El <noscript> va en el body, que es donde puede vivir una imagen.
  *
- * Es cliente sólo para leer la ruta: el panel no se mide, y nuestras visitas al
- * tablero no tienen por qué entrar a los públicos de retargeting.
+ * Es de servidor a propósito: así el snippet viaja en el HTML y corre mientras
+ * se parsea la página. Como componente de cliente se inyectaba recién después
+ * de hidratar, y el que rebota antes de que cargue el JS no contaba.
+ *
+ * Qué páginas lo montan lo decide el layout del grupo (landing), no esta
+ * función.
  */
 export function MetaPixel() {
   const id = site.tracking.metaPixelId;
-  const ruta = usePathname();
 
   // Sin ID no se carga nada: así el pixel no corre en desarrollo si no se configura.
-  if (!id || !seMide(ruta ?? "/")) return null;
+  if (!id) return null;
 
   return (
     <>

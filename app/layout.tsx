@@ -1,8 +1,5 @@
 import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
-import { CapturaDeAtribucion } from "@/components/analytics/CapturaDeAtribucion";
-import { CtaTracker } from "@/components/analytics/CtaTracker";
-import { MetaPixel } from "@/components/analytics/MetaPixel";
 import { site } from "@/content/landing";
 import "./globals.css";
 
@@ -48,12 +45,9 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="es" className={`${montserrat.variable} ${archivo.variable}`}>
-      <body>
-        {children}
-        <MetaPixel />
-        <CtaTracker />
-        <CapturaDeAtribucion />
-      </body>
+      {/* El píxel y las balizas no van acá: viven en el grupo (landing), que
+          deja /tracking afuera de la medición. */}
+      <body>{children}</body>
     </html>
   );
 }
